@@ -5,7 +5,7 @@
   "main": "runFile.ts",
   "scripts": {
     "test-cov": "jest --coverage",
-    "test-server": "npx ts-node src/__tests__/__server__/testServer.ts",
+    "test-server": "node src/__tests__/__server__/testServer.js",
     "build": "rimraf dist && tsc",
     "lint": "eslint **/*.ts",
     "test": "start-server-and-test test-server http://localhost:3000 test-cov"
