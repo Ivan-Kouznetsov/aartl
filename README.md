@@ -129,8 +129,9 @@ The syntax is case sensitive, statements start with an upper-case letter, data i
 
 In the terminal:
 
+    git clone https://github.com/Ivan-Kouznetsov/aartl.git
     cd aartl
-    npm install
+    npm ci
     npm run build
 
 And now you can run AARTL like so
