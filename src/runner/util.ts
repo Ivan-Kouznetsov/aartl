@@ -4,7 +4,7 @@ import { getArgs } from '../parser/util';
 import { Response } from 'node-fetch';
 import { ITestResult } from '../interfaces/results';
 
-export const randomSeed = process.hrtime()[0] * 1e9 + process.hrtime()[1];
+const randomSeed = process.hrtime()[0] * 1e9 + process.hrtime()[1];
 
 const replaceMultipleValuesInString = (str: string, replacements: IKeyValuePair[]) => {
   if (str != null) {
