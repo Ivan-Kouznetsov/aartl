@@ -4,10 +4,11 @@
   "description": "",
   "main": "runFile.ts",
   "scripts": {
-    "test": "jest --coverage",
+    "test-cov": "jest --coverage",
     "test-server": "npx ts-node src/__tests__/__server__/testServer.ts",
     "build": "rimraf dist && tsc",
-    "lint": "eslint **/*.ts"
+    "lint": "eslint **/*.ts",
+    "test": "start-server-and-test test-server http://localhost:3000 test-cov"
   },
   "author": "Ivan Kouznetsov",
   "license": "MIT",
@@ -24,6 +25,7 @@
     "express": "^4.17.1",
     "jest": "^26.1.0",
     "rimraf": "^3.0.2",
+    "start-server-and-test": "^1.11.2",
     "ts-jest": "^26.1.2",
     "verify-junit-xml": "0.0.3"
   },
