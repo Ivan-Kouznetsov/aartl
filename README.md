@@ -99,8 +99,8 @@ The syntax is case sensitive, statements start with an upper-case letter, data i
 
 ## Benefits
 
-- Runs fast (try to see for yourself)
-- Detailed Logging
+- Runs fast
+- Detailed logging
 - Cross platform
 - Flexible matching rules
 - ESLint compliant (No recommended ESLint rules disabled)
