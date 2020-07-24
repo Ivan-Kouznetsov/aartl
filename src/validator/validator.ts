@@ -1,6 +1,7 @@
 import { ITest } from '../interfaces/test';
+import { getArgs } from '../parser/util';
+import { aliasesedMatchers } from '../rules/matchers';
 
-//TODO: check argument counts
 export const getFirstValidationError = (test: ITest): string => {
   for (let i = 0; i < test.usingValues.length; i++) {
     const key = Object.keys(test.usingValues[i])[0];
@@ -22,4 +23,21 @@ export const getFirstValidationError = (test: ITest): string => {
   }
 
   if (test.requests[test.requests.length - 1].wait) return 'Cannot have a wait in last request';
+
+  const sortedAliasedMatchers = [...aliasesedMatchers].sort((a, b) => b.alias.length - a.alias.length);
+
+  for (const request of test.requests) {
+    for (const rule of request.jsonRules) {
+      for (const am of sortedAliasedMatchers) {
+        const key = Object.keys(rule)[0];
+        if (rule[key].toString().startsWith(am.alias)) {
+          if (getArgs(rule[key].toString(), am.alias).length > am.argCount) {
+            return `Rule: ${JSON.stringify(rule)} has too many arguments`;
+          } else {
+            break;
+          }
+        }
+      }
+    }
+  }
 };

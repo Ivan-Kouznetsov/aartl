@@ -1,6 +1,6 @@
 # Agnostic API Reliability Testing Language
 
-Agnostic API Reliability Testing Language (AARTL) is platform-agnostic declarative domain-specific language for testing HTTP servers using the server’s API, it is implemented in TypeScript and Node.js and can run on many popular platforms (such as Windows, macOS, Linux, and BSD) and can test servers irrespective of the platform used by the server. An AARTL test is a human-readable declaration of the expected response from a server endpoint given one or more requests.
+Agnostic API Reliability Testing Language (AARTL) is a platform-agnostic declarative domain-specific language for testing HTTP servers using the server’s API, it is implemented in TypeScript and Node.js and can run on many popular platforms (such as Windows, macOS, Linux, and BSD) and can test servers irrespective of the platform used by the server. An AARTL test is a human-readable declaration of the expected response from a server endpoint given one or more requests.
 
 ## Design goals
 
@@ -123,9 +123,11 @@ The syntax is case sensitive, statements start with an upper-case letter, data i
 
 ## Setup and Use
 
-Download the source code.
-Ensure that Node.js is installed
-Open a terminal
+1.  Download the source code
+2.  Ensure that Node.js is installed
+3.  Open a terminal
+
+In the terminal:
 
     cd aartl
     npm install
@@ -135,7 +137,13 @@ And now you can run AARTL like so
 
     node dist/runFile.js -f C:\path\to\file\with\tests
 
-Optionally use --hello to print name of the program when it starts running or --xml to output results as JUnit XML data.
+### CLI options
+
+| Option           | What it means                                      |
+| ---------------- | -------------------------------------------------- |
+| \-\-hello        | Print the name of the program before running tests |
+| \-\-xml          | Output results as JUnit XML                        |
+| \-\-novalidation | Don't validate test file                           |
 
 ## Output
 
@@ -267,7 +275,7 @@ Optionally use --hello to print name of the program when it starts running or --
 
 Durations are in nanoseconds.
 
-### Xml Example
+### Xml
 
     C:\Users\Ivan\source\repos\aartl>node dist/runFile.js -f src\__tests__\e2e\fixtures\localhostTests.fixtures.ts --xml
     <?xml version="1.0" encoding="UTF-8"?>

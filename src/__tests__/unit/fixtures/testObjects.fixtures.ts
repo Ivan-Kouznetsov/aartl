@@ -138,3 +138,39 @@ export const valid: ITest = {
     },
   ],
 };
+
+export const tooManyArgs: ITest = {
+  name: 'should return stuff when queried',
+  usingValues: [{ '@id': 10 }],
+  requests: [
+    {
+      headers: [{ 'Accept-Encoding': '*/*' }],
+      method: 'get',
+      url: 'http://example.org/@id',
+      body: null,
+      passOn: [],
+      headerRules: [],
+      expectedStatusCode: null,
+      jsonRules: [{ '$..id': '>= 1 2' }],
+      wait: null,
+    },
+  ],
+};
+
+export const notTooManyArgs: ITest = {
+  name: 'should return stuff when queried',
+  usingValues: [{ '@id': 10 }],
+  requests: [
+    {
+      headers: [{ 'Accept-Encoding': '*/*' }],
+      method: 'get',
+      url: 'http://example.org/@id',
+      body: null,
+      passOn: [],
+      headerRules: [],
+      expectedStatusCode: null,
+      jsonRules: [{ '$..id': '>= 1' }],
+      wait: null,
+    },
+  ],
+};

@@ -8,9 +8,11 @@ describe('Validator', () => {
     expect(getFirstValidationError(fixtures.nullUrl)).toEqual('In request 1: url is required');
     expect(getFirstValidationError(fixtures.passOn)).toEqual('Cannot have passed on values in last request');
     expect(getFirstValidationError(fixtures.waitInLast)).toEqual('Cannot have a wait in last request');
+    expect(getFirstValidationError(fixtures.tooManyArgs)).toContain('has too many arguments');
   });
 
   it('should validate valid test', () => {
     expect(getFirstValidationError(fixtures.valid)).toBeUndefined();
+    expect(getFirstValidationError(fixtures.notTooManyArgs)).toBeUndefined();
   });
 });

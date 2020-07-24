@@ -20,21 +20,25 @@ const main = async () => {
 
   for (const test of tests) {
     const parsedTest = parser.splitTestIntoSections(test);
-    const validationError = getFirstValidationError(parsedTest);
 
-    if (validationError) {
-      console.error(`${parsedTest.name}: ${validationError}`);
-      exit(1);
+    if (!argv['novalidation']) {
+      const validationError = getFirstValidationError(parsedTest);
+
+      if (validationError) {
+        console.error(`${parsedTest.name}: ${validationError}`);
+        exit(1);
+      }
     }
 
     const result = await runTest(parsedTest);
     results.push(result);
+    if (!argv.xml) {
+      console.log(result);
+    }
   }
 
   if (argv.xml) {
     console.log(util.resultsToXml(path.basename(filePath, path.extname(filePath)), results));
-  } else {
-    results.forEach((r) => console.log(r));
   }
 };
 
