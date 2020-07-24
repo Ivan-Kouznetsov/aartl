@@ -123,7 +123,7 @@ The syntax is case sensitive, statements start with an upper-case letter, data i
 
 ## Setup and Use
 
-1.  Download the source code
+1.  Ensure that git is installed
 2.  Ensure that Node.js is installed
 3.  Open a terminal
 
