@@ -99,11 +99,11 @@ The syntax is case sensitive, statements start with an upper-case letter, data i
 
 ## Benefits
 
+- Few opportunities for writing bugs
 - Runs fast
 - Detailed logging
-- Cross platform
+- Cross-platform
 - Flexible matching rules
-- ESLint compliant (No recommended ESLint rules disabled)
 - Good test coverage
 
 | File                      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s |
