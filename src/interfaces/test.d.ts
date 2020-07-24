@@ -1,0 +1,31 @@
+export interface IKeyValuePair {
+  [key: string]: string | number | boolean;
+}
+
+export interface IRequest {
+  headers: IKeyValuePair[];
+  method: string;
+  url: string;
+  body: string;
+  passOn: IKeyValuePair[];
+  wait: string;
+  expectedStatusCode: string;
+  jsonRules: IKeyValuePair[]; // notably an array not a hash map
+  headerRules: IKeyValuePair[];
+}
+
+export interface ITest {
+  name: string;
+  usingValues: IKeyValuePair[];
+  requests: IRequest[];
+}
+
+export type Primitive = undefined | boolean | string | number | BigInt | Record<string, unknown>;
+export type MatcherFunction = (arr: Primitive[]) => Primitive;
+export type Factory = (arg?: RegExp | Primitive | Primitive[]) => MatcherFunction;
+
+export interface IRule {
+  factory: Factory;
+  alias: string;
+  argCount: number;
+}
