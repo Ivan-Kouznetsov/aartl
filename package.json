@@ -4,10 +4,11 @@
   "description": "",
   "main": "runFile.ts",
   "scripts": {
-    "test": "jest --coverage",
+    "test-cov": "jest --coverage",
     "test-server": "npx ts-node src/__tests__/__server__/testServer.ts",
     "build": "rimraf dist && tsc",
-    "lint": "eslint **/*.ts"
+    "lint": "eslint **/*.ts",
+    "test": "start-server-and-test test-server http://localhost:3000 test-cov"
   },
   "author": "Ivan Kouznetsov",
   "license": "MIT",
@@ -22,8 +23,10 @@
     "@typescript-eslint/parser": "^3.7.0",
     "eslint": "^7.5.0",
     "express": "^4.17.1",
+    "husky": "^4.2.5",
     "jest": "^26.1.0",
     "rimraf": "^3.0.2",
+    "start-server-and-test": "^1.11.2",
     "ts-jest": "^26.1.2",
     "verify-junit-xml": "0.0.3"
   },
@@ -34,5 +37,10 @@
     "node-fetch": "^2.6.0",
     "typescript": "^3.9.6",
     "yargs": "^15.4.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm run lint && npm test"
+    }
   }
 }

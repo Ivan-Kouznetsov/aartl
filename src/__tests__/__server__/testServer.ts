@@ -8,6 +8,10 @@ const port = 3000;
 
 const posts = ['0th Post'];
 
+app.get('/', (_, response) => {
+  response.status(200).send('Ready').end();
+});
+
 app.get('/posts/:id', (request, response) => {
   const id = parseInt(request.params['id']);
 
@@ -19,7 +23,6 @@ app.get('/posts/:id', (request, response) => {
 });
 
 app.post('/posts', (request, response) => {
-  console.log(request.body.toString());
   posts.push(request.body.toString());
 
   response.send(JSON.stringify({ id: posts.length - 1, success: true }));
