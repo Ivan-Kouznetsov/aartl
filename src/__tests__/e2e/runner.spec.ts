@@ -64,14 +64,14 @@ describe('Test runner', () => {
     const result = await runTestThruAllSteps(fixtures.checkLiteral);
 
     expect(result.passed).toBe(false);
-    expect(result.failReasons[0]).toContain('0: Did not expect $..id to be');
+    expect(result.failReasons[0]).toContain('Expected $..id to be 0, got');
   });
 
   it('should fail when anyOf rules do not match', async () => {
     const result = await runTestThruAllSteps(fixtures.wrongCheckAnyOf);
 
     expect(result.passed).toBe(false);
-    expect(result.failReasons[0]).toContain('any of 1 2 3 4 5: Did not expect $..id to be 0');
+    expect(result.failReasons[0]).toContain('Expected $..id to be is any of 1 2 3 4 5, got 0');
   });
 
   it('should pass when anyOf rules do match', async () => {
