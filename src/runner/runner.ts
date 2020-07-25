@@ -91,13 +91,13 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
             const nonCompliantValue = rule.rule(data);
             if (nonCompliantValue !== undefined) {
               failReasons.push(
-                `${rule.originalRule}: Did not expect ${rule.jsonpath} to be ${nonCompliantValue.toString()}`
+                `Expected ${rule.jsonpath} to be ${rule.originalRule}, got ${nonCompliantValue.toString()}`
               );
             }
           } else {
             data.forEach((item) => {
               if (rule.rule !== item.toString()) {
-                failReasons.push(`${rule.originalRule}: Did not expect ${rule.jsonpath} to be ${item}`);
+                failReasons.push(`Expected ${rule.jsonpath} to be ${rule.originalRule}, got ${item}`);
               }
             });
           }
