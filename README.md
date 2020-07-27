@@ -146,6 +146,12 @@ And now you can run AARTL like so
 | \-\-xml          | Output results as JUnit XML                        |
 | \-\-novalidation | Don't validate test file                           |
 
+## Editor Support
+
+A work in progress VSCode extension is available at: https://github.com/Ivan-Kouznetsov/aartl-vscode-extension
+
+![VSCode Screenshot](https://raw.githubusercontent.com/Ivan-Kouznetsov/aartl-vscode-extension/master/vscodeScreenshot.png)
+
 ## Output
 
 ### JSON Example
