@@ -53,6 +53,7 @@ describe('Matchers', () => {
 
   it('should match via validateNonEmptyString correctly', () => {
     expect(matchers.validateNonEmptyString()(['hello'])).toBeUndefined();
+    expect(matchers.validateNonEmptyString()([47])).toEqual(47);
     expect(matchers.validateNonEmptyString()(['hello', ''])).toEqual('');
   });
 
