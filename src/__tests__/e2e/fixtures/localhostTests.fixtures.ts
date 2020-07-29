@@ -140,13 +140,12 @@ export const wrongCheckAnyOf = `
 
 export const rightCheckAnyOf = `
   Test that it should check post id 0 - 5
-  Using values
-    @postText: Hello world
   Expect HTTP request
     method: get
     url: http://localhost:3000/posts/0   
   To match JSON rules
     "$..id": is any of 1 2 3 4 5 0
+    "$..text": is any of 1 2 "0th Post" "hi" 72
   `;
 
 export const getNull = `
@@ -156,4 +155,9 @@ export const getNull = `
     url: http://localhost:3000/null   
   To match JSON rules
     "$..id": null
+    "$..text": count = 0
+    "$..text": count < 1
+    "$..text": count <= 1
+    "$..text": count > -1
+    "$..text": count >= 0
   `;

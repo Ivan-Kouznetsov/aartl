@@ -90,12 +90,12 @@ export const applyRandomValues = (test: ITest, seed: number = randomSeed): ITest
     if (v[key].toString().startsWith(randomString)) {
       const args = getArgs(v[key].toString(), randomString);
       if (args.length === 1) {
-        return { [key]: chance.string({ length: parseInt(args[0]) }) };
+        return { [key]: chance.string({ length: <number>args[0] }) };
       }
     } else if (v[key].toString().startsWith(randomNumber)) {
       const args = getArgs(v[key].toString(), randomNumber);
       if (args.length === 1) {
-        return { [key]: chance.integer({ min: 0, max: parseInt(args[0]) }).toString() };
+        return { [key]: chance.integer({ min: 0, max: <number>args[0] }).toString() };
       }
     }
     return v;
