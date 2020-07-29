@@ -33,7 +33,7 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
       });
 
       const requestEndTime = process.hrtime.bigint();
-      const responseText = util.getResponseText(currentRequestResponse);
+      const responseText = await util.getResponseText(currentRequestResponse);
 
       requestLogs.push({
         sent: requestLogSent,

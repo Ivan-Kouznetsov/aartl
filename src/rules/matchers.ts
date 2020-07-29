@@ -27,11 +27,11 @@ export const validateLessThanOrEqual = (compareWith: number): MatcherFunction =>
 /* Strings */
 
 export const validateNonEmptyString = (): MatcherFunction => (arr: Primitive[]): Primitive =>
-  arr.find((item) => numberRegex.test(item.toString()) || !(item.toString().length > 0));
+  arr.find((item) => typeof item !== 'string' || !(item.length > 0));
 export const validateStringContaining = (str: string): MatcherFunction => (arr: Primitive[]): Primitive =>
-  arr.find((item) => !item.toString().includes(str));
+  arr.find((item) => typeof item !== 'string' || !item.includes(str));
 export const validateStringNotContaining = (str: string): MatcherFunction => (arr: Primitive[]): Primitive =>
-  arr.find((item) => item.toString().includes(str));
+  arr.find((item) => typeof item !== 'string' || item.includes(str));
 
 /* Primitive Of */
 export const validateAnyOf = (anyOf: Primitive[]): MatcherFunction => (arr: Primitive[]): Primitive =>

@@ -133,9 +133,9 @@ export const keyValueToObject = (
   value: string | number | boolean;
 } => ({ key: Object.keys(kv)[0], value: kv[Object.keys(kv)[0]] });
 
-export const getResponseText = (response: Response): string => {
+export const getResponseText = async (response: Response): Promise<string> => {
   const responseClone = response.clone();
-  const body = responseClone.body.read();
+  const body = await responseClone.text();
   const headers = responseClone.headers.raw();
   const status = responseClone.status;
   const statusText = responseClone.statusText;
