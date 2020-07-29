@@ -148,3 +148,12 @@ export const rightCheckAnyOf = `
   To match JSON rules
     "$..id": is any of 1 2 3 4 5 0
   `;
+
+export const getNull = `
+  Test that it should be null
+  Expect HTTP request
+    method: get
+    url: http://localhost:3000/null   
+  To match JSON rules
+    "$..id": null
+  `;

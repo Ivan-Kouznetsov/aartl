@@ -79,4 +79,10 @@ describe('Test runner', () => {
 
     expect(result.passed).toBe(true);
   });
+
+  it('should pass when null', async () => {
+    const result = await runTestThruAllSteps(fixtures.getNull);
+
+    expect(result.passed).toBe(true);
+  });
 });
