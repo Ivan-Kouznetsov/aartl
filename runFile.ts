@@ -22,8 +22,6 @@ const main = async () => {
   const testName = <string>argv['t'];
   const randomize = <boolean>argv['r'];
 
-  console.log(testName);
-
   const contents = fileSystem.readFileSync(filePath, { encoding: 'utf-8' });
 
   const preProcessedText = parser.preProcess(contents);
