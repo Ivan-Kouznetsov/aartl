@@ -22,6 +22,15 @@ const main = async () => {
   const testName = <string>argv['t'];
   const randomize = <boolean>argv['r'];
 
+  if (filePath === undefined) {
+    console.log('Usage: node aartl.js -f "path-to-test-file"');
+    console.log('\nOptions:');
+    console.log('-t "name of test" - run a single test');
+    console.log('--hello - display name of this program');
+    console.log('--r - randomize test order');
+    return;
+  }
+
   const contents = fileSystem.readFileSync(filePath, { encoding: 'utf-8' });
 
   const preProcessedText = parser.preProcess(contents);

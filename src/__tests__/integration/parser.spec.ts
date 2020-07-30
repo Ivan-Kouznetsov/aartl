@@ -67,4 +67,14 @@ describe('Parser', () => {
 
     expect(test).toBeDefined();
   });
+
+  it('should not produce null rules', () => {
+    const preprocessedText = parser.preProcess(fixtures.saveAndCheckPost);
+    const test = parser.splitTestIntoSections(preprocessedText);
+
+    expect(test.requests[1].jsonRules.length).toBeGreaterThan(0);
+    test.requests[1].jsonRules.forEach((r) => {
+      if (r === null) fail('Has a null');
+    });
+  });
 });

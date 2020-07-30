@@ -83,8 +83,8 @@ const splitRequestIntoSections = (requestText: string) => ({
   passOn: getPassOn(requestText),
   wait: getWait(requestText),
   expectedStatusCode: getExpectedStatusCode(requestText),
-  jsonRules: getJsonRules(requestText),
-  headerRules: getHeaderRules(requestText),
+  jsonRules: getJsonRules(requestText).filter((r) => !!r),
+  headerRules: getHeaderRules(requestText).filter((r) => !!r),
 });
 
 const getRequests = (text: string) =>

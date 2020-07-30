@@ -15,4 +15,7 @@ describe('Validator', () => {
     expect(getFirstValidationError(fixtures.valid)).toBeUndefined();
     expect(getFirstValidationError(fixtures.notTooManyArgs)).toBeUndefined();
   });
+  it('should validate test with null rule', () => {
+    expect(getFirstValidationError(fixtures.hasNull)).toBeUndefined();
+  });
 });
