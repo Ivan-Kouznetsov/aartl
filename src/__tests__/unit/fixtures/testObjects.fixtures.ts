@@ -192,3 +192,21 @@ export const hasNull: ITest = {
     },
   ],
 };
+
+export const hasNullRules: ITest = {
+  name: 'should return stuff when queried',
+  usingValues: [{ '@id': 10 }],
+  requests: [
+    {
+      headers: [{ 'Accept-Encoding': '*/*' }],
+      method: 'get',
+      url: 'http://example.org/@id',
+      body: null,
+      passOn: [],
+      headerRules: [],
+      expectedStatusCode: null,
+      jsonRules: [{ '$..id': 'hello' }, null, null],
+      wait: null,
+    },
+  ],
+};
