@@ -4,5 +4,11 @@ module.exports = {
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest',
   },
-  collectCoverageFrom: ['src/**/*.ts', '!src/**/*fixtures.ts', '!src/**/*.d.ts', '!<rootDir>/src/__tests__/**/*.ts'],
+  collectCoverageFrom: [
+    'src/**/*.ts',
+    '!src/**/*fixtures.ts',
+    '!src/**/*.d.ts',
+    '!<rootDir>/src/__tests__/**/*.ts',
+    '!src/lib/**/*.ts',
+  ],
 };
