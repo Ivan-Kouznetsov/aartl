@@ -136,7 +136,7 @@ In the terminal:
 
 And now you can run AARTL like so
 
-    node dist/runFile.js -f C:\path\to\file\with\tests
+    node dist/aartl.js -f path/to/file/with/tests.aartl
 
 ### CLI options
 
