@@ -28,9 +28,12 @@ export const getFirstValidationError = (test: ITest): string => {
 
   for (const request of test.requests) {
     for (const rule of request.jsonRules) {
+      if (!rule) {
+        return `has one or more invalid lines at the end`;
+      }
       for (const am of sortedAliasedMatchers) {
         const key = Object.keys(rule)[0];
-        if (rule[key].toString().startsWith(am.alias)) {
+        if ((rule[key] ?? 'null').toString().startsWith(am.alias)) {
           if (getArgs(rule[key].toString(), am.alias).length > am.argCount) {
             return `Rule: ${JSON.stringify(rule)} has too many arguments`;
           } else {

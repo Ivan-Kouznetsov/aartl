@@ -156,137 +156,181 @@ A work in progress VSCode extension is available at: https://github.com/Ivan-Kou
 
 ### JSON Example
 
-        C:\Users\Ivan\source\repos\aartl>node dist/runFile.js -f src\__tests__\e2e\fixtures\localhostTests.fixtures.ts
-    { testName: 'should save a post',
+    $ node dist/aartl.js -f example.aartl
+    {
+      testName: 'should save a post',
       passed: true,
       failReasons: [],
-      duration: 1054661602,
-      requestLogs:
-       [ { sent:
-            '{"url":"http://localhost:3000/posts","body":"Hello world","headers":[],"method":"post"}',
-           received:
-            '{"url":"http://localhost:3000/posts","status":200,"statusText":"OK","timeout":0,"headers":{"x-powered-by":["Express"],"content-type":["text/html; charset=utf-8"],"content-length":["24"],"etag":["W/\\"18-gYADgj6/hK44mx4n4TgWiGlmEgw\\""],"date":["Fri, 24 Jul 2020 01:48:27 GMT"],"connection":["close"]},"body":null}',
-           duration: 29488393 },
-         { sent:
-            '{"url":"http://localhost:3000/posts/39","body":null,"headers":[["Accept-Encoding","*/*"]],"method":"get"}',
-           received:
-            '{"url":"http://localhost:3000/posts/39","status":200,"statusText":"OK","timeout":0,"headers":{"x-powered-by":["Express"],"content-type":["text/html; charset=utf-8"],"content-length":["30"],"etag":["W/\\"1e-+MERKujWdU3zHwqHSA74SD3ZnUA\\""],"date":["Fri, 24 Jul 2020 01:48:29 GMT"],"connection":["close"]},"body":null}',
-           duration: 5951370 } ] }
-    { testName: 'should save a post and check id',
+      duration: 1065204745,
+      requestLogs: [
+        {
+          sent: '{"url":"http://localhost:3000/posts","body":"Hello world","headers":[],"method":"post"}',
+          received: '{"url":"http://localhost:3000/posts","status":200,"statusText":"OK","timeout":0,"headers":{"x-powered-by":["Express"],"content-type":["text/html; charset=utf-8"],"content-length":["23"],"etag":["W/\\"17-T7TR06+V9gbucS1XFMf3C3HSYTU\\""],"date":["Thu, 30 Jul 2020 02:47:01 GMT"],"connection":["close"]},"body":"{\\"id\\":1,\\"success\\":true}"}',
+          duration: 49788834
+        },
+        {
+          sent: '{"url":"http://localhost:3000/posts/1","body":null,"headers":[["Accept-Encoding","*/*"]],"method":"get"}',
+          received: '{"url":"http://localhost:3000/posts/1","status":200,"statusText":"OK","timeout":0,"headers":{"x-powered-by":["Express"],"content-type":["text/html; charset=utf-8"],"content-length":["29"],"etag":["W/\\"1d-4Ko5yeBtU8K9jLSbqD2x/kEXcO0\\""],"date":["Thu, 30 Jul 2020 02:47:02 GMT"],"connection":["close"]},"body":"{\\"id\\":1,\\"text\\":\\"Hello world\\"}"}',
+          duration: 4943707
+        }
+      ]
+    }
+    {
+      testName: 'should save a post and check id',
       passed: true,
       failReasons: [],
-      duration: 8444667,
-      requestLogs:
-       [ { sent:
-            '{"url":"http://localhost:3000/posts","body":"Hello world","headers":[],"method":"post"}',
-           received:
-            '{"url":"http://localhost:3000/posts","status":200,"statusText":"OK","timeout":0,"headers":{"x-powered-by":["Express"],"content-type":["text/html; charset=utf-8"],"content-length":["24"],"etag":["W/\\"18-NDueK83FTIAiAzJVlEo6QbGn0zc\\""],"date":["Fri, 24 Jul 2020 01:48:29 GMT"],"connection":["close"]},"body":null}',
-           duration: 6558297 } ] }
-    { testName: 'should save a post and make sure id is less than 0',
+      duration: 5369636,
+      requestLogs: [
+        {
+          sent: '{"url":"http://localhost:3000/posts","body":"Hello world","headers":[],"method":"post"}',
+          received: '{"url":"http://localhost:3000/posts","status":200,"statusText":"OK","timeout":0,"headers":{"x-powered-by":["Express"],"content-type":["text/html; charset=utf-8"],"content-length":["23"],"etag":["W/\\"17-V613gjVCgAvtTH5+9CqJc2yyKjY\\""],"date":["Thu, 30 Jul 2020 02:47:02 GMT"],"connection":["close"]},"body":"{\\"id\\":2,\\"success\\":true}"}',
+          duration: 3749778
+        }
+      ]
+    }
+    {
+      testName: 'should save a post and make sure id is less than 0',
       passed: false,
-      failReasons: [ '< 0: Did not expect $..id to be 41' ],
-      duration: 3316926,
-      requestLogs:
-       [ { sent:
-            '{"url":"http://localhost:3000/posts","body":"Hello world","headers":[],"method":"post"}',
-           received:
-            '{"url":"http://localhost:3000/posts","status":200,"statusText":"OK","timeout":0,"headers":{"x-powered-by":["Express"],"content-type":["text/html; charset=utf-8"],"content-length":["24"],"etag":["W/\\"18-/rT+JZ9UDCbHuGuB105I2SsovC0\\""],"date":["Fri, 24 Jul 2020 01:48:29 GMT"],"connection":["close"]},"body":null}',
-           duration: 2723006 } ] }
-    { testName: 'should get apost with id of -1',
+      failReasons: [ 'Expected $..id to be < 0, got 3' ],
+      duration: 6951579,
+      requestLogs: [
+        {
+          sent: '{"url":"http://localhost:3000/posts","body":"Hello world","headers":[],"method":"post"}',
+          received: '{"url":"http://localhost:3000/posts","status":200,"statusText":"OK","timeout":0,"headers":{"x-powered-by":["Express"],"content-type":["text/html; charset=utf-8"],"content-length":["23"],"etag":["W/\\"17-MfPeEZSSuqFur/Lkfw3GsEpjdVM\\""],"date":["Thu, 30 Jul 2020 02:47:02 GMT"],"connection":["close"]},"body":"{\\"id\\":3,\\"success\\":true}"}',
+          duration: 5522129
+        }
+      ]
+    }
+    {
+      testName: 'should get apost with id of -1',
       passed: false,
-      failReasons:
-       [ 'Expected status code of 200, got: 404',
-         'invalid json response body at http://localhost:3000/posts/-1 reason: Unexpected token N in JSON at position 0' ],
-      duration: 3638240,
-      requestLogs:
-       [ { sent:
-            '{"url":"http://localhost:3000/posts/-1","body":null,"headers":[],"method":"get"}',
-           received:
-            '{"url":"http://localhost:3000/posts/-1","status":404,"statusText":"Not Found","timeout":0,"headers":{"x-powered-by":["Express"],"content-type":["text/html; charset=utf-8"],"content-length":["9"],"etag":["W/\\"9-0gXL1ngzMqISxa6S1zx3F4wtLyg\\""],"date":["Fri, 24 Jul 2020 01:48:29 GMT"],"connection":["close"]},"body":null}',
-           duration: 2244218 } ] }
-    { testName: 'should save a post and cache it',
+      failReasons: [
+        'Expected status code of 200, got: 404',
+        'invalid json response body at http://localhost:3000/posts/-1 reason: Unexpected token N in JSON at position 0'
+      ],
+      duration: 5722778,
+      requestLogs: [
+        {
+          sent: '{"url":"http://localhost:3000/posts/-1","body":null,"headers":[],"method":"get"}',
+          received: '{"url":"http://localhost:3000/posts/-1","status":404,"statusText":"Not Found","timeout":0,"headers":{"x-powered-by":["Express"],"content-type":["text/html; charset=utf-8"],"content-length":["9"],"etag":["W/\\"9-0gXL1ngzMqISxa6S1zx3F4wtLyg\\""],"date":["Thu, 30 Jul 2020 02:47:02 GMT"],"connection":["close"]},"body":"Not Found"}',
+          duration: 3866016
+        }
+      ]
+    }
+    {
+      testName: 'should save a post and cache it',
       passed: true,
       failReasons: [],
-      duration: 1006820108,
-      requestLogs:
-       [ { sent:
-            '{"url":"http://localhost:3000/posts","body":"Hello world","headers":[],"method":"post"}',
-           received:
-            '{"url":"http://localhost:3000/posts","status":200,"statusText":"OK","timeout":0,"headers":{"x-powered-by":["Express"],"content-type":["text/html; charset=utf-8"],"content-length":["24"],"etag":["W/\\"18-+5YEqQ0R11sNRfwD0BgHi1evvWk\\""],"date":["Fri, 24 Jul 2020 01:48:29 GMT"],"connection":["close"]},"body":null}',
-           duration: 2854189 },
-         { sent:
-            '{"url":"http://localhost:3000/posts/42","body":null,"headers":[["Accept-Encoding","*/*"]],"method":"get"}',
-           received:
-            '{"url":"http://localhost:3000/posts/42","status":200,"statusText":"OK","timeout":0,"headers":{"x-powered-by":["Express"],"content-type":["text/html; charset=utf-8"],"content-length":["30"],"etag":["W/\\"1e-FjyKOwyOh1yBnQUTyZFsJIkw3Q8\\""],"date":["Fri, 24 Jul 2020 01:48:30 GMT"],"connection":["close"]},"body":null}',
-           duration: 2234532 } ] }
-    { testName: 'should save a post and be powered by Express',
+      duration: 1008741642,
+      requestLogs: [
+        {
+          sent: '{"url":"http://localhost:3000/posts","body":"Hello world","headers":[],"method":"post"}',
+          received: '{"url":"http://localhost:3000/posts","status":200,"statusText":"OK","timeout":0,"headers":{"x-powered-by":["Express"],"content-type":["text/html; charset=utf-8"],"content-length":["23"],"etag":["W/\\"17-ljr/eMIDVB7SLLdy2nrJfQ2XQ5M\\""],"date":["Thu, 30 Jul 2020 02:47:02 GMT"],"connection":["close"]},"body":"{\\"id\\":4,\\"success\\":true}"}',
+          duration: 3992218
+        },
+        {
+          sent: '{"url":"http://localhost:3000/posts/4","body":null,"headers":[["Accept-Encoding","*/*"]],"method":"get"}',
+          received: '{"url":"http://localhost:3000/posts/4","status":200,"statusText":"OK","timeout":0,"headers":{"x-powered-by":["Express"],"content-type":["text/html; charset=utf-8"],"content-length":["29"],"etag":["W/\\"1d-Qb3uALVuDDMKG99RUY/dg4NuzYk\\""],"date":["Thu, 30 Jul 2020 02:47:03 GMT"],"connection":["close"]},"body":"{\\"id\\":4,\\"text\\":\\"Hello world\\"}"}',
+          duration: 2944139
+        }
+      ]
+    }
+    {
+      testName: 'should save a post and be powered by Express',
       passed: true,
       failReasons: [],
-      duration: 1008842367,
-      requestLogs:
-       [ { sent:
-            '{"url":"http://localhost:3000/posts","body":"Hello world","headers":[],"method":"post"}',
-           received:
-            '{"url":"http://localhost:3000/posts","status":200,"statusText":"OK","timeout":0,"headers":{"x-powered-by":["Express"],"content-type":["text/html; charset=utf-8"],"content-length":["24"],"etag":["W/\\"18-Nzkkf+gRkTwVxPYTu/ghigYOsMk\\""],"date":["Fri, 24 Jul 2020 01:48:30 GMT"],"connection":["close"]},"body":null}',
-           duration: 2866919 },
-         { sent:
-            '{"url":"http://localhost:3000/posts/43","body":null,"headers":[["Accept-Encoding","*/*"]],"method":"get"}',
-           received:
-            '{"url":"http://localhost:3000/posts/43","status":200,"statusText":"OK","timeout":0,"headers":{"x-powered-by":["Express"],"content-type":["text/html; charset=utf-8"],"content-length":["30"],"etag":["W/\\"1e-XMMOkQgX6sbsFhxzE57lhEktOXg\\""],"date":["Fri, 24 Jul 2020 01:48:31 GMT"],"connection":["close"]},"body":null}',
-           duration: 4766576 } ] }
-    { testName: 'should save a post and be powered by XXXX',
+      duration: 1007823916,
+      requestLogs: [
+        {
+          sent: '{"url":"http://localhost:3000/posts","body":"Hello world","headers":[],"method":"post"}',
+          received: '{"url":"http://localhost:3000/posts","status":200,"statusText":"OK","timeout":0,"headers":{"x-powered-by":["Express"],"content-type":["text/html; charset=utf-8"],"content-length":["23"],"etag":["W/\\"17-zXv/Sq2uY5CrlgNrxJK7HQwCXlY\\""],"date":["Thu, 30 Jul 2020 02:47:03 GMT"],"connection":["close"]},"body":"{\\"id\\":5,\\"success\\":true}"}',
+          duration: 3835850
+        },
+        {
+          sent: '{"url":"http://localhost:3000/posts/5","body":null,"headers":[["Accept-Encoding","*/*"]],"method":"get"}',
+          received: '{"url":"http://localhost:3000/posts/5","status":200,"statusText":"OK","timeout":0,"headers":{"x-powered-by":["Express"],"content-type":["text/html; charset=utf-8"],"content-length":["29"],"etag":["W/\\"1d-8C28sooaDenWdwVN26wIeVWI4Fk\\""],"date":["Thu, 30 Jul 2020 02:47:04 GMT"],"connection":["close"]},"body":"{\\"id\\":5,\\"text\\":\\"Hello world\\"}"}',
+          duration: 2566919
+        }
+      ]
+    }
+    {
+      testName: 'should save a post and be powered by XXXX',
       passed: true,
       failReasons: [],
-      duration: 1008039220,
-      requestLogs:
-       [ { sent:
-            '{"url":"http://localhost:3000/posts","body":"Hello world","headers":[],"method":"post"}',
-           received:
-            '{"url":"http://localhost:3000/posts","status":200,"statusText":"OK","timeout":0,"headers":{"x-powered-by":["Express"],"content-type":["text/html; charset=utf-8"],"content-length":["24"],"etag":["W/\\"18-3fkfcFlLnPf0CECnNzHdr/kSfTk\\""],"date":["Fri, 24 Jul 2020 01:48:31 GMT"],"connection":["close"]},"body":null}',
-           duration: 5482267 },
-         { sent:
-            '{"url":"http://localhost:3000/posts/44","body":null,"headers":[["Accept-Encoding","*/*"]],"method":"get"}',
-           received:
-            '{"url":"http://localhost:3000/posts/44","status":200,"statusText":"OK","timeout":0,"headers":{"x-powered-by":["Express"],"content-type":["text/html; charset=utf-8"],"content-length":["30"],"etag":["W/\\"1e-dCDqChk7ixPm2kFI+5VUBdB3eXo\\""],"date":["Fri, 24 Jul 2020 01:48:32 GMT"],"connection":["close"]},"body":null}',
-           duration: 2196892 } ] }
-    { testName: 'should check that post id is 0',
+      duration: 1009215173,
+      requestLogs: [
+        {
+          sent: '{"url":"http://localhost:3000/posts","body":"Hello world","headers":[],"method":"post"}',
+          received: '{"url":"http://localhost:3000/posts","status":200,"statusText":"OK","timeout":0,"headers":{"x-powered-by":["Express"],"content-type":["text/html; charset=utf-8"],"content-length":["23"],"etag":["W/\\"17-cVIF2Jsc4cLIpE+ESVWd3qPR+sM\\""],"date":["Thu, 30 Jul 2020 02:47:04 GMT"],"connection":["close"]},"body":"{\\"id\\":6,\\"success\\":true}"}',
+          duration: 4255136
+        },
+        {
+          sent: '{"url":"http://localhost:3000/posts/6","body":null,"headers":[["Accept-Encoding","*/*"]],"method":"get"}',
+          received: '{"url":"http://localhost:3000/posts/6","status":200,"statusText":"OK","timeout":0,"headers":{"x-powered-by":["Express"],"content-type":["text/html; charset=utf-8"],"content-length":["29"],"etag":["W/\\"1d-tHhSnxiuD4bH0t3nc6az5XpOQKY\\""],"date":["Thu, 30 Jul 2020 02:47:05 GMT"],"connection":["close"]},"body":"{\\"id\\":6,\\"text\\":\\"Hello world\\"}"}',
+          duration: 2888234
+        }
+      ]
+    }
+    {
+      testName: 'should check that post id is 0',
       passed: false,
-      failReasons: [ '0: Did not expect $..id to be 45' ],
-      duration: 3149211,
-      requestLogs:
-       [ { sent:
-            '{"url":"http://localhost:3000/posts","body":"Hello world","headers":[],"method":"post"}',
-           received:
-            '{"url":"http://localhost:3000/posts","status":200,"statusText":"OK","timeout":0,"headers":{"x-powered-by":["Express"],"content-type":["text/html; charset=utf-8"],"content-length":["24"],"etag":["W/\\"18-/6Okt6YsK6JZwXu+gPm3aswOJwY\\""],"date":["Fri, 24 Jul 2020 01:48:32 GMT"],"connection":["close"]},"body":null}',
-           duration: 2640809 } ] }
-    { testName: 'should check that post id is 1 - 5',
+      failReasons: [ 'Expected $..id to be 0, got 7' ],
+      duration: 4956715,
+      requestLogs: [
+        {
+          sent: '{"url":"http://localhost:3000/posts","body":"Hello world","headers":[],"method":"post"}',
+          received: '{"url":"http://localhost:3000/posts","status":200,"statusText":"OK","timeout":0,"headers":{"x-powered-by":["Express"],"content-type":["text/html; charset=utf-8"],"content-length":["23"],"etag":["W/\\"17-JBgFSXSbwr86Bgw13Hv+g+uSA0A\\""],"date":["Thu, 30 Jul 2020 02:47:05 GMT"],"connection":["close"]},"body":"{\\"id\\":7,\\"success\\":true}"}',
+          duration: 3553005
+        }
+      ]
+    }
+    {
+      testName: 'should check that post id is 1 - 5',
       passed: false,
-      failReasons: [ 'is any of 1 2 3 4 5: Did not expect $..id to be 0' ],
-      duration: 2628632,
-      requestLogs:
-       [ { sent:
-            '{"url":"http://localhost:3000/posts/0","body":null,"headers":[],"method":"get"}',
-           received:
-            '{"url":"http://localhost:3000/posts/0","status":200,"statusText":"OK","timeout":0,"headers":{"x-powered-by":["Express"],"content-type":["text/html; charset=utf-8"],"content-length":["26"],"etag":["W/\\"1a-V7YESHccve6KygRv1p/xSDihAMU\\""],"date":["Fri, 24 Jul 2020 01:48:32 GMT"],"connection":["close"]},"body":null}',
-           duration: 2001226 } ] }
-    { testName: 'should check post id 0 - 5',
+      failReasons: [ 'Expected $..id to be is any of 1 2 3 4 5, got 0' ],
+      duration: 3674500,
+      requestLogs: [
+        {
+          sent: '{"url":"http://localhost:3000/posts/0","body":null,"headers":[],"method":"get"}',
+          received: '{"url":"http://localhost:3000/posts/0","status":200,"statusText":"OK","timeout":0,"headers":{"x-powered-by":["Express"],"content-type":["text/html; charset=utf-8"],"content-length":["26"],"etag":["W/\\"1a-V7YESHccve6KygRv1p/xSDihAMU\\""],"date":["Thu, 30 Jul 2020 02:47:05 GMT"],"connection":["close"]},"body":"{\\"id\\":0,\\"text\\":\\"0th Post\\"}"}',
+          duration: 2656035
+        }
+      ]
+    }
+    {
+      testName: 'should check post id 0 - 5',
       passed: true,
       failReasons: [],
-      duration: 4357253,
-      requestLogs:
-       [ { sent:
-            '{"url":"http://localhost:3000/posts/0","body":null,"headers":[],"method":"get"}',
-           received:
-            '{"url":"http://localhost:3000/posts/0","status":200,"statusText":"OK","timeout":0,"headers":{"x-powered-by":["Express"],"content-type":["text/html; charset=utf-8"],"content-length":["26"],"etag":["W/\\"1a-V7YESHccve6KygRv1p/xSDihAMU\\""],"date":["Fri, 24 Jul 2020 01:48:32 GMT"],"connection":["close"]},"body":null}',
-           duration: 3886490 } ] }
+      duration: 4754129,
+      requestLogs: [
+        {
+          sent: '{"url":"http://localhost:3000/posts/0","body":null,"headers":[],"method":"get"}',
+          received: '{"url":"http://localhost:3000/posts/0","status":200,"statusText":"OK","timeout":0,"headers":{"x-powered-by":["Express"],"content-type":["text/html; charset=utf-8"],"content-length":["26"],"etag":["W/\\"1a-V7YESHccve6KygRv1p/xSDihAMU\\""],"date":["Thu, 30 Jul 2020 02:47:05 GMT"],"connection":["close"]},"body":"{\\"id\\":0,\\"text\\":\\"0th Post\\"}"}',
+          duration: 3045432
+        }
+      ]
+    }
+    {
+      testName: 'should be null',
+      passed: true,
+      failReasons: [],
+      duration: 3934099,
+      requestLogs: [
+        {
+          sent: '{"url":"http://localhost:3000/null","body":null,"headers":[],"method":"get"}',
+          received: '{"url":"http://localhost:3000/null","status":200,"statusText":"OK","timeout":0,"headers":{"x-powered-by":["Express"],"content-type":["text/html; charset=utf-8"],"content-length":["11"],"etag":["W/\\"b-yHl5CkQW7JVvNHB+r5i4h6FZPGk\\""],"date":["Thu, 30 Jul 2020 02:47:05 GMT"],"connection":["close"]},"body":"{\\"id\\":null}"}',
+          duration: 3163884
+        }
+      ]
+    }
 
 Durations are in nanoseconds.
 
-### Xml
+### XML Example
 
-    C:\Users\Ivan\source\repos\aartl>node dist/runFile.js -f src\__tests__\e2e\fixtures\localhostTests.fixtures.ts --xml
+    $ node dist/aartl.js -f example.aartl --xml
     <?xml version="1.0" encoding="UTF-8"?>
-    <testsuite name="localhostTests.fixtures" tests="10" id="0" errors="0" failures="4">
+    <testsuite name="example" tests="11" id="0" errors="0" failures="4">
     <testcase name="should save a post"
     classname="should_save_a_post"
     status="passed"
@@ -297,21 +341,21 @@ Durations are in nanoseconds.
     <testcase name="should save a post and check id"
     classname="should_save_a_post_and_check_id"
     status="passed"
-    time="0.00"
+    time="0.01"
     >
 
     </testcase>
     <testcase name="should save a post and make sure id is less than 0"
     classname="should_save_a_post_and_make_sure_id_is_less_than_0"
     status="failed"
-    time="0.00"
+    time="0.01"
     >
-    <failure message="< 0: Did not expect $..id to be 48"></failure>
+    <failure message="Expected $..id to be < 0, got 10"></failure>
     </testcase>
     <testcase name="should get apost with id of -1"
     classname="should_get_apost_with_id_of_-1"
     status="failed"
-    time="0.00"
+    time="0.01"
     >
     <failure message="Expected status code of 200, got: 404"></failure><failure message="invalid json response body at http://localhost:3000/posts/-1 reason: Unexpected token N in JSON at position 0"></failure>
     </testcase>
@@ -339,27 +383,34 @@ Durations are in nanoseconds.
     <testcase name="should check that post id is 0"
     classname="should_check_that_post_id_is_0"
     status="failed"
-    time="0.01"
+    time="0.00"
     >
-    <failure message="0: Did not expect $..id to be 52"></failure>
+    <failure message="Expected $..id to be 0, got 14"></failure>
     </testcase>
     <testcase name="should check that post id is 1 - 5"
     classname="should_check_that_post_id_is_1_-_5"
     status="failed"
     time="0.00"
     >
-    <failure message="is any of 1 2 3 4 5: Did not expect $..id to be 0"></failure>
+    <failure message="Expected $..id to be is any of 1 2 3 4 5, got 0"></failure>
     </testcase>
     <testcase name="should check post id 0 - 5"
     classname="should_check_post_id_0_-_5"
     status="passed"
-    time="0.01"
+    time="0.00"
+    >
+
+    </testcase>
+    <testcase name="should be null"
+    classname="should_be_null"
+    status="passed"
+    time="0.00"
     >
 
     </testcase>
     </testsuite>
 
-Times are in seconds.
+In XML output the times are in seconds.
 
 ## Licence
 

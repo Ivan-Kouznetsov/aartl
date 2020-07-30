@@ -22,7 +22,26 @@ const main = async () => {
   const testName = <string>argv['t'];
   const randomize = <boolean>argv['r'];
 
-  const contents = fileSystem.readFileSync(filePath, { encoding: 'utf-8' });
+  if (filePath === undefined) {
+    console.log('Usage: node aartl.js -f "path-to-test-file"');
+    console.log('\nOptions:');
+    console.log('-t "name of test" - run a single test');
+    console.log('--hello - display name of this program');
+    console.log('--r - randomize test order');
+    return;
+  }
+
+  let contents = '';
+  try {
+    contents = fileSystem.readFileSync(filePath, { encoding: 'utf-8' });
+  } catch (ex) {
+    if (ex.code === 'ENOENT') {
+      console.error(`${filePath} does not exist`);
+    } else {
+      console.error(`${filePath} cannot be accessed`);
+    }
+    exit(1);
+  }
 
   const preProcessedText = parser.preProcess(contents);
   const tests = parser.splitTests(preProcessedText);

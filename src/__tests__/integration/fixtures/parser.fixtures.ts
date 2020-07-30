@@ -76,3 +76,26 @@ export const fairlyCompleteInvalidLists = `
     "Accept-Encoding"
     "X-cache":true
   `;
+
+export const saveAndCheckPost = `
+    Test that it should save a post
+    Using values
+      @postText: Hello world
+    After HTTP request
+      method: post
+      url: http://localhost:3000/posts
+      body: @postText
+      Pass on "$..id" as _id
+    Wait 1 seconds
+    Expect HTTP request
+      headers:
+        "Accept-Encoding":"*/*"
+      method: get
+      url: http://localhost:3000/posts/_id
+    To respond with status code 200 /** OK **/
+    To match JSON rules
+      "$..id": _id
+      "$..text": @postText
+      ;
+      ;
+    `;

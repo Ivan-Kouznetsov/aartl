@@ -9,10 +9,14 @@ describe('Validator', () => {
     expect(getFirstValidationError(fixtures.passOn)).toEqual('Cannot have passed on values in last request');
     expect(getFirstValidationError(fixtures.waitInLast)).toEqual('Cannot have a wait in last request');
     expect(getFirstValidationError(fixtures.tooManyArgs)).toContain('has too many arguments');
+    expect(getFirstValidationError(fixtures.hasNullRules)).toContain('has one or more invalid lines at the end');
   });
 
   it('should validate valid test', () => {
     expect(getFirstValidationError(fixtures.valid)).toBeUndefined();
     expect(getFirstValidationError(fixtures.notTooManyArgs)).toBeUndefined();
+  });
+  it('should validate test with null rule', () => {
+    expect(getFirstValidationError(fixtures.hasNull)).toBeUndefined();
   });
 });
