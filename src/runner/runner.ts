@@ -96,7 +96,7 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
             }
           } else {
             data.forEach((item) => {
-              if (rule.rule !== item.toString()) {
+              if (rule.rule !== (item ?? 'null').toString()) {
                 failReasons.push(`Expected ${rule.jsonpath} to be ${rule.originalRule}, got ${item}`);
               }
             });
