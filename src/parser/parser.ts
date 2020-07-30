@@ -1,4 +1,4 @@
-import { flow } from 'fp-ts/lib/function';
+import { flow } from '../lib/fp-ts/function';
 import { ITest, IKeyValuePair } from '../interfaces/test';
 
 /**

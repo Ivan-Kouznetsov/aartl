@@ -2,7 +2,7 @@ import * as fileSystem from 'fs';
 import * as path from 'path';
 import { runTest } from './src/runner/runner';
 import * as parser from './src/parser/parser';
-import { argv } from 'yargs';
+import arg = require('./src/lib/arg');
 import { exit } from 'process';
 import { getFirstValidationError } from './src/validator/validator';
 import * as util from './src/runner/util';
@@ -16,11 +16,22 @@ const shuffleArray = (array: unknown[]): void => {
 };
 
 const main = async () => {
-  if (argv.hello === true) console.log('Agnostic API Testing Language - Runner');
+  const args = arg({
+    '-f': String,
+    '-t': String,
+    '--r': Boolean,
+    '--hello': Boolean,
+    '--xml': Boolean,
+    '--novalidation': Boolean,
+  });
 
-  const filePath = <string>argv['f'];
-  const testName = <string>argv['t'];
-  const randomize = <boolean>argv['r'];
+  if (args['--hello'] === true) console.log('Agnostic API Testing Language - Runner');
+
+  const filePath = <string>args['-f'];
+  const testName = <string>args['-t'];
+  const randomize = <boolean>args['--r'];
+  const outputXml = <boolean>args['--xml'];
+  const noValidation = <boolean>args['--novalidation'];
 
   if (filePath === undefined) {
     console.log('Usage: node aartl.js -f "path-to-test-file"');
@@ -54,7 +65,7 @@ const main = async () => {
   for (const test of tests) {
     const parsedTest = parser.splitTestIntoSections(test);
     if (testName === undefined || parsedTest.name === testName) {
-      if (!argv['novalidation']) {
+      if (!noValidation) {
         const validationError = getFirstValidationError(parsedTest);
 
         if (validationError) {
@@ -65,13 +76,13 @@ const main = async () => {
 
       const result = await runTest(parsedTest);
       results.push(result);
-      if (!argv.xml) {
+      if (!outputXml) {
         console.log(result);
       }
     }
   }
 
-  if (argv.xml) {
+  if (outputXml) {
     console.log(util.resultsToXml(path.basename(filePath, path.extname(filePath)), results));
   }
 };

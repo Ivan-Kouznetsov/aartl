@@ -13,7 +13,6 @@
   "author": "Ivan Kouznetsov",
   "license": "MIT",
   "devDependencies": {
-    "@types/chance": "^1.1.0",
     "@types/express": "^4.17.7",
     "@types/jest": "^26.0.4",
     "@types/jsonpath": "^0.2.0",
@@ -32,11 +31,8 @@
     "verify-junit-xml": "0.0.3"
   },
   "dependencies": {
-    "chance": "^1.1.6",
-    "fp-ts": "^2.7.0",
     "jsonpath": "^1.0.2",
-    "node-fetch": "^2.6.0",
-    "yargs": "^15.4.1"
+    "node-fetch": "^2.6.0"
   },
   "husky": {
     "hooks": {

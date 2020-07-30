@@ -1,5 +1,5 @@
 import { ITest, IKeyValuePair, IRequest } from '../interfaces/test';
-import { Chance } from 'chance';
+import Chance = require('../lib/chance');
 import { getArgs } from '../parser/util';
 import { Response } from 'node-fetch';
 import { ITestResult } from '../interfaces/results';
