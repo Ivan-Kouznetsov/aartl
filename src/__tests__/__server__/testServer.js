@@ -12,6 +12,13 @@ app.get('/', (_, response) => {
   response.status(200).send('Ready').end();
 });
 
+app.get('/null', (_, response) => {
+  response
+    .status(200)
+    .send(JSON.stringify({ id: null, text: undefined }))
+    .end();
+});
+
 app.get('/posts/:id', (request, response) => {
   const id = parseInt(request.params['id']);
 

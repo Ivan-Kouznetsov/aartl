@@ -33,9 +33,9 @@ export const validateStringContaining = (str: string): MatcherFunction => (arr: 
 export const validateStringNotContaining = (str: string): MatcherFunction => (arr: Primitive[]): Primitive =>
   arr.find((item) => typeof item !== 'string' || item.includes(str));
 
-/* Primitive Of */
+/* Any Of */
 export const validateAnyOf = (anyOf: Primitive[]): MatcherFunction => (arr: Primitive[]): Primitive =>
-  arr.find((item) => !anyOf.includes(item.toString()));
+  arr.find((item) => !anyOf.includes(item));
 
 /* Not */
 export const validateNot = (not: string): MatcherFunction => (arr: Primitive[]): Primitive =>
@@ -47,7 +47,7 @@ export const validateRegex = (regex: RegExp): MatcherFunction => (arr: Primitive
 
 /* Array Count */
 export const validateCountEquals = (count: number): MatcherFunction => (arr: Primitive[]): Primitive =>
-  !(arr.length === count) ? arr.length : undefined;
+  arr.length !== count ? arr.length : undefined;
 export const validateCountGreaterThan = (count: number): MatcherFunction => (arr: Primitive[]): Primitive =>
   !(arr.length > count) ? arr.length : undefined;
 export const validateCountGreaterThanOrEqual = (count: number): MatcherFunction => (arr: Primitive[]): Primitive =>

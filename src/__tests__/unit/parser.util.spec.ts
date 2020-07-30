@@ -6,8 +6,8 @@ describe('Parser Util', () => {
   });
 
   it('should get args when there are args', () => {
-    expect(util.getArgs('abc 1', 'abc')).toEqual(['1']);
-    expect(util.getArgs('abc 1 2', 'abc')).toEqual(['1', '2']);
+    expect(util.getArgs('abc 1', 'abc')).toEqual([1]);
+    expect(util.getArgs('abc 1 hello', 'abc')).toEqual([1, 'hello']);
   });
 
   it('should get quoted args when there are quoted args', () => {
