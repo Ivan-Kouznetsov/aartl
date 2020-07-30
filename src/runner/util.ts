@@ -1,10 +1,9 @@
 import { ITest, IKeyValuePair, IRequest } from '../interfaces/test';
-import Chance = require('../lib/chance');
 import { getArgs } from '../parser/util';
 import { Response } from 'node-fetch';
 import { ITestResult } from '../interfaces/results';
-
-const randomSeed = process.hrtime()[0] * 1e9 + process.hrtime()[1];
+import { getRngFunctions } from '../lib/rng';
+const randomSeed = process.hrtime()[1];
 
 const replaceMultipleValuesInString = (str: string, replacements: IKeyValuePair[]) => {
   if (str != null) {
@@ -82,7 +81,8 @@ export const applyValues = (test: ITest): ITest => {
   @txt: random string length 20
 */
 export const applyRandomValues = (test: ITest, seed: number = randomSeed): ITest => {
-  const chance = new Chance(seed);
+  const rng = getRngFunctions(seed);
+
   const randomString = 'random string length';
   const randomNumber = 'random number up to';
   const usingValues = test.usingValues.map((v) => {
@@ -90,12 +90,12 @@ export const applyRandomValues = (test: ITest, seed: number = randomSeed): ITest
     if (v[key].toString().startsWith(randomString)) {
       const args = getArgs(v[key].toString(), randomString);
       if (args.length === 1) {
-        return { [key]: chance.string({ length: <number>args[0] }) };
+        return { [key]: rng.randomStr(<number>args[0]) };
       }
     } else if (v[key].toString().startsWith(randomNumber)) {
       const args = getArgs(v[key].toString(), randomNumber);
       if (args.length === 1) {
-        return { [key]: chance.integer({ min: 0, max: <number>args[0] }).toString() };
+        return { [key]: rng.randomInt(<number>args[0]).toString() };
       }
     }
     return v;
