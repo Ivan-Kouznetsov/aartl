@@ -2,7 +2,7 @@ import * as fileSystem from 'fs';
 import * as path from 'path';
 import { runTest } from './src/runner/runner';
 import * as parser from './src/parser/parser';
-import arg = require('./src/lib/arg');
+import { arg } from './src/lib/arg';
 import { exit } from 'process';
 import { getFirstValidationError } from './src/validator/validator';
 import * as util from './src/runner/util';
