@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "alwaysStrict": true,
-    "allowJs": false,
+    "allowJs": true,
     "allowUnusedLabels": false,
     "outDir": "dist",
     "noEmit": false,
@@ -13,5 +13,5 @@
     "target": "es5",
     "watch": false
   },
-  "exclude": ["node_modules", "src/__tests__", "jest.config.*"]
+  "exclude": ["node_modules", "src/__tests__", "jest.config.*", "./dist"]
 }

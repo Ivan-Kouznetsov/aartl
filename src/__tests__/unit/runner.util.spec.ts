@@ -9,8 +9,8 @@ describe('Runner util', () => {
     const test = parser.splitTestIntoSections(fixtures.usingRanomdValues);
     const result = util.applyRandomValues(test, randomSeed);
 
-    expect(result.usingValues[0]).toEqual({ '@num': '4' });
-    expect(result.usingValues[1]).toEqual({ '@postText': '6(n25SSlGl' });
+    expect(result.usingValues[0]).toEqual({ '@num': '1' });
+    expect(result.usingValues[1]).toEqual({ '@postText': 'eqemnqxujf' });
   });
 
   it('should not apply random values if too many params', () => {

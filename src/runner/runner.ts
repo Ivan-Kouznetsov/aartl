@@ -3,7 +3,7 @@ import { IRequestLog, ITestResult } from '../interfaces/results';
 import * as util from './util';
 import * as ruleParser from '../parser/ruleParser';
 import fetch from 'node-fetch';
-import { value, query } from 'jsonpath';
+import { jsonPath } from '../lib/jsonpath';
 
 export const runTest = async (test: ITest): Promise<ITestResult> => {
   const testWithValues = util.applyRandomValues(util.applyValues(test));
@@ -49,7 +49,7 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
         const json = await currentRequestResponse.json();
         for (const passOn of currentRequest.passOn) {
           const passOnObj = util.keyValueToObject(passOn);
-          passOnValues.push({ [passOnObj.value.toString()]: value(json, passOnObj.key) });
+          passOnValues.push({ [passOnObj.value.toString()]: jsonPath(json, passOnObj.key)[0] });
         }
       }
 
@@ -85,17 +85,17 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
         const json = await currentRequestResponse.json();
 
         parsedRules.forEach(async (rule) => {
-          const data = query(json, rule.jsonpath);
+          const data = jsonPath(json, rule.jsonpath);
 
           if (typeof rule.rule === 'function') {
-            const nonCompliantValue = rule.rule(data);
+            const nonCompliantValue = rule.rule(data ? data : []);
             if (nonCompliantValue !== undefined) {
               failReasons.push(
                 `Expected ${rule.jsonpath} to be ${rule.originalRule}, got ${nonCompliantValue.toString()}`
               );
             }
           } else {
-            data.forEach((item) => {
+            (<unknown[]>data).forEach((item) => {
               if (rule.rule !== (item ?? 'null').toString()) {
                 failReasons.push(`Expected ${rule.jsonpath} to be ${rule.originalRule}, got ${item}`);
               }
