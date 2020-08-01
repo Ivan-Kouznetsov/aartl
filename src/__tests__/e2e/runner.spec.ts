@@ -18,6 +18,7 @@ describe('Test runner', () => {
   it('should save a post and check that it is saved', async () => {
     const result = await runTestThruAllSteps(fixtures.saveAndCheckPost);
 
+    console.log(result);
     expect(result.passed).toBe(true);
   });
 
@@ -53,11 +54,11 @@ describe('Test runner', () => {
     expect(result.passed).toBe(true);
   });
 
-  it('should pass when header rules do not match', async () => {
+  it('should not pass when header rules do not match', async () => {
     const result = await runTestThruAllSteps(fixtures.wrongHeaderValue);
 
     expect(result.passed).toBe(false);
-    expect(result.failReasons[0]).toEqual('Expected header x-powered-by to be XXXX, got: Express');
+    expect(result.failReasons[0]).toEqual('Expected header X-Powered-By to be XXXX, got: Express');
   });
 
   it('should fail when literal rules do not match', async () => {
@@ -84,5 +85,11 @@ describe('Test runner', () => {
     const result = await runTestThruAllSteps(fixtures.getNull);
 
     expect(result.passed).toBe(true);
+  });
+
+  it('should catch exception when request is not valid', async () => {
+    const result = await runTestThruAllSteps(fixtures.invalid);
+
+    expect(result.passed).toBe(false);
   });
 });

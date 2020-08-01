@@ -1,6 +1,5 @@
 import { ITest, IKeyValuePair, IRequest } from '../interfaces/test';
 import { getArgs } from '../parser/util';
-import { Response } from 'node-fetch';
 import { ITestResult } from '../interfaces/results';
 import { getRngFunctions } from '../lib/rng';
 const randomSeed = process.hrtime()[1];
@@ -104,12 +103,15 @@ export const applyRandomValues = (test: ITest, seed: number = randomSeed): ITest
   return { name: test.name, usingValues, requests: test.requests };
 };
 
-export const keyValuePairArrayTo2DArray = (arr: IKeyValuePair[]): string[][] =>
-  arr.map((item) => {
-    const key = Object.keys(item)[0].toString();
-    return [key, item[key].toString()];
-  });
+export const keyValuePairArrayHashTable = (arr: IKeyValuePair[]): { [key: string]: string } => {
+  const result: { [key: string]: string } = {};
 
+  arr.forEach((item) => {
+    const key = Object.keys(item)[0].toString();
+    result[key] = item[key].toString();
+  });
+  return result;
+};
 export const wait = async (ms: number): Promise<unknown> => await new Promise((resolve) => setTimeout(resolve, ms));
 
 // this function will throw if given invalid data
@@ -132,25 +134,6 @@ export const keyValueToObject = (
   key: string;
   value: string | number | boolean;
 } => ({ key: Object.keys(kv)[0], value: kv[Object.keys(kv)[0]] });
-
-export const getResponseText = async (response: Response): Promise<string> => {
-  const responseClone = response.clone();
-  const body = await responseClone.text();
-  const headers = responseClone.headers.raw();
-  const status = responseClone.status;
-  const statusText = responseClone.statusText;
-  const timeout = responseClone.timeout;
-  const url = responseClone.url;
-
-  return JSON.stringify({
-    url,
-    status,
-    statusText,
-    timeout,
-    headers,
-    body,
-  });
-};
 
 export const bigIntToNumber = (bigInt: BigInt): number => {
   if (bigInt <= BigInt(Number.MAX_SAFE_INTEGER)) return Number(bigInt);

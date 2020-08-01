@@ -5,6 +5,8 @@ export const saveAndCheckPost = `
   After HTTP request
     method: post
     url: http://localhost:3000/posts
+    headers:
+    "Content-Type": "application/txt; charset=utf-8"
     body: @postText
     Pass on "$..id" as _id
   Wait 1 seconds
@@ -92,7 +94,7 @@ export const rightHeader = `
     url: http://localhost:3000/posts/_id
   To respond with status code 200 /** OK **/
   To match header rules
-    "x-powered-by":"Express"
+    "X-Powered-By":"Express"
   `;
 
 export const wrongHeaderValue = `
@@ -112,7 +114,7 @@ export const wrongHeaderValue = `
     url: http://localhost:3000/posts/_id
   To respond with status code 200 /** OK **/
   To match header rules
-    "x-powered-by":"XXXX"
+    "X-Powered-By":"XXXX"
   `;
 
 export const checkLiteral = `
@@ -160,4 +162,18 @@ export const getNull = `
     "$..text": count <= 1
     "$..text": count > -1
     "$..text": count >= 0
+  `;
+
+export const invalid = `
+  Test that it should check post id 0 - 5
+  Expect HTTP request
+    method: XXXX
+
+  To match JSON rules
+    "$..id": is any of 1 2 3 4 5 0
+    "$.......text": is any of 1 2 "0th Post" "hi" 72
+
+    dasdasd
+    asdas
+    dasda
   `;
