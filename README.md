@@ -145,6 +145,8 @@ And now you can run AARTL like so
 | \-\-hello        | Print the name of the program before running tests |
 | \-\-xml          | Output results as JUnit XML                        |
 | \-\-novalidation | Don't validate test file                           |
+| \-\-r            | Randomize test order                               |
+| \-n NUMBER       | Rerun the tests a number of times                  |
 
 ## Editor Support
 

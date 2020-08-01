@@ -1,6 +1,6 @@
 {
   "name": "aartl",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Agnostic API Reliability Testing Language (AARTL) is platform-agnostic declarative domain-specific language for testing HTTP servers using the server’s API",
   "main": "aartl.ts",
   "scripts": {

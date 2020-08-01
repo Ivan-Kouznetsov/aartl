@@ -7,6 +7,7 @@ import { exit } from 'process';
 import { getFirstValidationError } from './src/validator/validator';
 import * as util from './src/runner/util';
 import { ITestResult } from './src/interfaces/results';
+import { ITest } from './src/interfaces/test';
 
 const shuffleArray = (array: unknown[]): void => {
   for (let i = array.length - 1; i > 0; i--) {
@@ -15,30 +16,43 @@ const shuffleArray = (array: unknown[]): void => {
   }
 };
 
-const main = async () => {
-  const args = arg({
-    '-f': String,
-    '-t': String,
-    '--r': Boolean,
-    '--hello': Boolean,
-    '--xml': Boolean,
-    '--novalidation': Boolean,
-  });
+const showUsage = () => {
+  console.log('Usage: node aartl.js -f "path-to-test-file"');
+  console.log('\nOptions:');
+  console.log('-t "name of test" - run a single test');
+  console.log('-n NUMBER - run the tests a number of times');
+  console.log('--hello - display name of this program');
+  console.log('--r - randomize test order');
+};
 
+const main = async () => {
+  let args;
+  try {
+    args = arg({
+      '-f': String,
+      '-t': String,
+      '-n': Number,
+      '--r': Boolean,
+      '--hello': Boolean,
+      '--xml': Boolean,
+      '--novalidation': Boolean,
+    });
+  } catch (ex) {
+    console.log(ex.message);
+    showUsage();
+    exit(1);
+  }
   if (args['--hello'] === true) console.log('Agnostic API Testing Language - Runner');
 
   const filePath = <string>args['-f'];
   const testName = <string>args['-t'];
+  const numberOfRuns = <number>args['-n'] ?? 1;
   const randomize = <boolean>args['--r'];
   const outputXml = <boolean>args['--xml'];
   const noValidation = <boolean>args['--novalidation'];
 
   if (filePath === undefined) {
-    console.log('Usage: node aartl.js -f "path-to-test-file"');
-    console.log('\nOptions:');
-    console.log('-t "name of test" - run a single test');
-    console.log('--hello - display name of this program');
-    console.log('--r - randomize test order');
+    showUsage();
     return;
   }
 
@@ -56,11 +70,9 @@ const main = async () => {
 
   const preProcessedText = parser.preProcess(contents);
   const tests = parser.splitTests(preProcessedText);
-  if (randomize) {
-    shuffleArray(tests);
-  }
 
   const results: ITestResult[] = [];
+  const parsedTests: ITest[] = [];
 
   for (const test of tests) {
     const parsedTest = parser.splitTestIntoSections(test);
@@ -73,7 +85,15 @@ const main = async () => {
           exit(1);
         }
       }
+      parsedTests.push(parsedTest);
+    }
+  }
 
+  for (let i = 0; i < numberOfRuns; i++) {
+    if (randomize) {
+      shuffleArray(parsedTests);
+    }
+    for (const parsedTest of parsedTests) {
       const result = await runTest(parsedTest);
       results.push(result);
       if (!outputXml) {
