@@ -18,7 +18,6 @@ describe('Test runner', () => {
   it('should save a post and check that it is saved', async () => {
     const result = await runTestThruAllSteps(fixtures.saveAndCheckPost);
 
-    console.log(result);
     expect(result.passed).toBe(true);
   });
 

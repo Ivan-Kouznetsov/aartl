@@ -46,7 +46,7 @@ export const request = (
 }> => {
   const urlParts = splitUrl(url);
 
-  return new Promise((resolve, _) => {
+  return new Promise((resolve) => {
     if (['http', 'https'].includes(urlParts.protocol.toLowerCase()) === false) {
       resolve({ error: 'Only http and https supported', response: null });
       return;
