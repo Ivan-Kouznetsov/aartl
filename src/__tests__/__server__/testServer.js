@@ -23,6 +23,7 @@ app.get('/posts/:id', (request, response) => {
   const id = parseInt(request.params['id']);
 
   if (typeof posts[id] !== 'undefined') {
+    console.log(JSON.stringify({ id, text: posts[id] }));
     response.send(JSON.stringify({ id, text: posts[id] })).end();
   } else {
     response.status(404).send('Not Found').end();

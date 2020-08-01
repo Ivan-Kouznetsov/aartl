@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * @since 2.0.0
  */
@@ -7,25 +8,25 @@
  * @since 2.0.0
  */
 export interface Lazy<A> {
-  (): A
+  (): A;
 }
 /**
  * @since 2.0.0
  */
 export interface Predicate<A> {
-  (a: A): boolean
+  (a: A): boolean;
 }
 /**
  * @since 2.0.0
  */
 export interface Refinement<A, B extends A> {
-  (a: A): a is B
+  (a: A): a is B;
 }
 /**
  * @since 2.0.0
  */
 export interface Endomorphism<A> {
-  (a: A): A
+  (a: A): A;
 }
 /**
  * @example
@@ -36,60 +37,60 @@ export interface Endomorphism<A> {
  * @since 2.0.0
  */
 export interface FunctionN<A extends ReadonlyArray<unknown>, B> {
-  (...args: A): B
+  (...args: A): B;
 }
 /**
  * @since 2.0.0
  */
-export declare function identity<A>(a: A): A
+export declare function identity<A>(a: A): A;
 /**
  * @since 2.0.0
  */
-export declare const unsafeCoerce: <A, B>(a: A) => B
+export declare const unsafeCoerce: <A, B>(a: A) => B;
 /**
  * @since 2.0.0
  */
-export declare function not<A>(predicate: Predicate<A>): Predicate<A>
+export declare function not<A>(predicate: Predicate<A>): Predicate<A>;
 /**
  * @since 2.0.0
  */
-export declare function constant<A>(a: A): Lazy<A>
+export declare function constant<A>(a: A): Lazy<A>;
 /**
  * A thunk that returns always `true`
  *
  * @since 2.0.0
  */
-export declare const constTrue: () => boolean
+export declare const constTrue: () => boolean;
 /**
  * A thunk that returns always `false`
  *
  * @since 2.0.0
  */
-export declare const constFalse: () => boolean
+export declare const constFalse: () => boolean;
 /**
  * A thunk that returns always `null`
  *
  * @since 2.0.0
  */
-export declare const constNull: () => null
+export declare const constNull: () => null;
 /**
  * A thunk that returns always `undefined`
  *
  * @since 2.0.0
  */
-export declare const constUndefined: () => undefined
+export declare const constUndefined: () => undefined;
 /**
  * A thunk that returns always `void`
  *
  * @since 2.0.0
  */
-export declare const constVoid: () => void
+export declare const constVoid: () => void;
 /**
  * Flips the order of the arguments of a function of two arguments.
  *
  * @since 2.0.0
  */
-export declare function flip<A, B, C>(f: (a: A, b: B) => C): (b: B, a: A) => C
+export declare function flip<A, B, C>(f: (a: A, b: B) => C): (b: B, a: A) => C;
 /**
  * Performs left-to-right function composition. The first argument may have any arity, the remaining arguments must be unary.
  *
@@ -107,29 +108,29 @@ export declare function flip<A, B, C>(f: (a: A, b: B) => C): (b: B, a: A) => C
  *
  * @since 2.0.0
  */
-export declare function flow<A extends ReadonlyArray<unknown>, B>(ab: (...a: A) => B): (...a: A) => B
+export declare function flow<A extends ReadonlyArray<unknown>, B>(ab: (...a: A) => B): (...a: A) => B;
 export declare function flow<A extends ReadonlyArray<unknown>, B, C>(
   ab: (...a: A) => B,
   bc: (b: B) => C
-): (...a: A) => C
+): (...a: A) => C;
 export declare function flow<A extends ReadonlyArray<unknown>, B, C, D>(
   ab: (...a: A) => B,
   bc: (b: B) => C,
   cd: (c: C) => D
-): (...a: A) => D
+): (...a: A) => D;
 export declare function flow<A extends ReadonlyArray<unknown>, B, C, D, E>(
   ab: (...a: A) => B,
   bc: (b: B) => C,
   cd: (c: C) => D,
   de: (d: D) => E
-): (...a: A) => E
+): (...a: A) => E;
 export declare function flow<A extends ReadonlyArray<unknown>, B, C, D, E, F>(
   ab: (...a: A) => B,
   bc: (b: B) => C,
   cd: (c: C) => D,
   de: (d: D) => E,
   ef: (e: E) => F
-): (...a: A) => F
+): (...a: A) => F;
 export declare function flow<A extends ReadonlyArray<unknown>, B, C, D, E, F, G>(
   ab: (...a: A) => B,
   bc: (b: B) => C,
@@ -137,7 +138,7 @@ export declare function flow<A extends ReadonlyArray<unknown>, B, C, D, E, F, G>
   de: (d: D) => E,
   ef: (e: E) => F,
   fg: (f: F) => G
-): (...a: A) => G
+): (...a: A) => G;
 export declare function flow<A extends ReadonlyArray<unknown>, B, C, D, E, F, G, H>(
   ab: (...a: A) => B,
   bc: (b: B) => C,
@@ -146,7 +147,7 @@ export declare function flow<A extends ReadonlyArray<unknown>, B, C, D, E, F, G,
   ef: (e: E) => F,
   fg: (f: F) => G,
   gh: (g: G) => H
-): (...a: A) => H
+): (...a: A) => H;
 export declare function flow<A extends ReadonlyArray<unknown>, B, C, D, E, F, G, H, I>(
   ab: (...a: A) => B,
   bc: (b: B) => C,
@@ -156,7 +157,7 @@ export declare function flow<A extends ReadonlyArray<unknown>, B, C, D, E, F, G,
   fg: (f: F) => G,
   gh: (g: G) => H,
   hi: (h: H) => I
-): (...a: A) => I
+): (...a: A) => I;
 export declare function flow<A extends ReadonlyArray<unknown>, B, C, D, E, F, G, H, I, J>(
   ab: (...a: A) => B,
   bc: (b: B) => C,
@@ -167,23 +168,23 @@ export declare function flow<A extends ReadonlyArray<unknown>, B, C, D, E, F, G,
   gh: (g: G) => H,
   hi: (h: H) => I,
   ij: (i: I) => J
-): (...a: A) => J
+): (...a: A) => J;
 /**
  * @since 2.0.0
  */
-export declare function tuple<T extends ReadonlyArray<any>>(...t: T): T
+export declare function tuple<T extends ReadonlyArray<any>>(...t: T): T;
 /**
  * @since 2.0.0
  */
-export declare function increment(n: number): number
+export declare function increment(n: number): number;
 /**
  * @since 2.0.0
  */
-export declare function decrement(n: number): number
+export declare function decrement(n: number): number;
 /**
  * @since 2.0.0
  */
-export declare function absurd<A>(_: never): A
+export declare function absurd<A>(_: never): A;
 /**
  * Creates a tupled version of this function: instead of `n` arguments, it accepts a single tuple argument.
  *
@@ -196,13 +197,13 @@ export declare function absurd<A>(_: never): A
  *
  * @since 2.4.0
  */
-export declare function tupled<A extends ReadonlyArray<unknown>, B>(f: (...a: A) => B): (a: A) => B
+export declare function tupled<A extends ReadonlyArray<unknown>, B>(f: (...a: A) => B): (a: A) => B;
 /**
  * Inverse function of `tupled`
  *
  * @since 2.4.0
  */
-export declare function untupled<A extends ReadonlyArray<unknown>, B>(f: (a: A) => B): (...a: A) => B
+export declare function untupled<A extends ReadonlyArray<unknown>, B>(f: (a: A) => B): (...a: A) => B;
 /**
  * Pipes the value of an expression into a pipeline of functions.
  *
@@ -222,11 +223,17 @@ export declare function untupled<A extends ReadonlyArray<unknown>, B>(f: (a: A) 
  *
  * @since 2.6.3
  */
-export declare function pipe<A>(a: A): A
-export declare function pipe<A, B>(a: A, ab: (a: A) => B): B
-export declare function pipe<A, B, C>(a: A, ab: (a: A) => B, bc: (b: B) => C): C
-export declare function pipe<A, B, C, D>(a: A, ab: (a: A) => B, bc: (b: B) => C, cd: (c: C) => D): D
-export declare function pipe<A, B, C, D, E>(a: A, ab: (a: A) => B, bc: (b: B) => C, cd: (c: C) => D, de: (d: D) => E): E
+export declare function pipe<A>(a: A): A;
+export declare function pipe<A, B>(a: A, ab: (a: A) => B): B;
+export declare function pipe<A, B, C>(a: A, ab: (a: A) => B, bc: (b: B) => C): C;
+export declare function pipe<A, B, C, D>(a: A, ab: (a: A) => B, bc: (b: B) => C, cd: (c: C) => D): D;
+export declare function pipe<A, B, C, D, E>(
+  a: A,
+  ab: (a: A) => B,
+  bc: (b: B) => C,
+  cd: (c: C) => D,
+  de: (d: D) => E
+): E;
 export declare function pipe<A, B, C, D, E, F>(
   a: A,
   ab: (a: A) => B,
@@ -234,7 +241,7 @@ export declare function pipe<A, B, C, D, E, F>(
   cd: (c: C) => D,
   de: (d: D) => E,
   ef: (e: E) => F
-): F
+): F;
 export declare function pipe<A, B, C, D, E, F, G>(
   a: A,
   ab: (a: A) => B,
@@ -243,7 +250,7 @@ export declare function pipe<A, B, C, D, E, F, G>(
   de: (d: D) => E,
   ef: (e: E) => F,
   fg: (f: F) => G
-): G
+): G;
 export declare function pipe<A, B, C, D, E, F, G, H>(
   a: A,
   ab: (a: A) => B,
@@ -253,7 +260,7 @@ export declare function pipe<A, B, C, D, E, F, G, H>(
   ef: (e: E) => F,
   fg: (f: F) => G,
   gh: (g: G) => H
-): H
+): H;
 export declare function pipe<A, B, C, D, E, F, G, H, I>(
   a: A,
   ab: (a: A) => B,
@@ -264,7 +271,7 @@ export declare function pipe<A, B, C, D, E, F, G, H, I>(
   fg: (f: F) => G,
   gh: (g: G) => H,
   hi: (h: H) => I
-): I
+): I;
 export declare function pipe<A, B, C, D, E, F, G, H, I, J>(
   a: A,
   ab: (a: A) => B,
@@ -276,10 +283,10 @@ export declare function pipe<A, B, C, D, E, F, G, H, I, J>(
   gh: (g: G) => H,
   hi: (h: H) => I,
   ij: (i: I) => J
-): J
+): J;
 /**
  * Type hole simulation
  *
  * @since 2.7.0
  */
-export declare const hole: <T>() => T
+export declare const hole: <T>() => T;

@@ -49,15 +49,6 @@ describe('Runner util', () => {
     }).toThrowError('Invalid duration string');
   });
 
-  it('should convert key value pair array to 2d array', () => {
-    const arr = util.keyValuePairArrayTo2DArray([{ 'Accept-Encoding': '*/*' }, { 'X-cache': true }]);
-
-    expect(arr).toEqual([
-      ['Accept-Encoding', '*/*'],
-      ['X-cache', 'true'],
-    ]);
-  });
-
   it('should convert key value pair to object', () => {
     const obj = util.keyValueToObject({ 'Accept-Encoding': '*/*' });
     expect(obj).toEqual({ key: 'Accept-Encoding', value: '*/*' });

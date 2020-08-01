@@ -2,7 +2,7 @@ import { ITest, IKeyValuePair } from '../interfaces/test';
 import { IRequestLog, ITestResult } from '../interfaces/results';
 import * as util from './util';
 import * as ruleParser from '../parser/ruleParser';
-import fetch from 'node-fetch';
+import * as http_promise from '../lib/http-promise';
 import { jsonPath } from '../lib/jsonpath';
 
 export const runTest = async (test: ITest): Promise<ITestResult> => {
@@ -22,18 +22,19 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
       const requestLogSent = JSON.stringify({
         url: currentRequest.url,
         body: currentRequest.body,
-        headers: util.keyValuePairArrayTo2DArray(currentRequest.headers),
+        headers: util.keyValuePairArrayHashTable(currentRequest.headers),
         method: currentRequest.method,
       });
 
-      const currentRequestResponse = await fetch(currentRequest.url, {
-        body: currentRequest.body,
-        headers: util.keyValuePairArrayTo2DArray(currentRequest.headers),
-        method: currentRequest.method,
-      });
+      const currentRequestResponse = await http_promise.request(
+        currentRequest.url,
+        currentRequest.method,
+        util.keyValuePairArrayHashTable(currentRequest.headers),
+        currentRequest.body
+      );
 
       const requestEndTime = process.hrtime.bigint();
-      const responseText = await util.getResponseText(currentRequestResponse);
+      const responseText = JSON.stringify(currentRequestResponse);
 
       requestLogs.push({
         sent: requestLogSent,
@@ -46,7 +47,7 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
         await util.wait(duration);
       }
       if (currentRequest.passOn.length > 0) {
-        const json = await currentRequestResponse.json();
+        const json = currentRequestResponse.response.json;
         for (const passOn of currentRequest.passOn) {
           const passOnObj = util.keyValueToObject(passOn);
           passOnValues.push({ [passOnObj.value.toString()]: jsonPath(json, passOnObj.key)[0] });
@@ -55,9 +56,9 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
 
       // if it has expectations
       if (currentRequest.expectedStatusCode) {
-        if (currentRequestResponse.status !== parseInt(currentRequest.expectedStatusCode)) {
+        if (currentRequestResponse.response.status !== parseInt(currentRequest.expectedStatusCode)) {
           failReasons.push(
-            `Expected status code of ${currentRequest.expectedStatusCode}, got: ${currentRequestResponse.status}`
+            `Expected status code of ${currentRequest.expectedStatusCode}, got: ${currentRequestResponse.response.status}`
           );
         }
       }
@@ -65,15 +66,12 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
       if (currentRequest.headerRules.length > 0) {
         currentRequest.headerRules.forEach((hr) => {
           const headerRule = util.keyValueToObject(hr);
-          if (
-            !currentRequestResponse.headers.has(headerRule.key) ||
-            !(currentRequestResponse.headers.get(headerRule.key) === headerRule.value)
-          ) {
+          if (currentRequestResponse.response.headers[headerRule.key] !== headerRule.value) {
             failReasons.push(
               `Expected header ${headerRule.key} to be ${headerRule.value}, got: ${
-                !currentRequestResponse.headers.has(headerRule.key)
+                currentRequestResponse.response.headers[headerRule.key] === undefined
                   ? 'nothing'
-                  : currentRequestResponse.headers.get(headerRule.key)
+                  : currentRequestResponse.response.headers[headerRule.key]
               }`
             );
           }
@@ -82,7 +80,7 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
 
       if (currentRequest.jsonRules.length > 0) {
         const parsedRules = ruleParser.parseJsonRules(currentRequest);
-        const json = await currentRequestResponse.json();
+        const json = currentRequestResponse.response.json;
 
         parsedRules.forEach(async (rule) => {
           const data = jsonPath(json, rule.jsonpath);
