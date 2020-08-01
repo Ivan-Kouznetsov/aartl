@@ -5,8 +5,7 @@
     method: post
     url: http://localhost:3000/posts
     body: @postText
-    Pass on "$..id" as _id
-  Wait 1 seconds
+    Pass on "$..id" as _id  
   Expect HTTP request
     headers:
       "Accept-Encoding":"*/*"
@@ -55,7 +54,7 @@
     url: http://localhost:3000/posts
     body: @postText
     Pass on "$..id" as _id
-  Wait 1 seconds
+  
   Expect HTTP request
     headers:
       "Accept-Encoding":"*/*"
@@ -73,7 +72,7 @@
     url: http://localhost:3000/posts
     body: @postText
     Pass on "$..id" as _id
-  Wait 1 seconds
+  
   Expect HTTP request
     headers:
       "Accept-Encoding":"*/*"
@@ -91,7 +90,7 @@
     url: http://localhost:3000/posts
     body: @postText
     Pass on "$..id" as _id
-  Wait 1 seconds
+  
   Expect HTTP request
     headers:
       "Accept-Encoding":"*/*"
