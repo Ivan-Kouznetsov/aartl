@@ -1,0 +1,1 @@
+for i in {1..10}; do node "node_modules/jest/bin/jest.js" "src/\_\_tests\_\_/bench/posts.spec.js" -t "Jest tests"; done 

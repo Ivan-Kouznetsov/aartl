@@ -1,9 +1,9 @@
 module.exports = {
   roots: ['<rootDir>'],
-  testMatch: ['**/__tests__/**/*.spec.ts'],
-  transform: {
+  testMatch: ['**/__tests__/**/*.spec.ts', '**/__tests__/**/*.spec.js'],
+  /*transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest',
-  },
+  },*/
   collectCoverageFrom: [
     'src/**/*.ts',
     '!src/**/*fixtures.ts',

@@ -6,7 +6,7 @@ app.use(bodyParser.raw({ type: '*/*' }));
 
 const port = 3000;
 
-const posts = ['0th Post'];
+const posts = ['Hello this is 0th Post'];
 
 app.get('/', (_, response) => {
   response.status(200).send('Ready').end();
@@ -34,6 +34,15 @@ app.post('/posts', (request, response) => {
   posts.push(request.body.toString());
 
   response.send(JSON.stringify({ id: posts.length - 1, success: true }));
+});
+
+app.get('/posts', (_, response) => {
+  const result = [];
+  for (let id = 0; id < posts.length; id++) {
+    result.push({ id, text: posts[id] });
+  }
+
+  response.send(JSON.stringify(result));
 });
 
 app.listen(port, (err) => {

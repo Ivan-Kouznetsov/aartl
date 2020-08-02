@@ -1,0 +1,84 @@
+  Test that it should save a post
+  Using values
+    @postText: Hello world
+  After HTTP request
+    method: post
+    url: http://localhost:3000/posts
+    body: @postText
+    Pass on "$..id" as _id  
+  Expect HTTP request
+    headers:
+      "Accept-Encoding":"*/*"
+    method: get
+    url: http://localhost:3000/posts/_id
+  To match JSON rules
+    "$..id": _id
+    "$..text": @postText
+
+  Test that it should get 0th post
+  Using values
+    @postText: Hello this is 0th Post
+  Expect HTTP request
+    method: get
+    url: http://localhost:3000/posts/0
+  To match JSON rules
+    "$..text": @postText
+
+  Test that it should get 200 status code
+  Expect HTTP request
+    method: get
+    url: http://localhost:3000/
+  To respond with status code 200
+
+  Test that it should get more than 0 posts
+  Expect HTTP request
+    method: get
+    url: http://localhost:3000/posts
+  To match JSON rules
+    "$..text" : count >= 0
+
+  Test that it should posts with text
+  Expect HTTP request
+    method: get
+    url: http://localhost:3000/posts
+  To match JSON rules
+    "$..text" : is text
+
+  Test that it should get posts that each have a text property
+  Expect HTTP request
+    method: get
+    url: http://localhost:3000/posts
+  To match JSON rules
+    "$" : each has a text
+
+  Test that it should get posts that each have an id starting with 0
+  Expect HTTP request
+    method: get
+    url: http://localhost:3000/posts
+  To match JSON rules
+    "$" : each has a id
+    "$..id": >= 0
+
+  Test that it should get posts that contain hello
+  Expect HTTP request
+    method: get
+    url: http://localhost:3000/posts
+  To match JSON rules
+    "$..text" : is text containing Hello
+    
+  Test that it should get posts that do not contain bye 
+  Expect HTTP request
+    method: get
+    url: http://localhost:3000/posts
+  To match JSON rules
+    "$..text" : is text not containing bye
+
+  Test that it should get a post with id of -1
+  Using values
+    @postText: Hello world
+  Expect HTTP request
+    method: get
+    url: http://localhost:3000/posts/-1
+  To respond with status code 404 /** not found **/
+  To match JSON rules
+    "$..id": < 0
