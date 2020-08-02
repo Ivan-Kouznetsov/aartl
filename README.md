@@ -47,12 +47,12 @@ For AARTL: node dist/aartl.js -f posts.aartl -n 10
 
 ## Jest
 
-real 0m47.317s
-user 0m0.045s
+real 0m47.317s  
+user 0m0.045s  
 sys 0m0.090s
 
 ## AARTL
 
-real 0m1.749s (**27 times faster**)
-user 0m0.000s
+real 0m1.749s (**27 times faster**)  
+user 0m0.000s  
 sys 0m0.046s
