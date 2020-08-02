@@ -111,11 +111,11 @@ const main = async (): Promise<void> => {
             console.log(result);
           } else if (resultsPerRun.length === parsedTests.length) {
             totalResults = totalResults.concat([...resultsPerRun]);
-            resultsPerRun = [];
+
             if (!report && outputXml) {
               console.log(util.resultsToXml(path.basename(filePath, path.extname(filePath)), resultsPerRun));
             }
-
+            resultsPerRun = [];
             if (totalResults.length === parsedTests.length * numberOfRuns) {
               if (report) {
                 console.log(buildReport(totalResults));
