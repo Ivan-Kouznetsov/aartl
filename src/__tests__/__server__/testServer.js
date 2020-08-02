@@ -36,6 +36,10 @@ app.post('/posts', (request, response) => {
   response.send(JSON.stringify({ id: posts.length - 1, success: true }));
 });
 
+app.get('/random', (_, response) => {
+  response.send(JSON.stringify({ id: Math.floor(Math.random() * Math.floor(100)), text: Math.random().toFixed(10) }));
+});
+
 app.listen(port, (err) => {
   if (err) {
     console.error('Error:', err);

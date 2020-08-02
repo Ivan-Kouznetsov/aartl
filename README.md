@@ -105,20 +105,22 @@ The syntax is case sensitive, statements start with an upper-case letter, data i
 - Flexible matching rules
 - Good test coverage
 
-| File                      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s |
-| ------------------------- | ------- | -------- | ------- | ------- | ----------------- |
-| All files                 | 100     | 100      | 100     | 100     |
-| &nbsp;parser              | 100     | 100      | 100     | 100     |
-| &nbsp;&nbsp;parser.ts     | 100     | 100      | 100     | 100     |
-| &nbsp;&nbsp;ruleParser.ts | 100     | 100      | 100     | 100     |
-| &nbsp;&nbsp;util.ts       | 100     | 100      | 100     | 100     |
-| rules                     | 100     | 100      | 100     | 100     |
-| &nbsp;&nbsp;matchers.ts   | 100     | 100      | 100     | 100     |
-| runner                    | 100     | 100      | 100     | 100     |
-| &nbsp;&nbsp;runner.ts     | 100     | 100      | 100     | 100     |
-| &nbsp;&nbsp;util.ts       | 100     | 100      | 100     | 100     |
-| validator                 | 100     | 100      | 100     | 100     |
-| &nbsp;&nbsp;validator.ts  | 100     | 100      | 100     | 100     |
+| File                         | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s |
+| ---------------------------- | ------- | -------- | ------- | ------- | ----------------- |
+| All files                    | 100     | 100      | 100     | 100     |
+| &nbsp;parser                 | 100     | 100      | 100     | 100     |
+| &nbsp;&nbsp;parser.ts        | 100     | 100      | 100     | 100     |
+| &nbsp;&nbsp;ruleParser.ts    | 100     | 100      | 100     | 100     |
+| &nbsp;&nbsp;util.ts          | 100     | 100      | 100     | 100     |
+| reportBuilder                | 100     | 100      | 100     | 100     |
+| &nbsp;&nbsp;reportBuilder.ts | 100     | 100      | 100     | 100     |
+| rules                        | 100     | 100      | 100     | 100     |
+| &nbsp;&nbsp;matchers.ts      | 100     | 100      | 100     | 100     |
+| runner                       | 100     | 100      | 100     | 100     |
+| &nbsp;&nbsp;runner.ts        | 100     | 100      | 100     | 100     |
+| &nbsp;&nbsp;util.ts          | 100     | 100      | 100     | 100     |
+| validator                    | 100     | 100      | 100     | 100     |
+| &nbsp;&nbsp;validator.ts     | 100     | 100      | 100     | 100     |
 
 ## Setup and Use
 
@@ -146,6 +148,7 @@ And now you can run AARTL like so
 | \-\-novalidation | Don't validate test file                           |
 | \-\-r            | Randomize test order                               |
 | \-n NUMBER       | Rerun the tests a number of times                  |
+| \-\-report       | Output a report with failure rates                 |
 
 ## Editor Support
 
