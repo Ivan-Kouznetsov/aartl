@@ -99,7 +99,7 @@ The syntax is case sensitive, statements start with an upper-case letter, data i
 ## Benefits
 
 - Few opportunities for writing bugs
-- Runs fast (_example.aartl tests take less than **30ms** per test_)
+- [Runs fast](https://github.com/Ivan-Kouznetsov/aartl/tree/benchmarks)
 - Detailed logging
 - Cross-platform
 - Flexible matching rules
