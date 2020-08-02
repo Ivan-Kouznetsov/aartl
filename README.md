@@ -118,6 +118,7 @@ The syntax is case sensitive, statements start with an upper-case letter, data i
 | &nbsp;&nbsp;matchers.ts      | 100     | 100      | 100     | 100     |
 | runner                       | 100     | 100      | 100     | 100     |
 | &nbsp;&nbsp;runner.ts        | 100     | 100      | 100     | 100     |
+| &nbsp;&nbsp;suiteRunner.ts   | 100     | 100      | 100     | 100     |
 | &nbsp;&nbsp;util.ts          | 100     | 100      | 100     | 100     |
 | validator                    | 100     | 100      | 100     | 100     |
 | &nbsp;&nbsp;validator.ts     | 100     | 100      | 100     | 100     |
