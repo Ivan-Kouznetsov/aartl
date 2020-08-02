@@ -45,7 +45,7 @@ export const savePostCheckIdLessThanZero = `
     "$..id": < 0
   `;
 
-export const requestNonExistantPost = `
+export const requestNonexistentPost = `
   Test that it should get apost with id of -1
   Using values
     @postText: Hello world

@@ -6,13 +6,6 @@ import { ITestResult, IReport } from '../interfaces/results';
 import { ITest } from '../interfaces/test';
 import { buildReport } from '../reportBuilder/reportBuilder';
 
-const shuffleArray = (array: unknown[]): void => {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-};
-
 export const suiteRunner = async (
   suiteName: string,
   contents: string,
@@ -49,7 +42,7 @@ export const suiteRunner = async (
     let totalResults: ITestResult[] = [];
     for (let i = 0; i < numberOfRuns; i++) {
       if (randomize) {
-        shuffleArray(parsedTests);
+        util.shuffleArray(parsedTests);
       }
 
       for (const parsedTest of parsedTests) {

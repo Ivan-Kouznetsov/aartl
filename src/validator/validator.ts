@@ -8,6 +8,7 @@ export const getFirstValidationError = (test: ITest): string => {
     if (test.usingValues.filter((uv) => typeof uv[key] !== 'undefined').length > 1)
       return `In request ${i + 1}: ${key} is a non-unique value name`;
   }
+
   for (let i = 0; i < test.requests.length; i++) {
     if (!test.requests[0].url) return `In request ${i + 1}: url is required`;
   }
@@ -25,8 +26,14 @@ export const getFirstValidationError = (test: ITest): string => {
   if (test.requests[test.requests.length - 1].wait) return 'Cannot have a wait in last request';
 
   const sortedAliasedMatchers = [...aliasesedMatchers].sort((a, b) => b.alias.length - a.alias.length);
+  const getFirstDuplicate = <T>(arr: T[]) => arr.filter((item, index) => arr.indexOf(item) != index)[0];
 
   for (const request of test.requests) {
+    const passOnJsonpathDupe = getFirstDuplicate(request.passOn.map((p) => Object.keys(p)[0]));
+    const passOnValueNamesDupe = getFirstDuplicate(request.passOn.map((p) => p[Object.keys(p)[0]]));
+    if (passOnJsonpathDupe) return `${passOnJsonpathDupe.toString()} is a non-unique Pass on JSON path`;
+    if (passOnValueNamesDupe) return `${passOnValueNamesDupe.toString()} is a non-unique Pass on value name`;
+
     for (const rule of request.jsonRules) {
       if (!rule) {
         return `has one or more invalid lines at the end`;
