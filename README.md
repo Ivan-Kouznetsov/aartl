@@ -1,13 +1,13 @@
 # Agnostic API Reliability Testing Language
 
-Agnostic API Reliability Testing Language (AARTL) is a platform-agnostic declarative domain-specific language for testing HTTP servers using the server’s API, it is implemented in TypeScript and Node.js and can run on many popular platforms (such as Windows, macOS, Linux, and BSD) and can test servers irrespective of the platform used by the server. An AARTL test is a human-readable declaration of the expected response from a server endpoint given one or more requests.
+Agnostic API Reliability Testing Language (AARTL) is a platform-agnostic declarative domain-specific language for testing HTTP servers using the server’s API, it is implemented in TypeScript as a **dependency-free** Node.js application and can run on all major operating systems (Windows, macOS, Linux-based OSs and FreeBSD), it can also run on GraalVM, and can test servers irrespective of the platform used by the server. An AARTL test is a human-readable declaration of the expected response from a server endpoint given one or more requests.
 
 ## Design goals
 
 1. To facilitate efficient testing of HTTP servers
 2. To offer data matching rules on par with procedural test frameworks
-3. To avoid procedural code such as loops
-4. To avoid unobvious syntax such as semi colons, brackets, braces, and significant white space
+3. To avoid procedural code in tests (as much as is practicable)
+4. To avoid unobvious syntax such as semi colons, brackets, braces, and significant whitespace
 5. To be easy to read for a person well-versed in HTTP and JSON irrespective of whether the person is a programmer
 
 ## Overview
@@ -20,7 +20,6 @@ Agnostic API Reliability Testing Language (AARTL) is a platform-agnostic declara
         url: http://localhost:3000/posts
         body: @postText
         Pass on "$..id" as _id
-      Wait 1 second
       Expect HTTP request
         headers:
           "Accept-Encoding":"*/*"
@@ -31,7 +30,7 @@ Agnostic API Reliability Testing Language (AARTL) is a platform-agnostic declara
         "$..id": _id
         "$..text": @postText
 
-A test consists of a name, optional constant values, optional “After” blocks, a required "Expect" block. JSON data is referred to within AARTL using JSON paths. For more information about the JSON path standard you may refer to: [https://support.smartbear.com/alertsite/docs/monitors/api/endpoint/jsonpath.html](https://support.smartbear.com/alertsite/docs/monitors/api/endpoint/jsonpath.html)
+A test consists of a name, optional constant values, optional “After” blocks, and a required "Expect" block. JSON data is referred to within AARTL using JSON paths. For more information about the JSON path standard you may refer to: [https://support.smartbear.com/alertsite/docs/monitors/api/endpoint/jsonpath.html](https://support.smartbear.com/alertsite/docs/monitors/api/endpoint/jsonpath.html)
 
 An After block consists of:
 
@@ -100,7 +99,7 @@ The syntax is case sensitive, statements start with an upper-case letter, data i
 ## Benefits
 
 - Few opportunities for writing bugs
-- Runs fast
+- Runs fast (_example.aartl tests take less than **30ms** per test_)
 - Detailed logging
 - Cross-platform
 - Flexible matching rules
