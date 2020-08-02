@@ -25,86 +25,91 @@ const showUsage = () => {
   console.log('--r - randomize test order');
 };
 
-const main = async () => {
-  let args;
-  try {
-    args = arg({
-      '-f': String,
-      '-t': String,
-      '-n': Number,
-      '--r': Boolean,
-      '--hello': Boolean,
-      '--xml': Boolean,
-      '--novalidation': Boolean,
-    });
-  } catch (ex) {
-    console.log(ex.message);
-    showUsage();
-    exit(1);
-  }
-  if (args['--hello'] === true) console.log('Agnostic API Testing Language - Runner');
-
-  const filePath = <string>args['-f'];
-  const testName = <string>args['-t'];
-  const numberOfRuns = <number>args['-n'] ?? 1;
-  const randomize = <boolean>args['--r'];
-  const outputXml = <boolean>args['--xml'];
-  const noValidation = <boolean>args['--novalidation'];
-
-  if (filePath === undefined) {
-    showUsage();
-    return;
-  }
-
-  let contents = '';
-  try {
-    contents = fileSystem.readFileSync(filePath, { encoding: 'utf-8' });
-  } catch (ex) {
-    if (ex.code === 'ENOENT') {
-      console.error(`${filePath} does not exist`);
-    } else {
-      console.error(`${filePath} cannot be accessed`);
+const main = async (): Promise<void> => {
+  return new Promise((resolve) => {
+    let args;
+    try {
+      args = arg({
+        '-f': String,
+        '-t': String,
+        '-n': Number,
+        '--r': Boolean,
+        '--hello': Boolean,
+        '--xml': Boolean,
+        '--novalidation': Boolean,
+      });
+    } catch (ex) {
+      console.log(ex.message);
+      showUsage();
+      exit(1);
     }
-    exit(1);
-  }
+    if (args['--hello'] === true) console.log('Agnostic API Testing Language - Runner');
 
-  const preProcessedText = parser.preProcess(contents);
-  const tests = parser.splitTests(preProcessedText);
+    const filePath = <string>args['-f'];
+    const testName = <string>args['-t'];
+    const numberOfRuns = <number>args['-n'] ?? 1;
+    const randomize = <boolean>args['--r'];
+    const outputXml = <boolean>args['--xml'];
+    const noValidation = <boolean>args['--novalidation'];
 
-  const results: ITestResult[] = [];
-  const parsedTests: ITest[] = [];
+    if (filePath === undefined) {
+      showUsage();
+      return;
+    }
 
-  for (const test of tests) {
-    const parsedTest = parser.splitTestIntoSections(test);
-    if (testName === undefined || parsedTest.name === testName) {
-      if (!noValidation) {
-        const validationError = getFirstValidationError(parsedTest);
+    let contents = '';
+    try {
+      contents = fileSystem.readFileSync(filePath, { encoding: 'utf-8' });
+    } catch (ex) {
+      if (ex.code === 'ENOENT') {
+        console.error(`${filePath} does not exist`);
+      } else {
+        console.error(`${filePath} cannot be accessed`);
+      }
+      exit(1);
+    }
 
-        if (validationError) {
-          console.error(`${parsedTest.name}: ${validationError}`);
-          exit(1);
+    const preProcessedText = parser.preProcess(contents);
+    const tests = parser.splitTests(preProcessedText);
+
+    const results: ITestResult[] = [];
+    const parsedTests: ITest[] = [];
+
+    for (const test of tests) {
+      const parsedTest = parser.splitTestIntoSections(test);
+      if (testName === undefined || parsedTest.name === testName) {
+        if (!noValidation) {
+          const validationError = getFirstValidationError(parsedTest);
+
+          if (validationError) {
+            console.error(`${parsedTest.name}: ${validationError}`);
+            exit(1);
+          }
         }
-      }
-      parsedTests.push(parsedTest);
-    }
-  }
-
-  for (let i = 0; i < numberOfRuns; i++) {
-    if (randomize) {
-      shuffleArray(parsedTests);
-    }
-    for (const parsedTest of parsedTests) {
-      const result = await runTest(parsedTest);
-      results.push(result);
-      if (!outputXml) {
-        console.log(result);
+        parsedTests.push(parsedTest);
       }
     }
-  }
 
-  if (outputXml) {
-    console.log(util.resultsToXml(path.basename(filePath, path.extname(filePath)), results));
-  }
+    for (let i = 0; i < numberOfRuns; i++) {
+      if (randomize) {
+        shuffleArray(parsedTests);
+      }
+      for (const parsedTest of parsedTests) {
+        runTest(parsedTest).then((result) => {
+          results.push(result);
+          if (!outputXml) {
+            console.log(result);
+          }
+          if (results.length === parsedTests.length) {
+            if (outputXml) {
+              console.log(util.resultsToXml(path.basename(filePath, path.extname(filePath)), results));
+            }
+            resolve();
+          }
+        });
+      }
+    }
+  });
 };
 
 main().catch((ex) => console.error(ex));
