@@ -138,3 +138,10 @@
     "$..text": count <= 1
     "$..text": count > -1
     "$..text": count >= 0
+
+  Test that it should have id greater than 50
+  Expect HTTP request
+    method: get
+    url: http://localhost:3000/random   
+  To match JSON rules
+    "$..id": > 50

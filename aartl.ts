@@ -8,6 +8,7 @@ import { getFirstValidationError } from './src/validator/validator';
 import * as util from './src/runner/util';
 import { ITestResult } from './src/interfaces/results';
 import { ITest } from './src/interfaces/test';
+import { buildReport } from './src/reportBuilder/reportBuilder';
 
 const shuffleArray = (array: unknown[]): void => {
   for (let i = array.length - 1; i > 0; i--) {
@@ -23,6 +24,11 @@ const showUsage = () => {
   console.log('-n NUMBER - run the tests a number of times');
   console.log('--hello - display name of this program');
   console.log('--r - randomize test order');
+  console.log('--xml - output results as JUnit XML');
+  console.log('--novalidation - skip validation of tests');
+  console.log(
+    '--report - instead of outputing all results, output a report with failure rates and duration statistics, overrides --xml'
+  );
 };
 
 const main = async (): Promise<void> => {
@@ -37,6 +43,7 @@ const main = async (): Promise<void> => {
         '--hello': Boolean,
         '--xml': Boolean,
         '--novalidation': Boolean,
+        '--report': Boolean,
       });
     } catch (ex) {
       console.log(ex.message);
@@ -51,6 +58,7 @@ const main = async (): Promise<void> => {
     const randomize = <boolean>args['--r'];
     const outputXml = <boolean>args['--xml'];
     const noValidation = <boolean>args['--novalidation'];
+    const report = <boolean>args['--report'];
 
     if (filePath === undefined) {
       showUsage();
@@ -72,7 +80,7 @@ const main = async (): Promise<void> => {
     const preProcessedText = parser.preProcess(contents);
     const tests = parser.splitTests(preProcessedText);
 
-    const results: ITestResult[] = [];
+    let resultsPerRun: ITestResult[] = [];
     const parsedTests: ITest[] = [];
 
     for (const test of tests) {
@@ -90,21 +98,30 @@ const main = async (): Promise<void> => {
       }
     }
 
+    let totalResults: ITestResult[] = [];
     for (let i = 0; i < numberOfRuns; i++) {
       if (randomize) {
         shuffleArray(parsedTests);
       }
+
       for (const parsedTest of parsedTests) {
         runTest(parsedTest).then((result) => {
-          results.push(result);
-          if (!outputXml) {
+          resultsPerRun.push(result);
+          if (!outputXml && !report) {
             console.log(result);
-          }
-          if (results.length === parsedTests.length) {
-            if (outputXml) {
-              console.log(util.resultsToXml(path.basename(filePath, path.extname(filePath)), results));
+          } else if (resultsPerRun.length === parsedTests.length) {
+            totalResults = totalResults.concat([...resultsPerRun]);
+            resultsPerRun = [];
+            if (!report && outputXml) {
+              console.log(util.resultsToXml(path.basename(filePath, path.extname(filePath)), resultsPerRun));
             }
-            resolve();
+
+            if (totalResults.length === parsedTests.length * numberOfRuns) {
+              if (report) {
+                console.log(buildReport(totalResults));
+              }
+              resolve();
+            }
           }
         });
       }
