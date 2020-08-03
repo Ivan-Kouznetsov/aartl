@@ -210,3 +210,71 @@ export const hasNullRules: ITest = {
     },
   ],
 };
+
+export const nonUniquepassOnJsonPath: ITest = {
+  name: 'should return stuff when queried',
+  usingValues: [{ '@id': 10 }],
+  requests: [
+    {
+      headers: [{ 'Accept-Encoding': '*/*' }],
+      method: 'get',
+      url: 'http://example.org/@id',
+      body: null,
+      passOn: [{ '$..id': '_id' }, { '$..id': '_id2' }],
+      wait: null,
+      expectedStatusCode: '200',
+      jsonRules: [
+        { '$..id': '@id' },
+        { '$..title': 'each is a non empty string' },
+        { '$..num': 'each is > 10' },
+        { '$..books': 'count is "$..bookCount"' },
+      ],
+      headerRules: [{ 'Accept-Encoding': '*/*' }, { 'X-cache': true }],
+    },
+    {
+      headers: [{ 'Accept-Encoding': '*/*' }],
+      method: 'get',
+      url: 'http://example.org/@id',
+      body: null,
+      passOn: [],
+      headerRules: [],
+      expectedStatusCode: null,
+      jsonRules: [{ '$..id': 'hello' }],
+      wait: null,
+    },
+  ],
+};
+
+export const nonUniquepassOnNameValues: ITest = {
+  name: 'should return stuff when queried',
+  usingValues: [{ '@id': 10 }],
+  requests: [
+    {
+      headers: [{ 'Accept-Encoding': '*/*' }],
+      method: 'get',
+      url: 'http://example.org/@id',
+      body: null,
+      passOn: [{ '$..id': '_id' }, { '$..id2': '_id' }],
+      wait: null,
+      expectedStatusCode: '200',
+      jsonRules: [
+        { '$..id': '@id' },
+        { '$..title': 'each is a non empty string' },
+        { '$..num': 'each is > 10' },
+        { '$..books': 'count is "$..bookCount"' },
+      ],
+      headerRules: [{ 'Accept-Encoding': '*/*' }, { 'X-cache': true }],
+    },
+    {
+      headers: [{ 'Accept-Encoding': '*/*' }],
+      method: 'get',
+      url: 'http://example.org/@id',
+      body: null,
+      passOn: [],
+      headerRules: [],
+      expectedStatusCode: null,
+      jsonRules: [{ '$..id': 'hello' }],
+      wait: null,
+    },
+  ],
+};

@@ -162,3 +162,10 @@ export const resultsToXml = (suiteName: string, results: ITestResult[]): string 
 
   return fileStart + '\n' + suiteStart + results.map((r) => createXmlTestCase(r)).join('') + '\n' + suiteEnd;
 };
+
+export const shuffleArray = (array: unknown[]): void => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+};

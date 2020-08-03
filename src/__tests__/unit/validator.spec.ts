@@ -10,6 +10,12 @@ describe('Validator', () => {
     expect(getFirstValidationError(fixtures.waitInLast)).toEqual('Cannot have a wait in last request');
     expect(getFirstValidationError(fixtures.tooManyArgs)).toContain('has too many arguments');
     expect(getFirstValidationError(fixtures.hasNullRules)).toContain('has one or more invalid lines at the end');
+    expect(getFirstValidationError(fixtures.nonUniquepassOnJsonPath)).toContain(
+      '$..id is a non-unique Pass on JSON path'
+    );
+    expect(getFirstValidationError(fixtures.nonUniquepassOnNameValues)).toContain(
+      '_id is a non-unique Pass on value name'
+    );
   });
 
   it('should validate valid test', () => {

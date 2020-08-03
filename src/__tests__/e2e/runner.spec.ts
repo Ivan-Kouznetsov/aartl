@@ -33,8 +33,8 @@ describe('Test runner', () => {
     expect(result.passed).toBe(false);
   });
 
-  it('should fail when getting a non existant post', async () => {
-    const result = await runTestThruAllSteps(fixtures.requestNonExistantPost);
+  it('should fail when getting a non existent post', async () => {
+    const result = await runTestThruAllSteps(fixtures.requestNonexistentPost);
 
     expect(result.passed).toBe(false);
     expect(result.failReasons[0]).toEqual('Expected status code of 200, got: 404');
