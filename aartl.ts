@@ -3,6 +3,8 @@ import * as path from 'path';
 import { suiteRunner } from './src/runner/suiteRunner';
 import { arg } from './src/lib/arg';
 import { exit } from 'process';
+import { buildHtmlReport } from './src/reportBuilder/reportBuilder';
+import { resultsToXml } from './src/runner/util';
 
 const showUsage = () => {
   console.log('Usage: node aartl.js -f "path-to-test-file"');
@@ -78,8 +80,24 @@ const main = async (): Promise<void> => {
     }
   );
 
-  if (outputXml || report) {
-    console.log(results);
+  const okDateTime = () => {
+    const now = new Date();
+    return now
+      .toLocaleString()
+      .replace('a.m.', 'AM')
+      .replace('p.m.', 'PM')
+      .replace(/:/g, '-')
+      .replace(/(,|\s)/g, '_')
+      .replace('__', '_');
+  };
+
+  if (outputXml) {
+    console.log(resultsToXml(suiteName, results));
+  } else if (report) {
+    const fileName = `${suiteName}${okDateTime()}.html`;
+    const html = buildHtmlReport(suiteName, results);
+    fileSystem.writeFileSync(fileName, html);
+    console.log(`Saved report to: ${fileName}`);
   }
 };
 

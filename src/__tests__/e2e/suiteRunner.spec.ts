@@ -1,7 +1,6 @@
 import { exampleSuite, invalidExampleSuite } from './fixtures/suiteRunner.fixtures';
 import { suiteRunner } from '../../runner/suiteRunner';
-import { ITestResult, IReport } from '../../interfaces/results';
-import * as junitXml from 'verify-junit-xml';
+import { ITestResult } from '../../interfaces/results';
 
 describe('Suite Runner', () => {
   it('should run entire suite when default arguments are provided', async () => {
@@ -66,60 +65,6 @@ describe('Suite Runner', () => {
     expect(result.find((r) => r.testName === 'should be null')).toBeUndefined();
   }, 20000);
 
-  it('should run entire suite when outputting xml', async (done) => {
-    const log: ITestResult[] = [];
-    const result: string = <string>(
-      await suiteRunner('example', exampleSuite, undefined, 1, false, true, false, false, (result) => {
-        log.push(result);
-      })
-    );
-
-    expect(log).toEqual([]);
-    junitXml.verifyXml(result).catch((err) => {
-      if (err instanceof junitXml.UnsuccessfulError) {
-        done();
-      } else {
-        fail('invalid xml file');
-      }
-    });
-  }, 20000);
-
-  it('should run entire suite when outputting xml and novalidation', async (done) => {
-    const log: ITestResult[] = [];
-    const result: string = <string>(
-      await suiteRunner('example', exampleSuite, undefined, 1, false, true, true, false, (result) => {
-        log.push(result);
-      })
-    );
-
-    expect(log).toEqual([]);
-    junitXml.verifyXml(result).catch((err) => {
-      if (err instanceof junitXml.UnsuccessfulError) {
-        done();
-      } else {
-        fail('invalid xml file');
-      }
-    });
-  }, 20000);
-
-  it('should run entire suite when outputting xml and randomize is true', async (done) => {
-    const log: ITestResult[] = [];
-    const result: string = <string>(
-      await suiteRunner('example', exampleSuite, undefined, 1, true, true, true, false, (result) => {
-        log.push(result);
-      })
-    );
-
-    expect(log).toEqual([]);
-    junitXml.verifyXml(result).catch((err) => {
-      if (err instanceof junitXml.UnsuccessfulError) {
-        done();
-      } else {
-        fail('invalid xml file');
-      }
-    });
-  }, 20000);
-
   it('should reject when there is a validation error', async (done) => {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     suiteRunner('example', invalidExampleSuite, undefined, 1, true, true, false, false, () => {})
@@ -131,32 +76,4 @@ describe('Suite Runner', () => {
         done();
       });
   }, 20000);
-
-  it('should run entire suite when outputting a report', async () => {
-    const log: ITestResult[] = [];
-    const result: IReport = <IReport>(
-      await suiteRunner('example', exampleSuite, undefined, 1, false, false, false, true, (result) => {
-        log.push(result);
-      })
-    );
-
-    expect(log).toEqual([]);
-    expect(result.medianFailureRate).toBe(100);
-    expect(result.rangeOfFailureRates).toEqual({ min: 0, max: 100 });
-    expect(result.testReports.length).toBe(11);
-  }, 60000);
-
-  it('should run entire suite when outputting a report over 2 runs', async () => {
-    const log: ITestResult[] = [];
-    const result: IReport = <IReport>(
-      await suiteRunner('example', exampleSuite, undefined, 2, false, false, false, true, (result) => {
-        log.push(result);
-      })
-    );
-
-    expect(log).toEqual([]);
-    expect(result.medianFailureRate).toBe(100);
-    expect(result.rangeOfFailureRates).toEqual({ min: 0, max: 100 });
-    expect(result.testReports.length).toBe(11);
-  }, 60000);
 });
