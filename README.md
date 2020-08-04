@@ -147,7 +147,7 @@ The "runs fast" claim refers to the following:
 
 - Checking if a response passes the rules is as fast as 0.1 milliseconds
 - HTTP requests are handled by a very lightweight wrapper over the native HTTP APIs
-- Tests and test suites are executed asynchronously so while one test is "waiting" for a response, other tests are being executed
+- Tests are executed asynchronously so while one test is "waiting" for a response, other tests are being executed
 
 ## Licence
 

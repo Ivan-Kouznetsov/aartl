@@ -90,7 +90,7 @@ const main = async (): Promise<void> => {
     }
   }
 
-  filePaths.forEach((file) => {
+  const runSuite = (file: string) => {
     fileSystem.readFile(file, { encoding: 'utf-8' }, (err, data) => {
       if (err) {
         console.error(err.message);
@@ -108,13 +108,15 @@ const main = async (): Promise<void> => {
               fileSystem.writeFileSync(fileName, html);
               console.log(`Saved report to: ${fileName}`);
             }
+            if (filePaths.length > 0) runSuite(filePaths.shift());
           })
           .catch((reason) => {
             console.error(reason);
           });
       }
     });
-  });
+  };
+  runSuite(filePaths.shift());
 };
 
 main().catch((ex) => console.error(ex));

@@ -30,7 +30,6 @@
     "typescript": "^3.9.6",
     "verify-junit-xml": "0.0.3"
   },
-  "dependencies": {},
   "husky": {
     "hooks": {
       "pre-push": "npm run lint && npm test"

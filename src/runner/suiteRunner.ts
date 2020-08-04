@@ -4,6 +4,8 @@ import { getFirstValidationError } from '../validator/validator';
 import * as util from './util';
 import { ITestResult } from '../interfaces/results';
 import { ITest } from '../interfaces/test';
+import { RateLimit } from '../lib/async-sema-3.0.0';
+const lim = RateLimit(100);
 
 export const suiteRunner = async (
   contents: string,
@@ -14,7 +16,7 @@ export const suiteRunner = async (
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   realTimeLogger: (result: ITestResult) => void = () => {}
 ): Promise<ITestResult[]> => {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     const preProcessedText = parser.preProcess(contents);
     const tests = parser.splitTests(preProcessedText);
 
@@ -43,6 +45,7 @@ export const suiteRunner = async (
       }
 
       for (const parsedTest of parsedTests) {
+        await lim();
         runTest(parsedTest).then((result) => {
           totalResults.push(result);
           realTimeLogger(result);
