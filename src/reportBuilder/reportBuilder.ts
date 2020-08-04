@@ -81,7 +81,7 @@ export const buildHtmlReport = (suiteName: string, testResults: ITestResult[]): 
     });
 
   body +=
-    '</table>\n<h2>Details</h2>\n<table><tr><td>Test Name</td><td>Passed</td><td>Fail Reasons</td><td>Errors</td><td>Request Log</td></tr>';
+    '</table>\n<h2>Details</h2>\n<table><tr><td>Test Name</td><td>Passed</td><td>Duration (ns)</td><td>Fail Reasons</td><td>Request Log</td></tr>';
 
   [...testResults]
     .sort((a, b) => (a.testName < b.testName ? -1 : 1))
