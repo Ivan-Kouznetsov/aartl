@@ -1,5 +1,7 @@
-import { buildReport } from '../../reportBuilder/reportBuilder';
+import { buildReport, buildHtmlReport } from '../../reportBuilder/reportBuilder';
 import { testResults1, testResults2 } from './fixtures/reportBuilder.fixtures';
+import { rawResults } from './fixtures/htmlReport.fixtures';
+import * as html_validator from 'html-validator';
 
 describe('Report builder', () => {
   it('should return a report when given a test result array of 1', () => {
@@ -44,5 +46,13 @@ describe('Report builder', () => {
         },
       ],
     });
+  });
+
+  it('should produce valid html', async () => {
+    const html = buildHtmlReport('Example', rawResults);
+
+    expect(html.includes('[object')).toBe(false);
+    expect(html.includes('undefined')).toBe(false);
+    expect((await html_validator({ validator: 'WHATWG', data: html })).isValid).toBe(true);
   });
 });

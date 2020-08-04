@@ -1,4 +1,4 @@
-import { ITestResult, ITestReport, IReport } from '../interfaces/results';
+import { ITestResult, ITestReport, IReport, IRequestLog } from '../interfaces/results';
 
 /**
  * Math
@@ -12,7 +12,7 @@ const median = (arr: number[]) => {
 const range = (arr: number[]) => ({ min: Math.min(...arr), max: Math.max(...arr) });
 
 /*
- * Exported function
+ * Exported functions
  */
 
 export const buildReport = (testResults: ITestResult[]): IReport => {
@@ -35,4 +35,76 @@ export const buildReport = (testResults: ITestResult[]): IReport => {
     rangeOfFailureRates: range(failureRates),
     medianFailureRate: median(failureRates),
   };
+};
+
+const escapeHtmlChars = (str: string) => (str ?? '').replace('&', '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+export const requestLogToHtml = (log: IRequestLog): string => {
+  const sent = JSON.parse(log.sent);
+  const rec = JSON.parse(log.received);
+
+  return `<span class="requestDuration"> Duration: ${log.duration}ns </span> <p>Sent: <br/>Url: ${sent.url}
+  <br/>Method: ${sent.method}
+  <br/>Body: ${escapeHtmlChars(sent.body)}
+  <br/>Headers: ${JSON.stringify(sent.headers)}'  
+  <br/>
+  <p>Received
+  <br/>${
+    rec.error
+      ? ''
+      : rec.response.json
+      ? escapeHtmlChars(JSON.stringify(rec.response.json))
+      : escapeHtmlChars(rec.response.string)
+  }
+  <br/>Status: ${rec.error ? '' : rec.response.status}
+  <br/>Duration: ${log.duration}ns 
+  <br/>Error: ${rec.error ?? 'None'}
+  `;
+};
+
+export const buildHtmlReport = (suiteName: string, testResults: ITestResult[]): string => {
+  const newLine = '<br/>\n';
+  let body = '<table>';
+  const summary = buildReport(testResults);
+
+  body += `<tr><td>Median Failure Rate:</td><td> ${summary.medianFailureRate}</td></tr>`;
+  body += `<tr><td>Failure Rate Range:</td><td> ${summary.rangeOfFailureRates.min}-${summary.rangeOfFailureRates.max}</td></tr>`;
+
+  body += '</table><h2>Tests</h2><table><tr><td>Test Name</td><td>Runs</td><td>Failures</td><td>Failure Rate</td></tr>';
+
+  summary.testReports
+    .sort((a, b) => a.failureRate - b.failureRate)
+    .forEach((t) => {
+      body += `<tr><td><a href="#${t.testName.replace(/\s/g, '_')}">${t.testName}</a></td><td>${t.runs}</td><td>${
+        t.failures
+      }</td><td>${t.failureRate}%</td></tr>\n`;
+    });
+
+  body +=
+    '</table>\n<h2>Details</h2>\n<table><tr><td>Test Name</td><td>Passed</td><td>Fail Reasons</td><td>Errors</td><td>Request Log</td></tr>';
+
+  [...testResults]
+    .sort((a, b) => (a.testName < b.testName ? -1 : 1))
+    .forEach((t) => {
+      body += `<tr id="${t.testName.replace(/\s/g, '_')}"><td>${t.testName}</td><td>${t.passed}</td><td> ${
+        t.duration
+      }</td><td> ${
+        t.failReasons.length ? escapeHtmlChars(t.failReasons.join(',')) : 'None'
+      }</td><td> ${t.requestLogs.map((r) => requestLogToHtml(r)).join(newLine)}</td></tr>`;
+    });
+
+  body += '</table>';
+  return `<!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>AARLT Test Report - ${suiteName}</title>
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  
+  <body>  
+    <h1>AARLT Test Report - ${suiteName} - ${new Date().toString()}</h1>
+    ${body}
+  </body>
+  </html>`;
 };
