@@ -4,7 +4,7 @@ import { suiteRunner } from './src/runner/suiteRunner';
 import { arg } from './src/lib/arg';
 import { exit } from 'process';
 import { buildHtmlReport } from './src/reportBuilder/reportBuilder';
-import { resultsToXml } from './src/runner/util';
+import { resultsToXml } from './src/reportBuilder/reportBuilder';
 
 const showUsage = () => {
   console.log('Usage: node aartl.js -f "path-to-test-file"');

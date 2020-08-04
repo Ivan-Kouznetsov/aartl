@@ -1,6 +1,5 @@
 import { ITest, IKeyValuePair, IRequest } from '../interfaces/test';
 import { getArgs } from '../parser/util';
-import { ITestResult } from '../interfaces/results';
 import { getRngFunctions } from '../lib/rng';
 const randomSeed = process.hrtime()[1];
 
@@ -138,29 +137,6 @@ export const keyValueToObject = (
 export const bigIntToNumber = (bigInt: BigInt): number => {
   if (bigInt <= BigInt(Number.MAX_SAFE_INTEGER)) return Number(bigInt);
   return Infinity; // this is purely theoretical, Number.MAX_SAFE_INTEGER nanoseconds is 2501 hours / 100+ days
-};
-
-const createXmlTestCase = (result: ITestResult): string => `
-<testcase name="${result.testName}" 
-classname="${result.testName.replace(/\s/g, '_')}"  
-status="${result.passed ? 'passed' : 'failed'}"
-time="${(result.duration / 1e9).toFixed(2)}"
->
-${result.failReasons.map((f) => `<failure message="${f}"></failure>`).join('')}
-</testcase>`;
-
-/**
- * Convert results to Apache Ant JUnit XML data
- * @param results
- */
-export const resultsToXml = (suiteName: string, results: ITestResult[]): string => {
-  const fileStart = '<?xml version="1.0" encoding="UTF-8"?>';
-  const suiteStart = `<testsuite name="${suiteName}" tests="${results.length}" id="0" errors="0" failures="${
-    results.filter((r) => r.passed === false).length
-  }">`;
-  const suiteEnd = '</testsuite>';
-
-  return fileStart + '\n' + suiteStart + results.map((r) => createXmlTestCase(r)).join('') + '\n' + suiteEnd;
 };
 
 export const shuffleArray = (array: unknown[]): void => {
