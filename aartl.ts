@@ -10,14 +10,27 @@ const showUsage = () => {
   console.log('Usage: node aartl.js -f "path-to-test-file"');
   console.log('\nOptions:');
   console.log('-t "name of test" - run a single test');
+  console.log('-d path - run all files in directory');
   console.log('-n NUMBER - run the tests a number of times');
   console.log('--hello - display name of this program');
   console.log('--r - randomize test order');
   console.log('--xml - output results as JUnit XML');
   console.log('--novalidation - skip validation of tests');
+  console.log("--q - don't output realtime test results");
   console.log(
     '--report - instead of outputing all results, output a report with failure rates and duration statistics, overrides --xml'
   );
+};
+
+const okDateTime = () => {
+  const now = new Date();
+  return now
+    .toLocaleString()
+    .replace('a.m.', 'AM')
+    .replace('p.m.', 'PM')
+    .replace(/:/g, '-')
+    .replace(/(,|\s)/g, '_')
+    .replace('__', '_');
 };
 
 const main = async (): Promise<void> => {
@@ -28,10 +41,12 @@ const main = async (): Promise<void> => {
       '-t': String,
       '-n': Number,
       '--r': Boolean,
+      '-d': String,
       '--hello': Boolean,
       '--xml': Boolean,
       '--novalidation': Boolean,
       '--report': Boolean,
+      '--q': Boolean,
     });
   } catch (ex) {
     console.log(ex.message);
@@ -47,48 +62,59 @@ const main = async (): Promise<void> => {
   const outputXml = <boolean>args['--xml'];
   const noValidation = <boolean>args['--novalidation'];
   const report = <boolean>args['--report'];
-  const suiteName = path.basename(filePath, path.extname(filePath));
+  const directory = <string>args['-d'];
+  const quiet = <boolean>args['--q'];
 
-  if (filePath === undefined) {
-    showUsage();
-    return;
-  }
-
-  let contents = '';
-  try {
-    contents = fileSystem.readFileSync(filePath, { encoding: 'utf-8' });
-  } catch (ex) {
-    if (ex.code === 'ENOENT') {
-      console.error(`${filePath} does not exist`);
-    } else {
-      console.error(`${filePath} cannot be accessed`);
-    }
+  if (directory && filePath) {
+    console.log('Error: cannot specific both a file and a directory');
     exit(1);
   }
 
-  const results = await suiteRunner(contents, testName, numberOfRuns, randomize, noValidation, (str) => {
-    console.log(str);
-  });
-
-  const okDateTime = () => {
-    const now = new Date();
-    return now
-      .toLocaleString()
-      .replace('a.m.', 'AM')
-      .replace('p.m.', 'PM')
-      .replace(/:/g, '-')
-      .replace(/(,|\s)/g, '_')
-      .replace('__', '_');
-  };
-
-  if (outputXml) {
-    console.log(resultsToXml(suiteName, results));
-  } else if (report) {
-    const fileName = `${suiteName}${okDateTime()}.html`;
-    const html = buildHtmlReport(suiteName, results);
-    fileSystem.writeFileSync(fileName, html);
-    console.log(`Saved report to: ${fileName}`);
+  if (directory === undefined && filePath === undefined) {
+    showUsage();
+    exit(1);
   }
+  const filePaths: string[] = [];
+  if (filePath) {
+    filePaths.push(filePath);
+  } else if (directory) {
+    try {
+      fileSystem.readdirSync(directory).forEach((f) => {
+        if (f.endsWith('.aartl') && !fileSystem.statSync(f).isDirectory()) {
+          console.log(f);
+          filePaths.push(f);
+        }
+      });
+    } catch {
+      console.log('Cannot open directory:' + directory);
+    }
+  }
+
+  filePaths.forEach((file) => {
+    fileSystem.readFile(file, { encoding: 'utf-8' }, (err, data) => {
+      if (err) {
+        console.error(err.message);
+      } else {
+        suiteRunner(data, testName, numberOfRuns, randomize, noValidation, (str) => {
+          if (!quiet) console.log(str);
+        })
+          .then((testResults) => {
+            const suiteName = path.basename(file, path.extname(file));
+            if (outputXml) {
+              console.log(resultsToXml(suiteName, testResults));
+            } else if (report) {
+              const fileName = `${suiteName}${okDateTime()}.html`;
+              const html = buildHtmlReport(suiteName, testResults);
+              fileSystem.writeFileSync(fileName, html);
+              console.log(`Saved report to: ${fileName}`);
+            }
+          })
+          .catch((reason) => {
+            console.error(reason);
+          });
+      }
+    });
+  });
 };
 
 main().catch((ex) => console.error(ex));
