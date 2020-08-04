@@ -10,7 +10,7 @@
     "noEmitOnError": true,
     "removeComments": true,
     "sourceMap": false,
-    "target": "ES2020",
+    "target": "ES2018",
     "watch": false
   },
   "exclude": ["node_modules", "src/__tests__", "jest.config.*", "./dist", "coverage"]
