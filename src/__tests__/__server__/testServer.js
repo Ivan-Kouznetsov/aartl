@@ -31,6 +31,17 @@ app.get('/posts/:id', (request, response) => {
   }
 });
 
+app.delete('/posts/:id', (request, response) => {
+  const id = parseInt(request.params['id']);
+
+  if (typeof posts[id] !== 'undefined') {
+    delete posts[id];
+    response.status(200).send('Ready').end();
+  } else {
+    response.status(404).send('Not Found').end();
+  }
+});
+
 app.post('/posts', (request, response) => {
   posts.push(request.body.toString());
 

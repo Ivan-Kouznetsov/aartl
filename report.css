@@ -9,10 +9,12 @@ a:active {
   text-decoration: none;
 }
 
+span.failed,
 a.hasFailed {
   color: coral;
 }
 
+span.passed,
 a.hasNotFailed {
   color: #008477;
 }

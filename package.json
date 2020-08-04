@@ -1,12 +1,12 @@
 {
   "name": "aartl",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Agnostic API Reliability Testing Language (AARTL) is platform-agnostic declarative domain-specific language for testing HTTP servers using the server’s API",
   "main": "aartl.ts",
   "scripts": {
     "test-cov": "jest --coverage",
     "test-server": "node src/__tests__/__server__/testServer.js",
-    "build": "rimraf dist && tsc",
+    "build": "rimraf dist && tsc && cp report.css ./dist && cp example.aartl ./dist",
     "lint": "eslint **/*.ts",
     "test": "start-server-and-test test-server http://localhost:3000 test-cov"
   },

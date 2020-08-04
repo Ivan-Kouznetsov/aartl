@@ -1,6 +1,22 @@
-# Agnostic API Reliability Testing Language
+# Why?
 
-Agnostic API Reliability Testing Language (AARTL) is a platform-agnostic declarative domain-specific language for testing HTTP servers using the server’s API, it is implemented in TypeScript as a **dependency-free** high-performance Node.js application and can run on all major operating systems (Windows, macOS, Linux-based OSs and FreeBSD), it can also run on GraalVM, and can test servers irrespective of the platform used by the server. An AARTL test is a human-readable declaration of the expected response from a server endpoint given one or more requests.
+Imagine you have a software-as-a-service product that includes multiple services that rely on each other. Each of the services is tested. Let's say for the sake of argument they have code coverage of between 85% and 95%, you may have some confidence that the services work.
+
+What is your confidence that a specific end-to-end process that implicates several services works and has a low failure rate?
+![Diagram showing multiple connected services](diagram.png)
+
+## Possible solutions
+
+| Approach                                                     | Downsides                                                    |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Browser-based end-to-end tests                               | 1. Slow <br />2. Cannot be run at a high rate (due to slowness) and thus cannot be used to ascertain failure rates <br />3. Easy to write bugs |
+| API-based end-to-end tests using common general-purpose frameworks | 1. Easy to write bugs<br />2. Common test frameworks are not designed to re-run tests and calculate failure rates<br />3. Significant start-up time |
+
+# What?
+
+## Agnostic API Reliability Testing Language
+
+Agnostic API Reliability Testing Language (AARTL) is a platform-agnostic declarative domain-specific language for testing HTTP servers using the server’s API, it is implemented in TypeScript as a **dependency-free** high-performance Node.js application and can run on all major operating systems (Windows, macOS, Linux-based OSs and FreeBSD), it can also run on GraalVM, and can test servers irrespective of the platform used by the server. An AARTL test is a human-readable declaration of the expected response from a server endpoint given one or more requests. Its simple syntax offers fewer opportunities for writing bugs than a traditional test which may include any arbitrary code. 
 
 ## Design goals
 
@@ -106,7 +122,9 @@ The syntax is case sensitive, statements start with an upper-case letter, data i
 - 100% test coverage of all modules
 - Human-readable reports
 
-## Setup and Use
+## How?
+
+### Setup and Use
 
 1.  Ensure that git is installed
 2.  Ensure that Node.js is installed
@@ -131,9 +149,10 @@ And now you can run AARTL like so
 | \-\-xml          | Output results as JUnit XML                        |
 | \-\-novalidation | Don't validate test file                           |
 | \-\-r            | Randomize test order                               |
-| \-n NUMBER       | Rerun the tests a number of times                  |
+| \-n N            | Rerun the tests a number of times                  |
+| \-m N            | Maximum concurrent tests. Default = 100.           |
 | \-\-report       | Output a report with failure rates                 |
-| \-\-q            | Don't output realtime test results                 |
+| \-\-q            | Don't output real-time test results                |
 
 ## Editor Support
 
@@ -148,7 +167,10 @@ The "runs fast" claim refers to the following:
 - Checking if a response passes the rules is as fast as 0.1 milliseconds
 - HTTP requests are handled by a very lightweight wrapper over the native HTTP APIs
 - Tests are executed asynchronously so while one test is "waiting" for a response, other tests are being executed
+- Can send more concurrent requests than an Express-based server can handle and thus has to be throttled
 
-## Licence
+In other words, the bottleneck is likely to be how many requests the server being tested can handle not how fast the tests are executed.
+
+## License
 
 MIT
