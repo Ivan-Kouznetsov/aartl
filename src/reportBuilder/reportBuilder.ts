@@ -108,3 +108,26 @@ export const buildHtmlReport = (suiteName: string, testResults: ITestResult[]): 
   </body>
   </html>`;
 };
+
+const createXmlTestCase = (result: ITestResult): string => `
+<testcase name="${result.testName}" 
+classname="${result.testName.replace(/\s/g, '_')}"  
+status="${result.passed ? 'passed' : 'failed'}"
+time="${(result.duration / 1e9).toFixed(2)}"
+>
+${result.failReasons.map((f) => `<failure message="${f}"></failure>`).join('')}
+</testcase>`;
+
+/**
+ * Convert results to Apache Ant JUnit XML data
+ * @param results
+ */
+export const resultsToXml = (suiteName: string, results: ITestResult[]): string => {
+  const fileStart = '<?xml version="1.0" encoding="UTF-8"?>';
+  const suiteStart = `<testsuite name="${suiteName}" tests="${results.length}" id="0" errors="0" failures="${
+    results.filter((r) => r.passed === false).length
+  }">`;
+  const suiteEnd = '</testsuite>';
+
+  return fileStart + '\n' + suiteStart + results.map((r) => createXmlTestCase(r)).join('') + '\n' + suiteEnd;
+};
