@@ -1,6 +1,6 @@
 # Agnostic API Reliability Testing Language
 
-Agnostic API Reliability Testing Language (AARTL) is a platform-agnostic declarative domain-specific language for testing HTTP servers using the server’s API, it is implemented in TypeScript as a **dependency-free** Node.js application and can run on all major operating systems (Windows, macOS, Linux-based OSs and FreeBSD), it can also run on GraalVM, and can test servers irrespective of the platform used by the server. An AARTL test is a human-readable declaration of the expected response from a server endpoint given one or more requests.
+Agnostic API Reliability Testing Language (AARTL) is a platform-agnostic declarative domain-specific language for testing HTTP servers using the server’s API, it is implemented in TypeScript as a **dependency-free** high-performance Node.js application and can run on all major operating systems (Windows, macOS, Linux-based OSs and FreeBSD), it can also run on GraalVM, and can test servers irrespective of the platform used by the server. An AARTL test is a human-readable declaration of the expected response from a server endpoint given one or more requests.
 
 ## Design goals
 
@@ -103,25 +103,8 @@ The syntax is case sensitive, statements start with an upper-case letter, data i
 - Detailed logging
 - Cross-platform
 - Flexible matching rules
-- Good test coverage
-
-| File                         | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s |
-| ---------------------------- | ------- | -------- | ------- | ------- | ----------------- |
-| All files                    | 100     | 100      | 100     | 100     |
-| &nbsp;parser                 | 100     | 100      | 100     | 100     |
-| &nbsp;&nbsp;parser.ts        | 100     | 100      | 100     | 100     |
-| &nbsp;&nbsp;ruleParser.ts    | 100     | 100      | 100     | 100     |
-| &nbsp;&nbsp;util.ts          | 100     | 100      | 100     | 100     |
-| reportBuilder                | 100     | 100      | 100     | 100     |
-| &nbsp;&nbsp;reportBuilder.ts | 100     | 100      | 100     | 100     |
-| rules                        | 100     | 100      | 100     | 100     |
-| &nbsp;&nbsp;matchers.ts      | 100     | 100      | 100     | 100     |
-| runner                       | 100     | 100      | 100     | 100     |
-| &nbsp;&nbsp;runner.ts        | 100     | 100      | 100     | 100     |
-| &nbsp;&nbsp;suiteRunner.ts   | 100     | 100      | 100     | 100     |
-| &nbsp;&nbsp;util.ts          | 100     | 100      | 100     | 100     |
-| validator                    | 100     | 100      | 100     | 100     |
-| &nbsp;&nbsp;validator.ts     | 100     | 100      | 100     | 100     |
+- 100% test coverage of all modules
+- Human-readable reports
 
 ## Setup and Use
 
@@ -157,6 +140,14 @@ And now you can run AARTL like so
 A work in progress VSCode extension is available at: https://github.com/Ivan-Kouznetsov/aartl-vscode-extension
 
 ![VSCode Screenshot](https://raw.githubusercontent.com/Ivan-Kouznetsov/aartl-vscode-extension/master/vscodeScreenshot.png)
+
+## Performance
+
+The "runs fast" claim refers to the following:
+
+- Checking if a response passes the rules is as fast as 0.1 milliseconds
+- HTTP requests are handled by a very lightweight wrapper over the native HTTP APIs
+- Tests and test suites are executed asynchronously so while one test is "waiting" for a response, other tests are being executed
 
 ## Licence
 
