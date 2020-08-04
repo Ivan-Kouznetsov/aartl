@@ -92,6 +92,6 @@ describe('Runner util', () => {
     await util.wait(waitTime);
 
     const duration = (process.hrtime.bigint() - start) / BigInt(1e6);
-    expect(duration).toBeGreaterThanOrEqual(waitTime);
+    expect(duration).toBeGreaterThanOrEqual(waitTime - 5);
   });
 });
