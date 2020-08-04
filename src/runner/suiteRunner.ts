@@ -4,8 +4,8 @@ import { getFirstValidationError } from '../validator/validator';
 import * as util from './util';
 import { ITestResult } from '../interfaces/results';
 import { ITest } from '../interfaces/test';
-import { RateLimit } from 'async-sema';
-const lim = RateLimit(5);
+import { RateLimit } from '../lib/async-sema-3.0.0';
+const lim = RateLimit(100);
 
 export const suiteRunner = async (
   contents: string,
