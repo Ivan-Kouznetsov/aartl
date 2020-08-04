@@ -3,6 +3,7 @@
 Imagine you have a software-as-a-service product that includes multiple services that rely on each other. Each of the services is tested. Let's say for the sake of argument they have code coverage of between 85% and 95%, you may have some confidence that the services work.
 
 What is your confidence that a specific end-to-end process that implicates several services works and has a low failure rate?
+
 ![Diagram showing multiple connected services](diagram.png)
 
 ## Possible solutions
