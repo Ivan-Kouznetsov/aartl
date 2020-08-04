@@ -1,0 +1,33 @@
+body {
+  font-family: sans-serif;
+}
+
+a:hover,
+a:visited,
+a:link,
+a:active {
+  text-decoration: none;
+}
+
+a.hasFailed {
+  color: coral;
+}
+
+a.hasNotFailed {
+  color: #008477;
+}
+
+#details {
+  width: 100%;
+}
+
+#details > tbody > tr > td {
+  border: 1px dotted grey;
+}
+
+#detailsHeader {
+  border: none;
+}
+.requestLogColumn {
+  width: 40%;
+}

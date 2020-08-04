@@ -43,7 +43,9 @@ export const requestLogToHtml = (log: IRequestLog): string => {
   const sent = JSON.parse(log.sent);
   const rec = JSON.parse(log.received);
 
-  return `<span class="requestDuration"> Duration: ${log.duration}ns </span> <p>Sent: <br/>Url: ${sent.url}
+  return `<span class="requestDuration"> Duration: ${formatDuration(log.duration)} ms </span> <p>Sent: <br/>Url: ${
+    sent.url
+  }
   <br/>Method: ${sent.method}
   <br/>Body: ${escapeHtmlChars(sent.body)}
   <br/>Headers: ${JSON.stringify(sent.headers)}'  
@@ -57,49 +59,58 @@ export const requestLogToHtml = (log: IRequestLog): string => {
       : escapeHtmlChars(rec.response.string)
   }
   <br/>Status: ${rec.error ? '' : rec.response.status}
-  <br/>Duration: ${log.duration}ns 
+  <br/>Duration: ${formatDuration(log.duration)} ms 
   <br/>Error: ${rec.error ?? 'None'}
   `;
 };
 
+const formatDuration = (ns: number) => (ns / 1e6).toFixed(2);
+
 export const buildHtmlReport = (suiteName: string, testResults: ITestResult[]): string => {
   const newLine = '<br/>\n';
-  let body = '<table>';
+  let body = '<table id="summary">';
   const summary = buildReport(testResults);
 
   body += `<tr><td>Median Failure Rate:</td><td> ${summary.medianFailureRate}</td></tr>`;
   body += `<tr><td>Failure Rate Range:</td><td> ${summary.rangeOfFailureRates.min}-${summary.rangeOfFailureRates.max}</td></tr>`;
 
-  body += '</table><h2>Tests</h2><table><tr><td>Test Name</td><td>Runs</td><td>Failures</td><td>Failure Rate</td></tr>';
+  body +=
+    '</table><h2>Tests</h2><table id="tableOfContents"><tr><td>Test Name</td><td>Runs</td><td>Failures</td><td>Failure Rate</td></tr>';
 
   summary.testReports
-    .sort((a, b) => a.failureRate - b.failureRate)
+    .sort((a, b) => b.failureRate - a.failureRate)
     .forEach((t) => {
-      body += `<tr><td><a href="#${t.testName.replace(/\s/g, '_')}">${t.testName}</a></td><td>${t.runs}</td><td>${
-        t.failures
-      }</td><td>${t.failureRate}%</td></tr>\n`;
+      body += `<tr><td><a class="${t.failures === 0 ? 'hasNotFailed' : 'hasFailed'}" href="#${t.testName.replace(
+        /\s/g,
+        '_'
+      )}">${t.testName}</a></td><td>${t.runs}</td><td>${t.failures}</td><td>${t.failureRate}%</td></tr>\n`;
     });
 
-  body +=
-    '</table>\n<h2>Details</h2>\n<table><tr><td>Test Name</td><td>Passed</td><td>Duration (ns)</td><td>Fail Reasons</td><td>Request Log</td></tr>';
+  body += `</table>
+    <h2>Details</h2>
+    <table id="details">
+    <thead>
+    <tr><td>Test Name</td><td>Passed</td><td>Duration</td><td>Fail Reasons</td><td class="requestLogColumn">Request Log</td></tr>
+    </thead>
+    <tbody>`;
 
   [...testResults]
     .sort((a, b) => (a.testName < b.testName ? -1 : 1))
     .forEach((t) => {
-      body += `<tr id="${t.testName.replace(/\s/g, '_')}"><td>${t.testName}</td><td>${t.passed}</td><td> ${
-        t.duration
-      }</td><td> ${
+      body += `<tr id="${t.testName.replace(/\s/g, '_')}"><td>${t.testName}</td><td>${
+        t.passed
+      }</td><td> ${formatDuration(t.duration)} ms</td><td> ${
         t.failReasons.length ? escapeHtmlChars(t.failReasons.join(',')) : 'None'
       }</td><td> ${t.requestLogs.map((r) => requestLogToHtml(r)).join(newLine)}</td></tr>`;
     });
 
-  body += '</table>';
+  body += '</tbody></table>';
   return `<!DOCTYPE html>
   <html lang="en">
   <head>
     <meta charset="utf-8">
     <title>AARLT Test Report - ${suiteName}</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="report.css">
   </head>
   
   <body>  
