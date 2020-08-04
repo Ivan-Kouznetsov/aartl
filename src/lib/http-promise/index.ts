@@ -1,6 +1,7 @@
 import * as http from 'http';
 import * as https from 'https';
 import { TextEncoder } from 'util';
+const keepAliveAgent = new http.Agent({ keepAlive: true });
 
 /**
  * Helpers
@@ -74,6 +75,7 @@ export const request = (
       path: urlParts.path,
       method: method,
       headers: headers,
+      agent: keepAliveAgent,
     };
 
     const req = (urlParts.protocol === 'http' ? http : https)
