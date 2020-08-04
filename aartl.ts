@@ -66,19 +66,9 @@ const main = async (): Promise<void> => {
     exit(1);
   }
 
-  const results = await suiteRunner(
-    suiteName,
-    contents,
-    testName,
-    numberOfRuns,
-    randomize,
-    outputXml,
-    noValidation,
-    report,
-    (str) => {
-      console.log(str);
-    }
-  );
+  const results = await suiteRunner(contents, testName, numberOfRuns, randomize, noValidation, (str) => {
+    console.log(str);
+  });
 
   const okDateTime = () => {
     const now = new Date();

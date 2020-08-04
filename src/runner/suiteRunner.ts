@@ -6,15 +6,13 @@ import { ITestResult } from '../interfaces/results';
 import { ITest } from '../interfaces/test';
 
 export const suiteRunner = async (
-  suiteName: string,
   contents: string,
   testName: string,
   numberOfRuns: number,
   randomize: boolean,
-  outputXml: boolean,
   noValidation: boolean,
-  report: boolean,
-  realTimeLogger: (result: ITestResult) => void
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  realTimeLogger: (result: ITestResult) => void = () => {}
 ): Promise<ITestResult[]> => {
   return new Promise((resolve, reject) => {
     const preProcessedText = parser.preProcess(contents);
@@ -47,9 +45,7 @@ export const suiteRunner = async (
       for (const parsedTest of parsedTests) {
         runTest(parsedTest).then((result) => {
           totalResults.push(result);
-          if (!outputXml && !report) {
-            realTimeLogger(result);
-          }
+          realTimeLogger(result);
 
           if (totalResults.length === totalTestsToRun) {
             resolve(totalResults);
