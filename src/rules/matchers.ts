@@ -58,7 +58,7 @@ export const validateCountLessThanOrEqual = (count: number): MatcherFunction => 
   !(arr.length <= count) ? arr.length : undefined;
 
 /* Array Props */
-export const validateArrayHasProp = (props: string): MatcherFunction => (arr: Primitive[]): Primitive =>
+export const validateArrayHasProp = (props: string): MatcherFunction => (arr: Record<string, unknown>[]): Primitive =>
   arr.find((item) => typeof item[props] === 'undefined');
 
 export const aliasesedMatchers = [
