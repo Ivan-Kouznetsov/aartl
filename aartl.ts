@@ -55,7 +55,7 @@ const main = async (): Promise<void> => {
     showUsage();
     exit(1);
   }
-  if (args['--hello'] === true) console.log('Agnostic API Testing Language - Runner');
+  if (args['--hello'] === true) console.log('Agnostic API Reliability Testing Language - Test Runner');
 
   const filePath = <string>args['-f'];
   const testName = <string>args['-t'];
