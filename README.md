@@ -17,7 +17,7 @@ What is your confidence that a specific end-to-end process that implicates sever
 
 ## Agnostic API Reliability Testing Language
 
-Agnostic API Reliability Testing Language (AARTL) is a platform-agnostic declarative domain-specific language for testing HTTP servers using the server’s API, it is implemented in TypeScript as a **dependency-free** high-performance Node.js application and can run on all major operating systems (Windows, macOS, Linux-based OSs and FreeBSD), it can also run on GraalVM, and can test servers irrespective of the platform used by the server. An AARTL test is a human-readable declaration of the expected response from a server endpoint given one or more requests. Its simple syntax offers fewer opportunities for writing bugs than a traditional test which may include any arbitrary code. 
+Agnostic API Reliability Testing Language (AARTL) is a platform-agnostic declarative domain-specific language for testing HTTP servers using the server’s API, it is implemented in TypeScript as a dependency-free high-performance Node.js application and can run on all major operating systems (Windows, macOS, Linux-based OSs and FreeBSD), it can also run on GraalVM, and can test servers irrespective of the platform used by the server. An AARTL test is a human-readable declaration of the expected response from a server endpoint given one or more requests. Its simple syntax offers fewer opportunities for writing bugs than a traditional test which may include any arbitrary code. 
 
 ## Design goals
 
@@ -141,6 +141,8 @@ In the terminal:
 And now you can run AARTL like so
 
     node dist/aartl.js [-f path/to/file/with/tests.aartl] [-d path/to/dir/with/.aartl]
+
+[A video showing setting up and running an example file in AARTL](https://vimeo.com/444741784)
 
 ### CLI options
 
