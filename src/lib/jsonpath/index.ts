@@ -1,49 +1,51 @@
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* JSONPath 0.8.0 - XPath for JSON
  *
  * Copyright (c) 2007 Stefan Goessner (goessner.net)
- * Licensed under the MIT (MIT-LICENSE.txt) licence.
+ * Licensed under the MIT licence.
  */
-export function jsonPath(obj, expr, arg?) {
+export function jsonPath(obj: string | Record<string, any>, expr: string, arg?: { resultType: any }) {
   const P = {
     resultType: (arg && arg.resultType) || 'VALUE',
-    result: [],
-    normalize: function (expr) {
-      const subx = [];
+    result: <any[]>[],
+    normalize: function (expr: string) {
+      const subx: any[] = [];
       return expr
-        .replace(/[\['](\??\(.*?\))[\]']/g, function (_$0, $1) {
+        .replace(/[\['](\??\(.*?\))[\]']/g, function (_$0: any, $1: any) {
           return '[#' + (subx.push($1) - 1) + ']';
         })
         .replace(/'?\.'?|\['?/g, ';')
         .replace(/;;;|;;/g, ';..;')
         .replace(/;$|'?\]|'$/g, '')
-        .replace(/#([0-9]+)/g, function (_$0, $1) {
+        .replace(/#([0-9]+)/g, function (_$0: any, $1: any) {
           return subx[$1];
         });
     },
-    asPath: function (path) {
+    asPath: function (path: string) {
       const x = path.split(';');
       let p = '$';
       for (let i = 1, n = x.length; i < n; i++) p += /^[0-9*]+$/.test(x[i]) ? '[' + x[i] + ']' : "['" + x[i] + "']";
       return p;
     },
-    store: function (p, v) {
+    store: function (p: any, v: any) {
       if (p) P.result[P.result.length] = P.resultType == 'PATH' ? P.asPath(p) : v;
       return !!p;
     },
-    trace: function (expr, val, path) {
+    trace: function (expr: string, val: string | Record<string, any>[], path: string) {
       if (expr) {
-        let x = expr.split(';');
+        let x: string | string[] = expr.split(';');
         const loc = x.shift();
         x = x.join(';');
-        if (val && val.hasOwnProperty(loc)) P.trace(x, val[loc], path + ';' + loc);
+        if (val && val.hasOwnProperty(loc)) P.trace(x, (<Record<string, any>>val)[loc], path + ';' + loc);
         else if (loc === '*')
-          P.walk(loc, x, val, path, function (m, _l, x, v, p) {
+          P.walk(loc, x, val, path, function (m: string, _l: any, x: string, v: any, p: any) {
             P.trace(m + ';' + x, v, p);
           });
         else if (loc === '..') {
           P.trace(x, val, path);
-          P.walk(loc, x, val, path, function (m, _l, x, v, p) {
+          P.walk(loc, x, val, path, function (m: string, _l: any, x: string, v: { [x: string]: any }, p: string) {
             typeof v[m] === 'object' && P.trace('..;' + x, v[m], p + ';' + m);
           });
         } else if (/,/.test(loc)) {
@@ -54,28 +56,46 @@ export function jsonPath(obj, expr, arg?) {
           P.trace(P.eval(loc, val, path.substr(path.lastIndexOf(';') + 1)) + ';' + x, val, path);
         else if (/^\?\(.*?\)$/.test(loc))
           // [?(expr)]
-          P.walk(loc, x, val, path, function (m, l, x, v, p) {
-            if (P.eval(l.replace(/^\?\((.*?)\)$/, '$1'), v[m], m)) P.trace(m + ';' + x, v, p);
+          P.walk(loc, x, val, path, function (
+            m: string,
+            l: string,
+            x: string,
+            v: string | { [x: string]: any },
+            p: any
+          ) {
+            if (P.eval(l.replace(/^\?\((.*?)\)$/, '$1'), (<{ [x: string]: any }>v)[m], m))
+              P.trace(m + ';' + x, <string>v, p);
           });
         else if (/^(-?[0-9]*):(-?[0-9]*):?([0-9]*)$/.test(loc))
           // [start:end:step]  phyton slice syntax
-          P.slice(loc, x, val, path);
+          P.slice(<any>loc, x, val, path);
       } else P.store(path, val);
     },
-    walk: function (loc, expr, val, path, f) {
+    walk: function (
+      loc: any,
+      expr: any,
+      val: string | object[],
+      path: any,
+      f: (arg0: string | number, arg1: any, arg2: any, arg3: any[], arg4: any) => void
+    ) {
       if (val instanceof Array) {
         for (let i = 0, n = val.length; i < n; i++) if (i in val) f(i, loc, expr, val, path);
       } else if (typeof val === 'object') {
-        for (const m in val) if (val.hasOwnProperty(m)) f(m, loc, expr, val, path);
+        for (const m in <object[]>val) if ((<object>val).hasOwnProperty(m)) f(m, loc, expr, val, path);
       }
     },
-    slice: function (loc, expr, val, path) {
+    slice: function (
+      loc: { replace: (arg0: RegExp, arg1: (_$0: any, $1: any, $2: any, $3: any) => void) => void },
+      expr: string,
+      val: string | any[],
+      path: any
+    ) {
       if (val instanceof Array) {
         const len = val.length;
         let start = 0,
           end = len,
           step = 1;
-        loc.replace(/^(-?[0-9]*):(-?[0-9]*):?(-?[0-9]*)$/g, function (_$0, $1, $2, $3) {
+        loc.replace(/^(-?[0-9]*):(-?[0-9]*):?(-?[0-9]*)$/g, function (_$0: any, $1: any, $2: any, $3: any) {
           start = parseInt($1 || start);
           end = parseInt($2 || end);
           step = parseInt($3 || step);
@@ -86,7 +106,7 @@ export function jsonPath(obj, expr, arg?) {
       }
     },
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    eval: function (x, _v, _vname) {
+    eval: function (x: string, _v: any, _vname: any) {
       try {
         return $ && _v && eval(x.replace(/@/g, '_v'));
       } catch (e) {
@@ -97,7 +117,7 @@ export function jsonPath(obj, expr, arg?) {
 
   const $ = obj;
   if (expr && obj && (P.resultType == 'VALUE' || P.resultType == 'PATH')) {
-    P.trace(P.normalize(expr).replace(/^\$;/, ''), obj, '$');
+    P.trace(P.normalize(expr).replace(/^\$;/, ''), <any>obj, '$');
     return P.result.length ? P.result : false;
   }
 }

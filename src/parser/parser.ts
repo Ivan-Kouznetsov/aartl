@@ -1,5 +1,15 @@
-import { flow } from '../lib/fp-ts/function';
 import { ITest, IKeyValuePair } from '../interfaces/test';
+
+/*
+ * FP helper
+ */
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+function flow(ab: Function, bc: Function): (str: string) => string {
+  return function (...args) {
+    return bc(ab.apply(this, args));
+  };
+}
 
 /**
  * Functions used to transform text into different text and into objects

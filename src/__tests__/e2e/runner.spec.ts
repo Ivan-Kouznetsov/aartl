@@ -21,6 +21,13 @@ describe('Test runner', () => {
     expect(result.passed).toBe(true);
   });
 
+  it('should fail if the pass on json path is not found', async () => {
+    const result = await runTestThruAllSteps(fixtures.requestNonexistentPassOn);
+
+    expect(result.passed).toBe(false);
+    expect(result.failReasons[0]).toEqual('Pass on JSON path: $..XXXXX not found in response');
+  });
+
   it('should save a post and check id', async () => {
     const result = await runTestThruAllSteps(fixtures.savePostCheckId);
 

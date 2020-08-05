@@ -5,7 +5,7 @@
     "allowUnusedLabels": false,
     "outDir": "dist",
     "noEmit": false,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "module": "commonjs",
     "noEmitOnError": true,
     "removeComments": true,

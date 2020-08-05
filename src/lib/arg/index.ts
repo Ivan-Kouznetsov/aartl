@@ -4,17 +4,15 @@ const flagSymbol = Symbol('arg flag');
 export function arg(
   opts: { [x: string]: unknown },
   { argv = process.argv.slice(2), permissive = false, stopAtPositional = false } = {}
-): {
-  _: any[];
-} {
+): { [key: string]: unknown } {
   if (!opts) {
     throw new Error('Argument specification object is required');
   }
 
-  const result = { _: [] };
+  const result: { [key: string]: unknown[] } = { _: [] };
 
-  const aliases = {};
-  const handlers = {};
+  const aliases: { [key: string]: unknown } = {};
+  const handlers: { [key: string]: unknown } = {};
 
   for (const key of Object.keys(opts)) {
     if (!key) {
@@ -34,12 +32,12 @@ export function arg(
       continue;
     }
 
-    let type = opts[key];
+    let type: any = opts[key];
     let isFlag = false;
 
     if (Array.isArray(type) && type.length === 1 && typeof type[0] === 'function') {
       const [fn] = type;
-      type = (value: any, name: any, prev = []) => {
+      type = (value: any, name: any, prev: any[] = []) => {
         prev.push(fn(value, name, prev[prev.length - 1]));
         return prev;
       };
@@ -87,7 +85,7 @@ export function arg(
 
         let argName = originalArgName;
         while (argName in aliases) {
-          argName = aliases[argName];
+          argName = <string>aliases[argName];
         }
 
         if (!(argName in handlers)) {
@@ -100,7 +98,7 @@ export function arg(
           }
         }
 
-        const [type, isFlag] = handlers[argName];
+        const [type, isFlag] = <any>handlers[argName];
 
         if (!isFlag && j + 1 < separatedArguments.length) {
           throw new TypeError(
