@@ -1,6 +1,8 @@
 import { buildReport, buildHtmlReport, resultsToXml } from '../../reportBuilder/reportBuilder';
 import { testResults1, testResults2 } from './fixtures/reportBuilder.fixtures';
 import { rawResults } from './fixtures/htmlReport.fixtures';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-ignore
 import * as html_validator from 'html-validator';
 
 describe('Report builder', () => {
@@ -53,7 +55,8 @@ describe('Report builder', () => {
 
     expect(html.includes('[object')).toBe(false);
     expect(html.includes('undefined')).toBe(false);
-    expect((await html_validator({ validator: 'WHATWG', data: html })).isValid).toBe(true);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect((await (<any>html_validator({ validator: 'WHATWG', data: html }))).isValid).toBe(true);
   });
 
   it('should create xml', async () => {

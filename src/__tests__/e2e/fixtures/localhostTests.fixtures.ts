@@ -21,6 +21,23 @@ export const saveAndCheckPost = `
     "$..text": @postText
   `;
 
+export const requestNonexistentPassOn = `
+  Test that it should save a post
+  Using values
+    @postText: Hello world
+  After HTTP request
+    method: post
+    url: http://localhost:3000/posts    
+    body: @postText
+    Pass on "$..XXXXX" as _id
+  Expect HTTP request
+    headers:
+      "Accept-Encoding":"*/*"
+    method: get
+    url: http://localhost:3000/posts/_id
+  To respond with status code 200 /** OK **/
+  `;
+
 export const savePostCheckId = `
   Test that it should save a post and check id
   Using values

@@ -50,7 +50,18 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
         const json = currentRequestResponse.response.json;
         for (const passOn of currentRequest.passOn) {
           const passOnObj = util.keyValueToObject(passOn);
-          passOnValues.push({ [passOnObj.value.toString()]: jsonPath(json, passOnObj.key)[0] });
+          const value = jsonPath(json, passOnObj.key);
+          if (Array.isArray(value)) {
+            passOnValues.push({ [passOnObj.value.toString()]: value[0] });
+          } else {
+            return {
+              testName: test.name,
+              passed: false,
+              failReasons: [`Pass on JSON path: ${passOnObj.key} not found in response`],
+              duration: util.bigIntToNumber(process.hrtime.bigint() - testStartTime),
+              requestLogs,
+            };
+          }
         }
       }
 
@@ -106,13 +117,11 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
     }
   }
 
-  const testEndTime = process.hrtime.bigint();
-
   return {
     testName: test.name,
     passed: failReasons.length === 0,
     failReasons,
-    duration: util.bigIntToNumber(testEndTime - testStartTime),
+    duration: util.bigIntToNumber(process.hrtime.bigint() - testStartTime),
     requestLogs,
   };
 };

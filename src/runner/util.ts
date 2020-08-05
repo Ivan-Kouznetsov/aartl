@@ -59,7 +59,7 @@ export const replaceValuesInRequest = (request: IRequest, replacements: IKeyValu
 };
 
 const replaceValuesInRequests = (requests: IRequest[], replacements: IKeyValuePair[]): IRequest[] => {
-  const result = [];
+  const result: IRequest[] = [];
 
   requests.forEach((request) => {
     result.push(replaceValuesInRequest(request, replacements));
