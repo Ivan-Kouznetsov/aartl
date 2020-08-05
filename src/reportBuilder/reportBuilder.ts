@@ -98,7 +98,7 @@ export const buildHtmlReport = (suiteName: string, testResults: ITestResult[]): 
     .sort((a, b) => (a.testName < b.testName ? -1 : 1))
     .forEach((t) => {
       body += `<tr id="${t.testName.replace(/\s/g, '_')}"><td>${t.testName}</td><td>${
-        t.passed
+        t.passed ? '<span class="passed">&check;</span>' : '<span class="failed">&#10060;</span>'
       }</td><td> ${formatDuration(t.duration)} ms</td><td> ${
         t.failReasons.length ? escapeHtmlChars(t.failReasons.join(',')) : 'None'
       }</td><td> ${t.requestLogs.map((r) => requestLogToHtml(r)).join(newLine)}</td></tr>`;

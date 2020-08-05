@@ -12,6 +12,7 @@ const showUsage = () => {
   console.log('-t "name of test" - run a single test');
   console.log('-d path - run all files in directory');
   console.log('-n NUMBER - run the tests a number of times');
+  console.log('-maxConcurrent NUMBER - Maximum concurrent tests. Default: 100');
   console.log('--hello - display name of this program');
   console.log('--r - randomize test order');
   console.log('--xml - output results as JUnit XML');
@@ -42,6 +43,7 @@ const main = async (): Promise<void> => {
       '-n': Number,
       '--r': Boolean,
       '-d': String,
+      '-m': Number,
       '--hello': Boolean,
       '--xml': Boolean,
       '--novalidation': Boolean,
