@@ -20,7 +20,7 @@ export interface ITest {
   requests: IRequest[];
 }
 
-export type Primitive = undefined | boolean | string | number | BigInt | Record<string, unknown>;
+export type Primitive = boolean | string | number | Record<string, unknown>;
 export type MatcherFunction = (arr: Primitive[]) => Primitive;
 export type Factory = (arg?: RegExp | Primitive | Primitive[]) => MatcherFunction;
 

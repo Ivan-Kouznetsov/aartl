@@ -2,7 +2,7 @@ import { ITest } from '../interfaces/test';
 import { getArgs } from '../parser/util';
 import { aliasesedMatchers } from '../rules/matchers';
 
-export const getFirstValidationError = (test: ITest): string => {
+export const getFirstValidationError = (test: ITest): string | undefined => {
   for (let i = 0; i < test.usingValues.length; i++) {
     const key = Object.keys(test.usingValues[i])[0];
     if (test.usingValues.filter((uv) => typeof uv[key] !== 'undefined').length > 1)
@@ -50,4 +50,5 @@ export const getFirstValidationError = (test: ITest): string => {
       }
     }
   }
+  return undefined;
 };

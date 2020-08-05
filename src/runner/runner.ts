@@ -104,7 +104,8 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
               );
             }
           } else {
-            (<unknown[]>data).forEach((item) => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (<any[]>data).forEach((item) => {
               if (rule.rule !== (item ?? 'null').toString()) {
                 failReasons.push(`Expected ${rule.jsonpath} to be ${rule.originalRule}, got ${item}`);
               }

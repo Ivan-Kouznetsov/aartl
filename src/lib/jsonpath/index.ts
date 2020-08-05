@@ -41,12 +41,12 @@ export function jsonPath(obj: string | Record<string, any>, expr: string, arg?: 
         if (val && val.hasOwnProperty(loc)) P.trace(x, (<Record<string, any>>val)[loc], path + ';' + loc);
         else if (loc === '*')
           P.walk(loc, x, val, path, function (m: string, _l: any, x: string, v: any, p: any) {
-            P.trace(m + ';' + x, v, p);
+            return P.trace(m + ';' + x, v, p);
           });
         else if (loc === '..') {
           P.trace(x, val, path);
           P.walk(loc, x, val, path, function (m: string, _l: any, x: string, v: { [x: string]: any }, p: string) {
-            typeof v[m] === 'object' && P.trace('..;' + x, v[m], p + ';' + m);
+            return typeof v[m] === 'object' && P.trace('..;' + x, v[m], p + ';' + m);
           });
         } else if (/,/.test(loc)) {
           // [name1,name2,...]
@@ -71,13 +71,7 @@ export function jsonPath(obj: string | Record<string, any>, expr: string, arg?: 
           P.slice(<any>loc, x, val, path);
       } else P.store(path, val);
     },
-    walk: function (
-      loc: any,
-      expr: any,
-      val: string | object[],
-      path: any,
-      f: (arg0: string | number, arg1: any, arg2: any, arg3: any[], arg4: any) => void
-    ) {
+    walk: function (loc: any, expr: any, val: string | object[], path: any, f: (...args: any) => void) {
       if (val instanceof Array) {
         for (let i = 0, n = val.length; i < n; i++) if (i in val) f(i, loc, expr, val, path);
       } else if (typeof val === 'object') {
@@ -120,4 +114,5 @@ export function jsonPath(obj: string | Record<string, any>, expr: string, arg?: 
     P.trace(P.normalize(expr).replace(/^\$;/, ''), <any>obj, '$');
     return P.result.length ? P.result : false;
   }
+  return false;
 }
