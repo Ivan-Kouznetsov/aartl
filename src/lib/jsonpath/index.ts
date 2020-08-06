@@ -38,7 +38,8 @@ export function jsonPath(obj: string | Record<string, any>, expr: string, arg?: 
         let x: string | string[] = expr.split(';');
         const loc = x.shift();
         x = x.join(';');
-        if (val && val.hasOwnProperty(loc)) P.trace(x, (<Record<string, any>>val)[loc], path + ';' + loc);
+        if (val && val.hasOwnProperty(<string>loc))
+          P.trace(x, (<Record<string, any>>val)[<string>loc], path + ';' + loc);
         else if (loc === '*')
           P.walk(loc, x, val, path, function (m: string, _l: any, x: string, v: any, p: any) {
             return P.trace(m + ';' + x, v, p);
@@ -48,13 +49,14 @@ export function jsonPath(obj: string | Record<string, any>, expr: string, arg?: 
           P.walk(loc, x, val, path, function (m: string, _l: any, x: string, v: { [x: string]: any }, p: string) {
             return typeof v[m] === 'object' && P.trace('..;' + x, v[m], p + ';' + m);
           });
-        } else if (/,/.test(loc)) {
+        } else if (/,/.test(<string>loc)) {
           // [name1,name2,...]
-          for (let s = loc.split(/'?,'?/), i = 0, n = s.length; i < n; i++) P.trace(s[i] + ';' + x, val, path);
-        } else if (/^\(.*?\)$/.test(loc))
+          for (let s = (<string>loc).split(/'?,'?/), i = 0, n = s.length; i < n; i++)
+            P.trace(s[i] + ';' + x, val, path);
+        } else if (/^\(.*?\)$/.test(<string>loc))
           // [(expr)]
-          P.trace(P.eval(loc, val, path.substr(path.lastIndexOf(';') + 1)) + ';' + x, val, path);
-        else if (/^\?\(.*?\)$/.test(loc))
+          P.trace(P.eval(<string>loc, val, path.substr(path.lastIndexOf(';') + 1)) + ';' + x, val, path);
+        else if (/^\?\(.*?\)$/.test(<string>loc))
           // [?(expr)]
           P.walk(loc, x, val, path, function (
             m: string,
@@ -66,7 +68,7 @@ export function jsonPath(obj: string | Record<string, any>, expr: string, arg?: 
             if (P.eval(l.replace(/^\?\((.*?)\)$/, '$1'), (<{ [x: string]: any }>v)[m], m))
               P.trace(m + ';' + x, <string>v, p);
           });
-        else if (/^(-?[0-9]*):(-?[0-9]*):?([0-9]*)$/.test(loc))
+        else if (/^(-?[0-9]*):(-?[0-9]*):?([0-9]*)$/.test(<string>loc))
           // [start:end:step]  phyton slice syntax
           P.slice(<any>loc, x, val, path);
       } else P.store(path, val);

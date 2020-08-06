@@ -64,7 +64,6 @@ describe('Runner util', () => {
       method: 'get',
       passOn: [],
       url: 'http://example.org/@id',
-      wait: null,
     };
 
     const requestWithValues = util.replaceValuesInRequest(request, [
@@ -82,7 +81,6 @@ describe('Runner util', () => {
       expectedStatusCode: '200',
       method: 'get',
       passOn: [],
-      wait: null,
     });
   });
 

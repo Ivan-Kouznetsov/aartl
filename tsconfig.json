@@ -1,13 +1,10 @@
 {
   "compilerOptions": {
-    "strictNullChecks": false,
-    "strictPropertyInitialization": false,
-    "strictFunctionTypes": true,
-    "strictBindCallApply": true,
+    "strict": true,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "noImplicitReturns": true,
-    "noImplicitThis": false,
+    "noImplicitThis": true,
     "alwaysStrict": true,
     "allowJs": false,
     "allowUnusedLabels": false,

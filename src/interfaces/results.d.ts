@@ -1,7 +1,17 @@
 export interface IRequestLog {
   duration: number;
-  sent: string;
-  received: string;
+  sent: {
+    url?: string;
+    body?: string;
+    headers: { [key: string]: string };
+    method?: string;
+  };
+  received: {
+    json: Record<string, unknown> | null;
+    string: string;
+    headers: { [key: string]: string };
+    status?: number;
+  };
 }
 
 export interface ITestResult {

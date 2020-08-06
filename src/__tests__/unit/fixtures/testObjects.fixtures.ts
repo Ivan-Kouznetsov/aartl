@@ -8,9 +8,9 @@ export const nonUniqueValues: ITest = {
       headers: [{ 'Accept-Encoding': '*/*' }],
       method: 'get',
       url: 'http://example.org/@id',
-      body: null,
+
       passOn: [],
-      wait: null,
+
       expectedStatusCode: '200',
       jsonRules: [
         { '$..id': '@id' },
@@ -30,10 +30,9 @@ export const nullUrl: ITest = {
     {
       headers: [{ 'Accept-Encoding': '*/*' }],
       method: 'get',
-      url: null,
-      body: null,
+
       passOn: [],
-      wait: null,
+
       expectedStatusCode: '200',
       jsonRules: [
         { '$..id': '@id' },
@@ -60,9 +59,9 @@ export const passOn: ITest = {
       headers: [{ 'Accept-Encoding': '*/*' }],
       method: 'get',
       url: 'http://example.org/@id',
-      body: null,
+
       passOn: [{ '$..num': '_num' }, { '$..id': '_id' }],
-      wait: null,
+
       expectedStatusCode: '200',
       jsonRules: [
         { '$..id': '@id' },
@@ -83,7 +82,7 @@ export const waitInLast: ITest = {
       headers: [{ 'Accept-Encoding': '*/*' }],
       method: 'get',
       url: 'http://example.org/@id',
-      body: null,
+
       passOn: [],
       wait: '5 seconds',
       expectedStatusCode: '200',
@@ -106,12 +105,11 @@ export const noConditions: ITest = {
       headers: [{ 'Accept-Encoding': '*/*' }],
       method: 'get',
       url: 'http://example.org/@id',
-      body: null,
+
       passOn: [],
       headerRules: [],
-      expectedStatusCode: null,
+
       jsonRules: [],
-      wait: null,
     },
   ],
 };
@@ -124,9 +122,9 @@ export const valid: ITest = {
       headers: [{ 'Accept-Encoding': '*/*' }],
       method: 'get',
       url: 'http://example.org/@id',
-      body: null,
+
       passOn: [],
-      wait: null,
+
       expectedStatusCode: '200',
       jsonRules: [
         { '$..id': '@id' },
@@ -147,12 +145,11 @@ export const tooManyArgs: ITest = {
       headers: [{ 'Accept-Encoding': '*/*' }],
       method: 'get',
       url: 'http://example.org/@id',
-      body: null,
+
       passOn: [],
       headerRules: [],
-      expectedStatusCode: null,
+
       jsonRules: [{ '$..id': '>= 1 2' }],
-      wait: null,
     },
   ],
 };
@@ -165,48 +162,11 @@ export const notTooManyArgs: ITest = {
       headers: [{ 'Accept-Encoding': '*/*' }],
       method: 'get',
       url: 'http://example.org/@id',
-      body: null,
+
       passOn: [],
       headerRules: [],
-      expectedStatusCode: null,
+
       jsonRules: [{ '$..id': '>= 1' }],
-      wait: null,
-    },
-  ],
-};
-
-export const hasNull: ITest = {
-  name: 'should return stuff when queried',
-  usingValues: [{ '@id': 10 }],
-  requests: [
-    {
-      headers: [{ 'Accept-Encoding': '*/*' }],
-      method: 'get',
-      url: 'http://example.org/@id',
-      body: null,
-      passOn: [],
-      headerRules: [],
-      expectedStatusCode: null,
-      jsonRules: [{ '$..id': null }],
-      wait: null,
-    },
-  ],
-};
-
-export const hasNullRules: ITest = {
-  name: 'should return stuff when queried',
-  usingValues: [{ '@id': 10 }],
-  requests: [
-    {
-      headers: [{ 'Accept-Encoding': '*/*' }],
-      method: 'get',
-      url: 'http://example.org/@id',
-      body: null,
-      passOn: [],
-      headerRules: [],
-      expectedStatusCode: null,
-      jsonRules: [{ '$..id': 'hello' }, null, null],
-      wait: null,
     },
   ],
 };
@@ -219,9 +179,9 @@ export const nonUniquepassOnJsonPath: ITest = {
       headers: [{ 'Accept-Encoding': '*/*' }],
       method: 'get',
       url: 'http://example.org/@id',
-      body: null,
+
       passOn: [{ '$..id': '_id' }, { '$..id': '_id2' }],
-      wait: null,
+
       expectedStatusCode: '200',
       jsonRules: [
         { '$..id': '@id' },
@@ -235,12 +195,11 @@ export const nonUniquepassOnJsonPath: ITest = {
       headers: [{ 'Accept-Encoding': '*/*' }],
       method: 'get',
       url: 'http://example.org/@id',
-      body: null,
+
       passOn: [],
       headerRules: [],
-      expectedStatusCode: null,
+
       jsonRules: [{ '$..id': 'hello' }],
-      wait: null,
     },
   ],
 };
@@ -253,9 +212,9 @@ export const nonUniquepassOnNameValues: ITest = {
       headers: [{ 'Accept-Encoding': '*/*' }],
       method: 'get',
       url: 'http://example.org/@id',
-      body: null,
+
       passOn: [{ '$..id': '_id' }, { '$..id2': '_id' }],
-      wait: null,
+
       expectedStatusCode: '200',
       jsonRules: [
         { '$..id': '@id' },
@@ -269,12 +228,11 @@ export const nonUniquepassOnNameValues: ITest = {
       headers: [{ 'Accept-Encoding': '*/*' }],
       method: 'get',
       url: 'http://example.org/@id',
-      body: null,
+
       passOn: [],
       headerRules: [],
-      expectedStatusCode: null,
+
       jsonRules: [{ '$..id': 'hello' }],
-      wait: null,
     },
   ],
 };

@@ -4,12 +4,10 @@ import { getRngFunctions } from '../lib/rng';
 const randomSeed = process.hrtime()[1];
 
 const replaceMultipleValuesInString = (str: string, replacements: IKeyValuePair[]) => {
-  if (str != null) {
-    replacements.forEach((replacement) => {
-      const key = Object.keys(replacement)[0];
-      str = str.replace(key, replacement[key].toString());
-    });
-  }
+  replacements.forEach((replacement) => {
+    const key = Object.keys(replacement)[0];
+    str = str.replace(key, replacement[key].toString());
+  });
   return str;
 };
 
@@ -39,15 +37,13 @@ const replaceMultipleValuesInKeyValuePairArray = (
 };
 
 export const replaceValuesInRequest = (request: IRequest, replacements: IKeyValuePair[]): IRequest => {
-  const body = replaceMultipleValuesInString(request.body, replacements);
-  const url = replaceMultipleValuesInString(request.url, replacements);
   const headerRules = replaceMultipleValuesInKeyValuePairArray(request.headerRules, replacements);
   const headers = replaceMultipleValuesInKeyValuePairArray(request.headers, replacements);
   const jsonRules = replaceMultipleValuesInKeyValuePairArray(request.jsonRules, replacements);
 
   return {
-    body,
-    url,
+    body: request.body === undefined ? undefined : replaceMultipleValuesInString(request.body, replacements),
+    url: request.url === undefined ? undefined : replaceMultipleValuesInString(request.url, replacements),
     headerRules,
     headers,
     jsonRules,
@@ -116,8 +112,12 @@ export const wait = async (ms: number): Promise<unknown> => await new Promise((r
 // this function will throw if given invalid data
 export const durationStringToMs = (duration: string): number => {
   if (/^\d+\s{1,}[A-Z]+$/i.test(duration)) {
-    const num = parseInt(/\d+/.exec(duration)[0]);
-    const unit = /[A-Z]+/i.exec(duration)[0].toLowerCase();
+    const numMatches = <RegExpExecArray>/\d+/.exec(duration);
+    const unitMatches = <RegExpExecArray>/[A-Z]+/i.exec(duration);
+
+    const num = parseInt(numMatches[0]);
+    const unit = unitMatches[0].toLowerCase();
+
     if (unit.includes('second') || unit === 's') {
       return num * 1000;
     } else if (unit.includes('milisecond') || unit === 'ms') {

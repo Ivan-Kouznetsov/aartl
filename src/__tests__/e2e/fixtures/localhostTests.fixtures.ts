@@ -69,9 +69,7 @@ export const requestNonexistentPost = `
   Expect HTTP request
     method: get
     url: http://localhost:3000/posts/-1
-  To respond with status code 200 /** OK **/
-  To match JSON rules
-    "$..id": < 0
+  To respond with status code 200 /** OK **/ 
   `;
 
 export const missingHeader = `
@@ -181,16 +179,47 @@ export const getNull = `
     "$..text": count >= 0
   `;
 
-export const invalid = `
+export const invalidUrl = `
   Test that it should check post id 0 - 5
   Expect HTTP request
-    method: XXXX
-
+    url: http:///  
+    method: get
   To match JSON rules
     "$..id": is any of 1 2 3 4 5 0
-    "$.......text": is any of 1 2 "0th Post" "hi" 72
+  `;
 
-    dasdasd
-    asdas
-    dasda
+export const noUrl = `
+Test that it should check post id 0 - 5
+Expect HTTP request
+  method: get
+To match JSON rules
+  "$..id": is any of 1 2 3 4 5 0
+`;
+
+export const noMethod = `
+Test that it should xxx
+Expect HTTP request
+  url: http://localhost:3000/
+To respond with status code 200
+`;
+
+export const passOnNonExistentValue = `
+  Test that it should xxx
+  After HTTP request
+  method: get
+  url: http://localhost:3000/
+  Pass on "$..id" as _id
+  Expect HTTP request
+    method: get
+    url: http://localhost:3000/posts/_id   
+    To respond with status code 200
+  `;
+
+export const JsonRuleCheckWhenResponseIsNotJson = `
+  Test that it should xxx
+  Expect HTTP request
+    method: get
+    url: http://localhost:3000/  
+  To match JSON rules
+    "$..id": is any of 1 2 3 4 5 0
   `;

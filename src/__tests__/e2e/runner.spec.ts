@@ -94,8 +94,36 @@ describe('Test runner', () => {
   });
 
   it('should catch exception when request is not valid', async () => {
-    const result = await runTestThruAllSteps(fixtures.invalid);
+    const result = await runTestThruAllSteps(fixtures.invalidUrl);
 
     expect(result.passed).toBe(false);
+    expect(result.failReasons[0]).toEqual('Invalid url: http:///');
+  });
+
+  it('should return approppriate error when request url is not defined', async () => {
+    const result = await runTestThruAllSteps(fixtures.noUrl);
+
+    expect(result.passed).toBe(false);
+    expect(result.failReasons[0]).toEqual('Cannot request an empty url');
+  });
+
+  it('should fail when passing on value from a response that is not JSON', async () => {
+    const result = await runTestThruAllSteps(fixtures.passOnNonExistentValue);
+
+    expect(result.passed).toBe(false);
+    expect(result.failReasons[0]).toEqual('Cannot pass on value because response was not JSON');
+  });
+
+  it('should fail when checking JSON rule against a non-JSON response', async () => {
+    const result = await runTestThruAllSteps(fixtures.JsonRuleCheckWhenResponseIsNotJson);
+
+    expect(result.passed).toBe(false);
+    expect(result.failReasons[0]).toEqual('Cannot check JSON rules because response was not JSON');
+  });
+
+  it('should defualt to get when method is not provided', async () => {
+    const result = await runTestThruAllSteps(fixtures.noMethod);
+
+    expect(result.passed).toBe(true);
   });
 });

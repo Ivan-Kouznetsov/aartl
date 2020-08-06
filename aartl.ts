@@ -92,13 +92,21 @@ const main = async (): Promise<void> => {
     }
   }
 
-  const runSuite = (file: string) => {
-    fileSystem.readFile(file, { encoding: 'utf-8' }, (err, data) => {
+  const runSuite = (file?: string) => {
+    if (!file) return;
+    fileSystem.readFile(file, { encoding: 'utf-8' }, (err, content) => {
       if (err) {
         console.error(err.message);
       } else {
-        suiteRunner(data, testName, numberOfRuns, randomize, noValidation, (str) => {
-          if (!quiet) console.log(str);
+        suiteRunner({
+          content,
+          testName,
+          numberOfRuns,
+          randomize,
+          noValidation,
+          realTimeLogger: (result) => {
+            if (!quiet) console.log(JSON.stringify(result));
+          },
         })
           .then((testResults) => {
             const suiteName = path.basename(file, path.extname(file));

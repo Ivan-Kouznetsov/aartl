@@ -9,56 +9,65 @@ import { Primitive, MatcherFunction, Factory } from '../interfaces/test';
 
 const numberRegex = /^-{0,1}[0-9]+(\.\d+){0,1}$/;
 
-export const validateNumber = (): MatcherFunction => (arr: Primitive[]): Primitive =>
+export const validateNumber = (): MatcherFunction => (arr: Primitive[]): Primitive | undefined =>
   arr.find((item) => !numberRegex.test(item.toString()));
 
-export const validateGreaterThan = (compareWith: number): MatcherFunction => (arr: Primitive[]): Primitive =>
+export const validateGreaterThan = (compareWith: number): MatcherFunction => (
+  arr: Primitive[]
+): Primitive | undefined =>
   arr.find((item) => !(numberRegex.test(item.toString()) && parseFloat(item.toString()) > compareWith));
 
-export const validateGreaterThanOrEqual = (compareWith: number): MatcherFunction => (arr: Primitive[]): Primitive =>
+export const validateGreaterThanOrEqual = (compareWith: number): MatcherFunction => (
+  arr: Primitive[]
+): Primitive | undefined =>
   arr.find((item) => !(numberRegex.test(item.toString()) && parseFloat(item.toString()) >= compareWith));
 
-export const validateLessThan = (compareWith: number): MatcherFunction => (arr: Primitive[]): Primitive =>
+export const validateLessThan = (compareWith: number): MatcherFunction => (arr: Primitive[]): Primitive | undefined =>
   arr.find((item) => !(numberRegex.test(item.toString()) && parseFloat(item.toString()) < compareWith));
 
-export const validateLessThanOrEqual = (compareWith: number): MatcherFunction => (arr: Primitive[]): Primitive =>
+export const validateLessThanOrEqual = (compareWith: number): MatcherFunction => (
+  arr: Primitive[]
+): Primitive | undefined =>
   arr.find((item) => !(numberRegex.test(item.toString()) && parseFloat(item.toString()) <= compareWith));
 
 /* Strings */
 
-export const validateNonEmptyString = (): MatcherFunction => (arr: Primitive[]): Primitive =>
+export const validateNonEmptyString = (): MatcherFunction => (arr: Primitive[]): Primitive | undefined =>
   arr.find((item) => typeof item !== 'string' || !(item.length > 0));
-export const validateStringContaining = (str: string): MatcherFunction => (arr: Primitive[]): Primitive =>
+export const validateStringContaining = (str: string): MatcherFunction => (arr: Primitive[]): Primitive | undefined =>
   arr.find((item) => typeof item !== 'string' || !item.includes(str));
-export const validateStringNotContaining = (str: string): MatcherFunction => (arr: Primitive[]): Primitive =>
-  arr.find((item) => typeof item !== 'string' || item.includes(str));
+export const validateStringNotContaining = (str: string): MatcherFunction => (
+  arr: Primitive[]
+): Primitive | undefined => arr.find((item) => typeof item !== 'string' || item.includes(str));
 
 /* Any Of */
-export const validateAnyOf = (anyOf: Primitive[]): MatcherFunction => (arr: Primitive[]): Primitive =>
+export const validateAnyOf = (anyOf: Primitive[]): MatcherFunction => (arr: Primitive[]): Primitive | undefined =>
   arr.find((item) => !anyOf.includes(item));
 
 /* Not */
-export const validateNot = (not: string): MatcherFunction => (arr: Primitive[]): Primitive =>
+export const validateNot = (not: string): MatcherFunction => (arr: Primitive[]): Primitive | undefined =>
   arr.find((item) => item === not);
 
 /* Regex */
-export const validateRegex = (regex: RegExp): MatcherFunction => (arr: Primitive[]): Primitive =>
+export const validateRegex = (regex: RegExp): MatcherFunction => (arr: Primitive[]): Primitive | undefined =>
   arr.find((item) => !regex.test(item.toString()));
 
 /* Array Count */
-export const validateCountEquals = (count: number): MatcherFunction => (arr: Primitive[]): Primitive =>
+export const validateCountEquals = (count: number): MatcherFunction => (arr: Primitive[]): Primitive | undefined =>
   arr.length !== count ? arr.length : undefined;
-export const validateCountGreaterThan = (count: number): MatcherFunction => (arr: Primitive[]): Primitive =>
+export const validateCountGreaterThan = (count: number): MatcherFunction => (arr: Primitive[]): Primitive | undefined =>
   !(arr.length > count) ? arr.length : undefined;
-export const validateCountGreaterThanOrEqual = (count: number): MatcherFunction => (arr: Primitive[]): Primitive =>
-  !(arr.length >= count) ? arr.length : undefined;
-export const validateCountLessThan = (count: number): MatcherFunction => (arr: Primitive[]): Primitive =>
+export const validateCountGreaterThanOrEqual = (count: number): MatcherFunction => (
+  arr: Primitive[]
+): Primitive | undefined => (!(arr.length >= count) ? arr.length : undefined);
+export const validateCountLessThan = (count: number): MatcherFunction => (arr: Primitive[]): Primitive | undefined =>
   !(arr.length < count) ? arr.length : undefined;
-export const validateCountLessThanOrEqual = (count: number): MatcherFunction => (arr: Primitive[]): Primitive =>
-  !(arr.length <= count) ? arr.length : undefined;
+export const validateCountLessThanOrEqual = (count: number): MatcherFunction => (
+  arr: Primitive[]
+): Primitive | undefined => (!(arr.length <= count) ? arr.length : undefined);
 
 /* Array Props */
-export const validateArrayHasProp = (props: string): MatcherFunction => (arr: Primitive[]): Primitive =>
+export const validateArrayHasProp = (props: string): MatcherFunction => (arr: Primitive[]): Primitive | undefined =>
   arr.find((item) => typeof item !== 'object' || typeof (<Record<string, unknown>>item)[props] === 'undefined');
 
 export const aliasesedMatchers = [
