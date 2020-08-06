@@ -3,8 +3,8 @@ import * as path from 'path';
 import { suiteRunner } from './src/runner/suiteRunner';
 import { arg } from './src/lib/arg';
 import { exit } from 'process';
-import { buildHtmlReport } from './src/reportBuilder/reportBuilder';
-import { resultsToXml } from './src/reportBuilder/reportBuilder';
+import { buildHtmlReport, resultsToXml } from './src/reportBuilder/reportBuilder';
+import { prettyPrintResult } from './src/runner/util';
 
 const showUsage = () => {
   console.log('Usage: node aartl.js -f "path-to-test-file"');
@@ -105,7 +105,7 @@ const main = async (): Promise<void> => {
           randomize,
           noValidation,
           realTimeLogger: (result) => {
-            if (!quiet) console.log(JSON.stringify(result));
+            if (!quiet) console.log(prettyPrintResult(result));
           },
         })
           .then((testResults) => {

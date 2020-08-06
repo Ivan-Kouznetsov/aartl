@@ -1,6 +1,7 @@
 import { ITest, IKeyValuePair, IRequest } from '../interfaces/test';
 import { getArgs } from '../parser/util';
 import { getRngFunctions } from '../lib/rng';
+import { ITestResult, IRequestLog } from '../interfaces/results';
 const randomSeed = process.hrtime()[1];
 
 const replaceMultipleValuesInString = (str: string, replacements: IKeyValuePair[]) => {
@@ -144,4 +145,33 @@ export const shuffleArray = (array: unknown[]): void => {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
   }
+};
+
+const prettyPrintRequestLog = (log: IRequestLog): string => {
+  return `\n\nRequest ☎
+  ${(log.sent.method ?? '').toUpperCase()} ${log.sent.url} ➥
+  Duration: ${log.duration}ns
+\t${Object.keys(log.sent.headers)
+    .map((key) => `${key}: ${log.sent.headers[key]}`)
+    .filter((l) => l.trim().length > 0)
+    .join('\n\t')
+    .trim()}
+  ${log.sent.body ? log.sent.body.replace(/\s/g, '•') : ''}
+  Response ⬎
+  
+  Status: ${log.received.status}
+\t${Object.keys(log.received.headers)
+    .map((key) => `${key}: ${log.received.headers[key]}`)
+    .filter((l) => l.trim().length > 0)
+    .join('\n\t')
+    .trim()}
+  ${log.received.string}`;
+};
+
+export const prettyPrintResult = (testResult: ITestResult): string => {
+  return `
+${testResult.passed ? '✔ Passed' : '✘ Failed'} ${testResult.testName} 
+Duration: ${testResult.duration}ns
+${testResult.failReasons.length > 0 ? 'Failure Reasons:\n\t' + testResult.failReasons.join('\n\t').trim() : ''}
+\t\t\tRequests${testResult.requestLogs.map((log) => prettyPrintRequestLog(log)).join('')}`;
 };
