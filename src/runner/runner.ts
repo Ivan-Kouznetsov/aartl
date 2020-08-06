@@ -140,7 +140,7 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
         });
       }
     } catch (ex) {
-      failReasons.push(ex.message);
+      failReasons.push(ex);
     }
   }
 
