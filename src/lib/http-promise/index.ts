@@ -11,14 +11,14 @@ const httpskeepAliveAgent = new https.Agent({ keepAlive: true });
 const splitUrl = (url: string) => {
   // https://tools.ietf.org/html/rfc3986#appendix-B
   const parts = url.trim().match(/^(([^:/?#]+):)?(\/\/([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?/);
-  if (parts === null) throw new Error(`Invalid url: ${url}`);
+  if (parts === null) throw `Invalid url: ${url}`;
   const protocol = parts[2];
   const rawHostname = parts[4];
   const path = parts[5];
 
   const port = /(?<=:)\d+/.test(rawHostname) ? (/(?<=:)\d+/.exec(rawHostname) ?? [null])[0] : null;
   const hostnameMatches = /(\w|\.)+(?=:{0,1})/.exec(rawHostname);
-  if (hostnameMatches === null) throw new Error(`Invalid url: ${url}`);
+  if (hostnameMatches === null) throw `Invalid url: ${url}`;
 
   return { protocol, hostname: hostnameMatches[0], path, port };
 };
