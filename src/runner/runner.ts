@@ -123,12 +123,20 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
           const data = jsonPath(json, rule.jsonpath);
 
           if (typeof rule.rule === 'function') {
-            const nonCompliantValue = Array.isArray(data) ? rule.rule(data) : 'nothing';
+            const nonCompliantValue = Array.isArray(data)
+              ? rule.rule(data)
+              : rule.originalRule.toString().includes('count')
+              ? rule.rule([])
+              : 'nothing';
             if (nonCompliantValue !== undefined) {
               failReasons.push(
-                `Expected ${rule.jsonpath} to be ${rule.originalRule}, got ${JSON.stringify(nonCompliantValue)}`
+                `Expected ${rule.jsonpath} to be ${rule.originalRule}, got ${
+                  typeof nonCompliantValue === 'string' ? nonCompliantValue : JSON.stringify(nonCompliantValue)
+                }`
               );
             }
+          } else if (data === false) {
+            failReasons.push(`Expected ${rule.jsonpath} to be ${rule.originalRule}, got nothing`);
           } else {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (<any[]>data).forEach((item) => {

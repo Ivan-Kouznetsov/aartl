@@ -236,3 +236,47 @@ export const hasEachRootQueryPass = `
   To match JSON rules
     "$": each has text
   `;
+
+export const countPass = `
+  Test that it should be null
+Expect HTTP request
+  method: get
+  url: http://localhost:3000/null   
+To match JSON rules
+  "$..text": count = 0
+  "$..text": count < 1
+  "$..text": count <= 1
+  "$..text": count > -1
+  "$..text": count >= 0
+`;
+
+export const countFail = `
+  Test that it should be null
+Expect HTTP request
+  method: get
+  url: http://localhost:3000/null   
+To match JSON rules
+  "$..text": count = 0
+  "$..text": count < 1
+  "$..text": count <= 1
+  "$..text": count > -1
+  "$..text": count >= 50
+`;
+
+export const nonExistentJsonPath = `
+  Test that it should xxx 
+  Expect HTTP request
+    method: get
+    url: http://localhost:3000/posts/   
+  To match JSON rules
+    "$..AAAAA": 10
+  `;
+
+export const nonExistentJsonPathRule = `
+  Test that it should xxx 
+  Expect HTTP request
+    method: get
+    url: http://localhost:3000/posts/   
+  To match JSON rules
+    "$..AAAAA": > 10
+  `;
