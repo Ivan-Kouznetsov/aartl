@@ -1,5 +1,10 @@
 {
   "compilerOptions": {
+    "strict": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
     "alwaysStrict": true,
     "allowJs": false,
     "allowUnusedLabels": false,

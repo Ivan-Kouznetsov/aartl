@@ -11,12 +11,16 @@ const httpskeepAliveAgent = new https.Agent({ keepAlive: true });
 const splitUrl = (url: string) => {
   // https://tools.ietf.org/html/rfc3986#appendix-B
   const parts = url.trim().match(/^(([^:/?#]+):)?(\/\/([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?/);
+  if (parts === null) throw `Invalid url: ${url}`;
   const protocol = parts[2];
   const rawHostname = parts[4];
   const path = parts[5];
-  const port = /:\d+/.test(rawHostname) ? /(?<=:)\d+/.exec(rawHostname)[0] : null;
 
-  return { protocol, hostname: /(\w|\.)+(?=:{0,1})/.exec(rawHostname)[0], path, port };
+  const port = /(?<=:)\d+/.test(rawHostname) ? (/(?<=:)\d+/.exec(rawHostname) ?? [null])[0] : null;
+  const hostnameMatches = /(\w|\.)+(?=:{0,1})/.exec(rawHostname);
+  if (hostnameMatches === null) throw `Invalid url: ${url}`;
+
+  return { protocol, hostname: hostnameMatches[0], path, port };
 };
 
 const headerArrayToHashTable = (rawHeaders: string[]): { [key: string]: string } => {
@@ -28,7 +32,7 @@ const headerArrayToHashTable = (rawHeaders: string[]): { [key: string]: string }
   return result;
 };
 
-const tryParseJson = (str: string): Record<string, unknown> => {
+const tryParseJson = (str: string): Record<string, unknown> | null => {
   try {
     return JSON.parse(str);
   } catch {
@@ -40,26 +44,28 @@ export const request = (
   url: string,
   method: string,
   headers: { [key: string]: string },
-  body: string,
+  body?: string,
   timeout?: number
 ): Promise<{
-  error: string;
-  response: { json: Record<string, unknown>; string: string; headers: { [key: string]: string }; status?: number };
+  json: Record<string, unknown> | null;
+  string: string;
+  headers: { [key: string]: string };
+  status?: number;
 }> => {
   const urlParts = splitUrl(url);
 
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     if (['http', 'https'].includes(urlParts.protocol.toLowerCase()) === false) {
-      resolve({ error: 'Only http and https supported', response: null });
+      reject('Only http and https supported');
       return;
     }
     if (timeout) {
       setTimeout(() => {
-        resolve({ error: 'Timed out', response: null });
+        reject('Timed out');
       }, timeout);
     }
 
-    if (body !== null) {
+    if (body !== undefined) {
       headers['Content-Length'] = new TextEncoder().encode(body).length.toString();
       if (headers['Content-Type'] === undefined) {
         if (!/{.+}/.test(body)) {
@@ -90,18 +96,15 @@ export const request = (
         res.on('end', () => {
           const json = tryParseJson(data);
           resolve({
-            response: {
-              json,
-              string: data,
-              headers: headerArrayToHashTable(res.rawHeaders),
-              status: res.statusCode,
-            },
-            error: null,
+            json,
+            string: data,
+            headers: headerArrayToHashTable(res.rawHeaders),
+            status: res.statusCode,
           });
         });
       })
       .on('error', (err) => {
-        resolve({ error: err.message, response: null });
+        reject(err.message);
       });
 
     if (body) req.write(body);

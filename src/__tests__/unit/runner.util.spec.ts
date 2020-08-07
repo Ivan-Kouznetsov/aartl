@@ -64,7 +64,6 @@ describe('Runner util', () => {
       method: 'get',
       passOn: [],
       url: 'http://example.org/@id',
-      wait: null,
     };
 
     const requestWithValues = util.replaceValuesInRequest(request, [
@@ -82,7 +81,6 @@ describe('Runner util', () => {
       expectedStatusCode: '200',
       method: 'get',
       passOn: [],
-      wait: null,
     });
   });
 
@@ -93,5 +91,98 @@ describe('Runner util', () => {
 
     const duration = (process.hrtime.bigint() - start) / BigInt(1e6);
     expect(duration).toBeGreaterThanOrEqual(waitTime - 5);
+  });
+
+  it('should pretty print result', () => {
+    const text = util.prettyPrintResult({
+      testName: 'should save a post and check id',
+      passed: true,
+      failReasons: [],
+      duration: 50561014,
+      requestLogs: [
+        {
+          sent: {
+            url: 'http://localhost:3000/posts',
+            headers: { 'Content-Length': '25' },
+            body: 'Hello world',
+            method: 'post',
+          },
+          received: {
+            json: { id: 165, success: true },
+            string: '{"id":165,"success":true}',
+            headers: {
+              'X-Powered-By': 'Express',
+              'Content-Type': 'text/html; charset=utf-8',
+              'Content-Length': '25',
+              ETag: 'W/"19-J+GSUqHQuJXdHBtipmmPTNHvzqY"',
+              Date: 'Thu, 06 Aug 2020 01:55:09 GMT',
+              Connection: 'keep-alive',
+            },
+            status: 200,
+          },
+          duration: 45908175,
+        },
+      ],
+    });
+
+    const receivedLines = text
+      .split('\n')
+      .filter((l) => l.trim().length > 0)
+      .map((l) => l.trim());
+
+    expect(receivedLines).toEqual([
+      '✔ Passed should save a post and check id',
+      'Duration: 50561014ns',
+      'Requests',
+      'Request ☎',
+      'POST http://localhost:3000/posts ➥',
+      'Duration: 45908175ns',
+      'Content-Length: 25',
+      'Hello•world',
+      'Response ⬎',
+      'Status: 200',
+      'X-Powered-By: Express',
+      'Content-Type: text/html; charset=utf-8',
+      'Content-Length: 25',
+      'ETag: W/"19-J+GSUqHQuJXdHBtipmmPTNHvzqY"',
+      'Date: Thu, 06 Aug 2020 01:55:09 GMT',
+      'Connection: keep-alive',
+      '{"id":165,"success":true}',
+    ]);
+
+    expect(text).toBeDefined();
+  });
+
+  it('should pretty print result when fail reason provided and body and method are not', () => {
+    const text = util.prettyPrintResult({
+      testName: 'should save a post and check id',
+      passed: false,
+      failReasons: ['hello'],
+      duration: 50561014,
+      requestLogs: [
+        {
+          sent: {
+            url: 'http://localhost:3000/posts',
+            headers: { 'Content-Length': '25' },
+          },
+          received: {
+            json: { id: 165, success: true },
+            string: '{"id":165,"success":true}',
+            headers: {
+              'X-Powered-By': 'Express',
+              'Content-Type': 'text/html; charset=utf-8',
+              'Content-Length': '25',
+              ETag: 'W/"19-J+GSUqHQuJXdHBtipmmPTNHvzqY"',
+              Date: 'Thu, 06 Aug 2020 01:55:09 GMT',
+              Connection: 'keep-alive',
+            },
+            status: 200,
+          },
+          duration: 45908175,
+        },
+      ],
+    });
+
+    expect(text).toBeDefined();
   });
 });

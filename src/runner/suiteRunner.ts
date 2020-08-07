@@ -6,18 +6,19 @@ import { ITestResult } from '../interfaces/results';
 import { ITest } from '../interfaces/test';
 import { RateLimit } from '../lib/async-sema-3.0.0';
 
-export const suiteRunner = async (
-  contents: string,
-  testName: string,
-  numberOfRuns: number,
-  randomize: boolean,
-  noValidation: boolean,
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  realTimeLogger: (result: ITestResult) => void = () => {},
-  maxConcurrent = 100
-): Promise<ITestResult[]> => {
+export const suiteRunner = async (args: {
+  content: string;
+  testName?: string;
+  numberOfRuns: number;
+  randomize: boolean;
+  noValidation: boolean;
+  realTimeLogger?: (result: ITestResult) => void;
+  maxConcurrent?: number;
+}): Promise<ITestResult[]> => {
   return new Promise(async (resolve, reject) => {
-    const lim = RateLimit(maxConcurrent);
+    const { content: contents, testName, numberOfRuns, randomize, noValidation, realTimeLogger, maxConcurrent } = args;
+
+    const lim = RateLimit(maxConcurrent ?? 100);
 
     const preProcessedText = parser.preProcess(contents);
     const tests = parser.splitTests(preProcessedText);
@@ -50,7 +51,7 @@ export const suiteRunner = async (
         await lim();
         runTest(parsedTest).then((result) => {
           totalResults.push(result);
-          realTimeLogger(result);
+          if (realTimeLogger) realTimeLogger(result);
 
           if (totalResults.length === totalTestsToRun) {
             resolve(totalResults);

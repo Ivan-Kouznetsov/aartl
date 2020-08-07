@@ -1,15 +1,14 @@
 import { ITest, IKeyValuePair, IRequest } from '../interfaces/test';
 import { getArgs } from '../parser/util';
 import { getRngFunctions } from '../lib/rng';
+import { ITestResult, IRequestLog } from '../interfaces/results';
 const randomSeed = process.hrtime()[1];
 
 const replaceMultipleValuesInString = (str: string, replacements: IKeyValuePair[]) => {
-  if (str != null) {
-    replacements.forEach((replacement) => {
-      const key = Object.keys(replacement)[0];
-      str = str.replace(key, replacement[key].toString());
-    });
-  }
+  replacements.forEach((replacement) => {
+    const key = Object.keys(replacement)[0];
+    str = str.replace(key, replacement[key].toString());
+  });
   return str;
 };
 
@@ -39,15 +38,13 @@ const replaceMultipleValuesInKeyValuePairArray = (
 };
 
 export const replaceValuesInRequest = (request: IRequest, replacements: IKeyValuePair[]): IRequest => {
-  const body = replaceMultipleValuesInString(request.body, replacements);
-  const url = replaceMultipleValuesInString(request.url, replacements);
   const headerRules = replaceMultipleValuesInKeyValuePairArray(request.headerRules, replacements);
   const headers = replaceMultipleValuesInKeyValuePairArray(request.headers, replacements);
   const jsonRules = replaceMultipleValuesInKeyValuePairArray(request.jsonRules, replacements);
 
   return {
-    body,
-    url,
+    body: request.body === undefined ? undefined : replaceMultipleValuesInString(request.body, replacements),
+    url: request.url === undefined ? undefined : replaceMultipleValuesInString(request.url, replacements),
     headerRules,
     headers,
     jsonRules,
@@ -116,8 +113,12 @@ export const wait = async (ms: number): Promise<unknown> => await new Promise((r
 // this function will throw if given invalid data
 export const durationStringToMs = (duration: string): number => {
   if (/^\d+\s{1,}[A-Z]+$/i.test(duration)) {
-    const num = parseInt(/\d+/.exec(duration)[0]);
-    const unit = /[A-Z]+/i.exec(duration)[0].toLowerCase();
+    const numMatches = <RegExpExecArray>/\d+/.exec(duration);
+    const unitMatches = <RegExpExecArray>/[A-Z]+/i.exec(duration);
+
+    const num = parseInt(numMatches[0]);
+    const unit = unitMatches[0].toLowerCase();
+
     if (unit.includes('second') || unit === 's') {
       return num * 1000;
     } else if (unit.includes('milisecond') || unit === 'ms') {
@@ -144,4 +145,33 @@ export const shuffleArray = (array: unknown[]): void => {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
   }
+};
+
+const prettyPrintRequestLog = (log: IRequestLog): string => {
+  return `\n\nRequest ☎
+  ${(log.sent.method ?? '').toUpperCase()} ${log.sent.url} ➥
+  Duration: ${log.duration}ns
+\t${Object.keys(log.sent.headers)
+    .map((key) => `${key}: ${log.sent.headers[key]}`)
+    .filter((l) => l.trim().length > 0)
+    .join('\n\t')
+    .trim()}
+  ${log.sent.body ? log.sent.body.replace(/\s/g, '•') : ''}
+  Response ⬎
+  
+  Status: ${log.received.status}
+\t${Object.keys(log.received.headers)
+    .map((key) => `${key}: ${log.received.headers[key]}`)
+    .filter((l) => l.trim().length > 0)
+    .join('\n\t')
+    .trim()}
+  ${log.received.string}`;
+};
+
+export const prettyPrintResult = (testResult: ITestResult): string => {
+  return `
+${testResult.passed ? '✔ Passed' : '✘ Failed'} ${testResult.testName} 
+Duration: ${testResult.duration}ns
+${testResult.failReasons.length > 0 ? 'Failure Reasons:\n\t' + testResult.failReasons.join('\n\t').trim() : ''}
+\t\t\tRequests${testResult.requestLogs.map((log) => prettyPrintRequestLog(log)).join('')}`;
 };

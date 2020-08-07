@@ -1,4 +1,4 @@
-import { ITest, IKeyValuePair } from '../interfaces/test';
+import { ITest, IKeyValuePair, IRequest } from '../interfaces/test';
 
 /*
  * FP helper
@@ -6,9 +6,7 @@ import { ITest, IKeyValuePair } from '../interfaces/test';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 function flow(ab: Function, bc: Function): (str: string) => string {
-  return function (...args) {
-    return bc(ab.apply(this, args));
-  };
+  return (...args) => bc(ab(...args));
 }
 
 /**
@@ -28,11 +26,11 @@ const stringToTypedValue = (s: string): number | boolean | string => {
   if (/(true|false)/.test(s)) return JSON.parse(s);
   return s;
 };
-const regexMatchToString = (match: RegExpMatchArray) => (match && match.length === 1 ? match[0].trim() : null);
+const regexMatchToString = (match: RegExpMatchArray) => (match && match.length === 1 ? match[0].trim() : undefined);
 const arrayToPair = (arr?: string[]) =>
-  arr ? { [removeQuotes(arr[0].trim())]: stringToTypedValue(arr[1].trim()) } : null;
-const splitStringByFirstColon = (s: string) => (s.includes(':') ? s.split(/:(.+)/, 2).map((s) => s.trim()) : null);
-const stringToPair = (s: string) => arrayToPair(splitStringByFirstColon(s));
+  arr ? { [removeQuotes(arr[0].trim())]: stringToTypedValue(arr[1].trim()) } : undefined;
+const splitStringByFirstColon = (s: string) => (s.includes(':') ? s.split(/:(.+)/, 2).map((s) => s.trim()) : undefined);
+const stringToPair = (s: string) => arrayToPair(splitStringByFirstColon(s) ?? undefined);
 const passOnStringToPair = (text: string) =>
   text.includes('as') ? arrayToPair(text.split(/as(.+)/, 2)) : arrayToPair([text, text]);
 const removeQuotes = (s: string) => s.replace(/"/g, '');
@@ -66,41 +64,44 @@ const getPassOn = (requestText: string) =>
     passOnStringToPair(s.trim())
   );
 const getHeaders = (requestText: string) =>
-  safeSplitIntoLines(requestText.match(/(?<=headers:)[\s\S]*?(?=method:)/g)).map((s) => stringToPair(removeQuotes(s)));
+  safeSplitIntoLines(requestText.match(/(?<=headers:)[\s\S]*?(?=method:)/g) ?? []).map((s) =>
+    stringToPair(removeQuotes(s))
+  );
 const getJsonRules = (requestText: string) =>
   safeSplitIntoLines(
-    requestText.match(new RegExp(`(?<=To match JSON rules)[\\s\\S]*?(?=(${endTerms}))`, 'g'))
+    requestText.match(new RegExp(`(?<=To match JSON rules)[\\s\\S]*?(?=(${endTerms}))`, 'g')) ?? []
   ).map((s) => stringToPair(s));
 const getHeaderRules = (requestText: string) =>
   safeSplitIntoLines(
-    requestText.match(new RegExp(`(?<=To match header rules\n)[\\s\\S]*?(?=(${endTerms}))`, 'g'))
+    requestText.match(new RegExp(`(?<=To match header rules\n)[\\s\\S]*?(?=(${endTerms}))`, 'g')) ?? []
   ).map((s) => stringToPair(removeQuotes(s)));
 
 /**
  * Functions used by splitTestIntoSections
  */
 const getName = flow(regexMatcher(/(?<=Test that it\s).+/), regexMatchToString);
-const getUsingValues = (text: string): IKeyValuePair[] =>
-  safeSplitIntoLines(text.match(/(?<=Using values)[\s\S]+?(?=((After|Expect) HTTP request))/g)).map((s) =>
-    stringToPair(s)
-  );
+const getUsingValues = (text: string): IKeyValuePair[] => <IKeyValuePair[]>safeSplitIntoLines(
+    text.match(/(?<=Using values)[\s\S]+?(?=((After|Expect) HTTP request))/g) ?? []
+  )
+    .map((s) => stringToPair(s))
+    .filter((pair) => pair !== undefined);
 
-const splitRequestIntoSections = (requestText: string) => ({
-  headers: getHeaders(requestText),
+const splitRequestIntoSections = (requestText: string): IRequest => ({
+  headers: <IKeyValuePair[]>getHeaders(requestText),
   method: getMethod(requestText),
   url: getUrl(requestText),
   body: getBody(requestText),
-  passOn: getPassOn(requestText),
+  passOn: <IKeyValuePair[]>getPassOn(requestText),
   wait: getWait(requestText),
   expectedStatusCode: getExpectedStatusCode(requestText),
-  jsonRules: getJsonRules(requestText),
-  headerRules: getHeaderRules(requestText),
+  jsonRules: <IKeyValuePair[]>getJsonRules(requestText),
+  headerRules: <IKeyValuePair[]>getHeaderRules(requestText),
 });
 
 const getRequests = (text: string) =>
-  text
-    .match(/(?<=((After|Expect) HTTP request))[\s\S]+?(?=($|((After|Expect) HTTP request)))/g)
-    .map((r) => splitRequestIntoSections(r));
+  (text.match(/(?<=((After|Expect) HTTP request))[\s\S]+?(?=($|((After|Expect) HTTP request)))/g) ?? []).map((r) =>
+    splitRequestIntoSections(r)
+  );
 
 /**
  * Exported functions
@@ -111,7 +112,8 @@ export const preProcess = (text: string): string =>
     .replace(/\s*$/gm, '')
     .replace(/\/\*\*.+?\*\*\//gm, '');
 
-export const splitTests = (text: string): RegExpMatchArray => text.match(/Test that it[\s\S]*?(?=(Test that it|$))/g);
+export const splitTests = (text: string): RegExpMatchArray =>
+  text.match(/Test that it[\s\S]*?(?=(Test that it|$))/g) ?? [];
 export const splitTestIntoSections = (text: string): ITest => ({
   name: getName(text),
   usingValues: getUsingValues(text),

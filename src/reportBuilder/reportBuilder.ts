@@ -37,30 +37,24 @@ export const buildReport = (testResults: ITestResult[]): IReport => {
   };
 };
 
-const escapeHtmlChars = (str: string) => (str ?? '').replace('&', '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const escapeHtmlChars = (str: string) => str.replace('&', '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 export const requestLogToHtml = (log: IRequestLog): string => {
-  const sent = JSON.parse(log.sent);
-  const rec = JSON.parse(log.received);
+  const sent = log.sent;
+  const rec = log.received;
 
-  return `<span class="requestDuration"> Duration: ${formatDuration(log.duration)} ms </span> <p>Sent: <br/>Url: ${
-    sent.url
-  }
+  return `<h3>Request</h3><span class="requestDuration"> Duration: ${formatDuration(
+    log.duration
+  )} ms </span> <p>Sent: <br/>Url: ${sent.url}
+  <br/>Headers: ${JSON.stringify(sent.headers)}  
   <br/>Method: ${sent.method}
-  <br/>Body: ${escapeHtmlChars(sent.body)}
-  <br/>Headers: ${JSON.stringify(sent.headers)}'  
+  <br/>Body: ${sent.body ? escapeHtmlChars(sent.body) : 'None'}
   <br/>
   <p>Received
-  <br/>${
-    rec.error
-      ? ''
-      : rec.response.json
-      ? escapeHtmlChars(JSON.stringify(rec.response.json))
-      : escapeHtmlChars(rec.response.string)
-  }
-  <br/>Status: ${rec.error ? '' : rec.response.status}
-  <br/>Duration: ${formatDuration(log.duration)} ms 
-  <br/>Error: ${rec.error ?? 'None'}
+  <br/>Headers: ${JSON.stringify(rec.headers)}  
+  <br/>${rec.json ? escapeHtmlChars(JSON.stringify(rec.json)) : escapeHtmlChars(rec.string)}
+  <br/>Status: ${rec.status}
+  <br/>Duration: ${formatDuration(log.duration)} ms   
   `;
 };
 
@@ -121,8 +115,8 @@ export const buildHtmlReport = (suiteName: string, testResults: ITestResult[]): 
 };
 
 const createXmlTestCase = (result: ITestResult): string => `
-<testcase name="${result.testName}" 
-classname="${result.testName.replace(/\s/g, '_')}"  
+<testcase name="${result.testName}"
+classname="${result.testName.replace(/\s/g, '_')}"
 status="${result.passed ? 'passed' : 'failed'}"
 time="${(result.duration / 1e9).toFixed(2)}"
 >

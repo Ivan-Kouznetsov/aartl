@@ -99,3 +99,7 @@ export const saveAndCheckPost = `
       ;
       ;
     `;
+
+export const noRequests = `
+    Test that it should save a post
+    `;

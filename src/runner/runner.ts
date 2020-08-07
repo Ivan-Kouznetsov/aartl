@@ -19,26 +19,35 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
     const currentRequest = util.replaceValuesInRequest(request, passOnValues);
     try {
       const requestStartTime = process.hrtime.bigint();
-      const requestLogSent = JSON.stringify({
+      const requestLogSent = {
         url: currentRequest.url,
         body: currentRequest.body,
         headers: util.keyValuePairArrayHashTable(currentRequest.headers),
         method: currentRequest.method,
-      });
+      };
+
+      if (currentRequest.url === undefined) {
+        return {
+          testName: test.name,
+          passed: false,
+          failReasons: [`Cannot request an empty url`],
+          duration: util.bigIntToNumber(process.hrtime.bigint() - testStartTime),
+          requestLogs,
+        };
+      }
 
       const currentRequestResponse = await http_promise.request(
         currentRequest.url,
-        currentRequest.method,
+        currentRequest.method ?? 'get',
         util.keyValuePairArrayHashTable(currentRequest.headers),
         currentRequest.body
       );
 
       const requestEndTime = process.hrtime.bigint();
-      const responseText = JSON.stringify(currentRequestResponse);
 
       requestLogs.push({
         sent: requestLogSent,
-        received: responseText,
+        received: currentRequestResponse,
         duration: util.bigIntToNumber(requestEndTime - requestStartTime),
       });
 
@@ -47,7 +56,16 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
         await util.wait(duration);
       }
       if (currentRequest.passOn.length > 0) {
-        const json = currentRequestResponse.response.json;
+        const json = currentRequestResponse.json;
+        if (json === null) {
+          return {
+            testName: test.name,
+            passed: false,
+            failReasons: [`Cannot pass on value because response was not JSON`],
+            duration: util.bigIntToNumber(process.hrtime.bigint() - testStartTime),
+            requestLogs,
+          };
+        }
         for (const passOn of currentRequest.passOn) {
           const passOnObj = util.keyValueToObject(passOn);
           const value = jsonPath(json, passOnObj.key);
@@ -67,9 +85,9 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
 
       // if it has expectations
       if (currentRequest.expectedStatusCode) {
-        if (currentRequestResponse.response.status !== parseInt(currentRequest.expectedStatusCode)) {
+        if (currentRequestResponse.status !== parseInt(currentRequest.expectedStatusCode)) {
           failReasons.push(
-            `Expected status code of ${currentRequest.expectedStatusCode}, got: ${currentRequestResponse.response.status}`
+            `Expected status code of ${currentRequest.expectedStatusCode}, got: ${currentRequestResponse.status}`
           );
         }
       }
@@ -77,12 +95,12 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
       if (currentRequest.headerRules.length > 0) {
         currentRequest.headerRules.forEach((hr) => {
           const headerRule = util.keyValueToObject(hr);
-          if (currentRequestResponse.response.headers[headerRule.key] !== headerRule.value) {
+          if (currentRequestResponse.headers[headerRule.key] !== headerRule.value) {
             failReasons.push(
               `Expected header ${headerRule.key} to be ${headerRule.value}, got: ${
-                currentRequestResponse.response.headers[headerRule.key] === undefined
+                currentRequestResponse.headers[headerRule.key] === undefined
                   ? 'nothing'
-                  : currentRequestResponse.response.headers[headerRule.key]
+                  : currentRequestResponse.headers[headerRule.key]
               }`
             );
           }
@@ -91,20 +109,29 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
 
       if (currentRequest.jsonRules.length > 0) {
         const parsedRules = ruleParser.parseJsonRules(currentRequest);
-        const json = currentRequestResponse.response.json;
-
+        const json = currentRequestResponse.json;
+        if (json === null) {
+          return {
+            testName: test.name,
+            passed: false,
+            failReasons: [`Cannot check JSON rules because response was not JSON`],
+            duration: util.bigIntToNumber(process.hrtime.bigint() - testStartTime),
+            requestLogs,
+          };
+        }
         parsedRules.forEach(async (rule) => {
           const data = jsonPath(json, rule.jsonpath);
 
           if (typeof rule.rule === 'function') {
-            const nonCompliantValue = rule.rule(data ? data : []);
+            const nonCompliantValue = Array.isArray(data) ? rule.rule(data) : 'nothing';
             if (nonCompliantValue !== undefined) {
               failReasons.push(
                 `Expected ${rule.jsonpath} to be ${rule.originalRule}, got ${nonCompliantValue.toString()}`
               );
             }
           } else {
-            (<unknown[]>data).forEach((item) => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (<any[]>data).forEach((item) => {
               if (rule.rule !== (item ?? 'null').toString()) {
                 failReasons.push(`Expected ${rule.jsonpath} to be ${rule.originalRule}, got ${item}`);
               }
@@ -113,7 +140,7 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
         });
       }
     } catch (ex) {
-      failReasons.push(ex.message);
+      failReasons.push(ex);
     }
   }
 

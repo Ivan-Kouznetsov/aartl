@@ -26,7 +26,6 @@ describe('Parser', () => {
           body: 'hello',
           passOn: [{ '$..num': '_num' }, { '$..id': '_id' }],
           wait: '5 seconds',
-          expectedStatusCode: null,
           jsonRules: [],
           headerRules: [],
         },
@@ -36,8 +35,6 @@ describe('Parser', () => {
           url: 'http://example.org/things/@id2',
           body: 'hi',
           passOn: [],
-          wait: null,
-          expectedStatusCode: null,
           jsonRules: [],
           headerRules: [],
         },
@@ -45,9 +42,8 @@ describe('Parser', () => {
           headers: [{ 'Accept-Encoding': '*/*' }],
           method: 'get',
           url: 'http://example.org/@id',
-          body: null,
+
           passOn: [],
-          wait: null,
           expectedStatusCode: '200',
           jsonRules: [
             { '$..id': '@id' },
@@ -66,5 +62,18 @@ describe('Parser', () => {
     const test = parser.splitTestIntoSections(preprocessedText);
 
     expect(test).toBeDefined();
+  });
+
+  it('should not throw when parsing a test with no requests', () => {
+    const preprocessedText = parser.preProcess(fixtures.noRequests);
+    const test = parser.splitTestIntoSections(preprocessedText);
+
+    expect(test).toBeDefined();
+  });
+
+  it('should not throw when parsing an empty string', () => {
+    const arr = parser.splitTests('');
+
+    expect(arr).toBeDefined();
   });
 });

@@ -2,14 +2,32 @@ import { exampleSuite, invalidExampleSuite } from './fixtures/suiteRunner.fixtur
 import { suiteRunner } from '../../runner/suiteRunner';
 import { ITestResult } from '../../interfaces/results';
 
+/**
+ * Helpers
+ */
+
+const hasTestPassed = (testResults: ITestResult[], testName: string): boolean => {
+  const testResult = testResults.find((r) => r.testName === testName);
+  if (testResult === null || testResult === undefined) {
+    return false;
+  } else {
+    return testResult.passed;
+  }
+};
+
 describe('Suite Runner', () => {
   it('should run entire suite when default arguments are provided', async () => {
     const log: ITestResult[] = [];
-    const result: ITestResult[] = <ITestResult[]>(
-      await suiteRunner(exampleSuite, undefined, 1, false, false, (result) => {
+    const result: ITestResult[] = <ITestResult[]>await suiteRunner({
+      content: exampleSuite,
+      testName: undefined,
+      numberOfRuns: 1,
+      randomize: false,
+      noValidation: false,
+      realTimeLogger: (result) => {
         log.push(result);
-      })
-    );
+      },
+    });
     result.forEach((result) => {
       expect(result.duration).toBeGreaterThan(0);
       result.failReasons.forEach((f) => {
@@ -21,26 +39,31 @@ describe('Suite Runner', () => {
     });
     expect(log).toEqual(result);
 
-    expect(result.find((r) => r.testName === 'should save a post').passed).toBe(true);
-    expect(result.find((r) => r.testName === 'should save a post and check id').passed).toBe(true);
-    expect(result.find((r) => r.testName === 'should save a post and make sure id is less than 0').passed).toBe(false);
-    expect(result.find((r) => r.testName === 'should get apost with id of -1').passed).toBe(false);
-    expect(result.find((r) => r.testName === 'should save a post and cache it').passed).toBe(false);
-    expect(result.find((r) => r.testName === 'should save a post and be powered by Express').passed).toBe(true);
-    expect(result.find((r) => r.testName === 'should save a post and be powered by XXXX').passed).toBe(false);
-    expect(result.find((r) => r.testName === 'should check that post id is 0').passed).toBe(false);
-    expect(result.find((r) => r.testName === 'should check that post id is 1 - 5').passed).toBe(false);
-    expect(result.find((r) => r.testName === 'should check post id 0 - 5').passed).toBe(true);
-    expect(result.find((r) => r.testName === 'should be null').passed).toBe(true);
+    expect(hasTestPassed(result, 'should save a post')).toBe(true);
+    expect(hasTestPassed(result, 'should save a post and check id')).toBe(true);
+    expect(hasTestPassed(result, 'should save a post and make sure id is less than 0')).toBe(false);
+    expect(hasTestPassed(result, 'should get apost with id of -1')).toBe(false);
+    expect(hasTestPassed(result, 'should save a post and cache it')).toBe(false);
+    expect(hasTestPassed(result, 'should save a post and be powered by Express')).toBe(true);
+    expect(hasTestPassed(result, 'should save a post and be powered by XXXX')).toBe(false);
+    expect(hasTestPassed(result, 'should check that post id is 0')).toBe(false);
+    expect(hasTestPassed(result, 'should check that post id is 1 - 5')).toBe(false);
+    expect(hasTestPassed(result, 'should check post id 0 - 5')).toBe(true);
+    expect(hasTestPassed(result, 'should be null')).toBe(true);
   }, 20000);
 
   it('should run entire suite when tests are randomized', async () => {
     const log: ITestResult[] = [];
-    const result: ITestResult[] = <ITestResult[]>(
-      await suiteRunner(exampleSuite, undefined, 1, true, false, (result) => {
+    const result: ITestResult[] = <ITestResult[]>await suiteRunner({
+      content: exampleSuite,
+      testName: undefined,
+      numberOfRuns: 1,
+      randomize: true,
+      noValidation: false,
+      realTimeLogger: (result) => {
         log.push(result);
-      })
-    );
+      },
+    });
     result.forEach((result) => {
       expect(result.duration).toBeGreaterThan(0);
       result.failReasons.forEach((f) => {
@@ -52,26 +75,32 @@ describe('Suite Runner', () => {
     });
     expect(log).toEqual(result);
 
-    expect(result.find((r) => r.testName === 'should save a post').passed).toBe(true);
-    expect(result.find((r) => r.testName === 'should save a post and check id').passed).toBe(true);
-    expect(result.find((r) => r.testName === 'should save a post and make sure id is less than 0').passed).toBe(false);
-    expect(result.find((r) => r.testName === 'should get apost with id of -1').passed).toBe(false);
-    expect(result.find((r) => r.testName === 'should save a post and cache it').passed).toBe(false);
-    expect(result.find((r) => r.testName === 'should save a post and be powered by Express').passed).toBe(true);
-    expect(result.find((r) => r.testName === 'should save a post and be powered by XXXX').passed).toBe(false);
-    expect(result.find((r) => r.testName === 'should check that post id is 0').passed).toBe(false);
-    expect(result.find((r) => r.testName === 'should check that post id is 1 - 5').passed).toBe(false);
-    expect(result.find((r) => r.testName === 'should check post id 0 - 5').passed).toBe(true);
-    expect(result.find((r) => r.testName === 'should be null').passed).toBe(true);
+    expect(hasTestPassed(result, 'should save a post')).toBe(true);
+    expect(hasTestPassed(result, 'should save a post and check id')).toBe(true);
+    expect(hasTestPassed(result, 'should save a post and make sure id is less than 0')).toBe(false);
+    expect(hasTestPassed(result, 'should get apost with id of -1')).toBe(false);
+    expect(hasTestPassed(result, 'should save a post and cache it')).toBe(false);
+    expect(hasTestPassed(result, 'should save a post and be powered by Express')).toBe(true);
+    expect(hasTestPassed(result, 'should save a post and be powered by XXXX')).toBe(false);
+    expect(hasTestPassed(result, 'should check that post id is 0')).toBe(false);
+    expect(hasTestPassed(result, 'should check that post id is 1 - 5')).toBe(false);
+    expect(hasTestPassed(result, 'should check post id 0 - 5')).toBe(true);
+    expect(hasTestPassed(result, 'should be null')).toBe(true);
   }, 20000);
 
   it('should run a single test when test name is provided', async () => {
     const log: ITestResult[] = [];
-    const result: ITestResult[] = <ITestResult[]>(
-      await suiteRunner(exampleSuite, 'should save a post', 1, false, false, (result) => {
+    const result: ITestResult[] = <ITestResult[]>await suiteRunner({
+      content: exampleSuite,
+      testName: 'should save a post',
+      numberOfRuns: 1,
+      randomize: false,
+      noValidation: false,
+      realTimeLogger: (result) => {
         log.push(result);
-      })
-    );
+      },
+      maxConcurrent: 1,
+    });
     result.forEach((result) => {
       expect(result.duration).toBeGreaterThan(0);
       result.failReasons.forEach((f) => {
@@ -83,21 +112,28 @@ describe('Suite Runner', () => {
     });
     expect(log).toEqual(result);
 
-    expect(result.find((r) => r.testName === 'should save a post').passed).toBe(true);
-    expect(result.find((r) => r.testName === 'should save a post and check id')).toBeUndefined();
-    expect(result.find((r) => r.testName === 'should save a post and make sure id is less than 0')).toBeUndefined();
-    expect(result.find((r) => r.testName === 'should get apost with id of -1')).toBeUndefined();
-    expect(result.find((r) => r.testName === 'should save a post and cache it')).toBeUndefined();
-    expect(result.find((r) => r.testName === 'should save a post and be powered by Express')).toBeUndefined();
-    expect(result.find((r) => r.testName === 'should save a post and be powered by XXXX')).toBeUndefined();
-    expect(result.find((r) => r.testName === 'should check that post id is 0')).toBeUndefined();
-    expect(result.find((r) => r.testName === 'should check that post id is 1 - 5')).toBeUndefined();
-    expect(result.find((r) => r.testName === 'should check post id 0 - 5')).toBeUndefined();
-    expect(result.find((r) => r.testName === 'should be null')).toBeUndefined();
+    expect(hasTestPassed(result, 'should save a post')).toBe(true);
+    // test that were not run:
+    expect(hasTestPassed(result, 'should save a post and check id')).toBe(false);
+    expect(hasTestPassed(result, 'should save a post and make sure id is less than 0')).toBe(false);
+    expect(hasTestPassed(result, 'should get apost with id of -1')).toBe(false);
+    expect(hasTestPassed(result, 'should save a post and cache it')).toBe(false);
+    expect(hasTestPassed(result, 'should save a post and be powered by Express')).toBe(false);
+    expect(hasTestPassed(result, 'should save a post and be powered by XXXX')).toBe(false);
+    expect(hasTestPassed(result, 'should check that post id is 0')).toBe(false);
+    expect(hasTestPassed(result, 'should check that post id is 1 - 5')).toBe(false);
+    expect(hasTestPassed(result, 'should check post id 0 - 5')).toBe(false);
+    expect(hasTestPassed(result, 'should be null')).toBe(false);
   }, 20000);
 
   it('should reject when there is a validation error', async (done) => {
-    suiteRunner(invalidExampleSuite, undefined, 1, false, false)
+    suiteRunner({
+      content: invalidExampleSuite,
+      testName: undefined,
+      numberOfRuns: 1,
+      randomize: false,
+      noValidation: false,
+    })
       .then(() => {
         fail('should not run test suite');
       })
@@ -108,7 +144,13 @@ describe('Suite Runner', () => {
   }, 20000);
 
   it('should not reject when there is a validation error and no validation is true', async (done) => {
-    suiteRunner(invalidExampleSuite, undefined, 1, false, true)
+    suiteRunner({
+      content: invalidExampleSuite,
+      testName: undefined,
+      numberOfRuns: 1,
+      randomize: false,
+      noValidation: true,
+    })
       .then(() => {
         done();
       })
