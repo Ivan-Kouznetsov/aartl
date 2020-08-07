@@ -121,17 +121,24 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
         }
         parsedRules.forEach(async (rule) => {
           const data = jsonPath(json, rule.jsonpath);
-
-          if (typeof rule.rule === 'function') {
-            const nonCompliantValue = Array.isArray(data) ? rule.rule(data) : 'nothing';
+          if (data === false) {
+            if (typeof rule.rule === 'function' && rule.originalRule.toString().includes('count')) {
+              const ruleCheckResult = rule.rule([]);
+              if (ruleCheckResult !== undefined) {
+                failReasons.push(`Expected ${rule.jsonpath} to be ${rule.originalRule}, got ${ruleCheckResult}`);
+              }
+            } else {
+              failReasons.push(`Expected ${rule.jsonpath} to be ${rule.originalRule}, got nothing`);
+            }
+          } else if (typeof rule.rule === 'function') {
+            const nonCompliantValue = rule.rule(data);
             if (nonCompliantValue !== undefined) {
               failReasons.push(
-                `Expected ${rule.jsonpath} to be ${rule.originalRule}, got ${nonCompliantValue.toString()}`
+                `Expected ${rule.jsonpath} to be ${rule.originalRule}, got ${JSON.stringify(nonCompliantValue)}`
               );
             }
           } else {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (<any[]>data).forEach((item) => {
+            data.forEach((item) => {
               if (rule.rule !== (item ?? 'null').toString()) {
                 failReasons.push(`Expected ${rule.jsonpath} to be ${rule.originalRule}, got ${item}`);
               }

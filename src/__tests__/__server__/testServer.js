@@ -48,6 +48,15 @@ app.post('/posts', (request, response) => {
   response.send(JSON.stringify({ id: posts.length - 1, success: true }));
 });
 
+app.get('/posts', (_, response) => {
+  const results = [];
+  for (let id = 0; id < posts.length; id++) {
+    results.push({ id, text: posts[id] });
+  }
+
+  response.send(JSON.stringify(results)).end();
+});
+
 app.get('/random', (_, response) => {
   response.send(JSON.stringify({ id: Math.floor(Math.random() * Math.floor(100)), text: Math.random().toFixed(10) }));
 });

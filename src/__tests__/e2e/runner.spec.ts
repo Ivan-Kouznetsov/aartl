@@ -126,4 +126,40 @@ describe('Test runner', () => {
 
     expect(result.passed).toBe(true);
   });
+
+  it('should be able to use each has a with a root query', async () => {
+    const badResult = await runTestThruAllSteps(fixtures.hasEachRootQueryFail);
+
+    expect(badResult.passed).toBe(false);
+    expect(badResult.failReasons[0]).toEqual('Expected $ to be each has XXX, got {"id":0,"text":"0th Post"}');
+
+    const goodResult = await runTestThruAllSteps(fixtures.hasEachRootQueryPass);
+
+    expect(goodResult.passed).toBe(true);
+  });
+
+  it('should be able to check count of 0', async () => {
+    const badResult = await runTestThruAllSteps(fixtures.countFail);
+
+    expect(badResult.passed).toBe(false);
+    expect(badResult.failReasons[0]).toEqual('Expected $..text to be count >= 50, got 0');
+
+    const goodResult = await runTestThruAllSteps(fixtures.countPass);
+
+    expect(goodResult.passed).toBe(true);
+  });
+
+  it('should fail when checking JSON rule for a path that does not exist with a literal value', async () => {
+    const badResult = await runTestThruAllSteps(fixtures.nonExistentJsonPath);
+
+    expect(badResult.passed).toBe(false);
+    expect(badResult.failReasons[0]).toEqual('Expected $..AAAAA to be 10, got nothing');
+  });
+
+  it('should fail when checking JSON rule for a path that does not exist with a rule', async () => {
+    const badResult = await runTestThruAllSteps(fixtures.nonExistentJsonPathRule);
+
+    expect(badResult.passed).toBe(false);
+    expect(badResult.failReasons[0]).toEqual('Expected $..AAAAA to be > 10, got nothing');
+  });
 });

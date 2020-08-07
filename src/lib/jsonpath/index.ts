@@ -7,6 +7,7 @@
  * Licensed under the MIT licence.
  */
 export function jsonPath(obj: string | Record<string, any>, expr: string, arg?: { resultType: any }) {
+  if (expr === '$') return Array.isArray(obj) ? obj : [obj];
   const P = {
     resultType: (arg && arg.resultType) || 'VALUE',
     result: <any[]>[],

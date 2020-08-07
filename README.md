@@ -8,16 +8,16 @@ What is your confidence that a specific end-to-end process that implicates sever
 
 ## Possible solutions
 
-| Approach                                                     | Downsides                                                    |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| Browser-based end-to-end tests                               | 1. Slow <br />2. Cannot be run at a high rate (due to slowness) and thus cannot be used to ascertain failure rates <br />3. Easy to write bugs |
+| Approach                                                           | Downsides                                                                                                                                           |
+| ------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Browser-based end-to-end tests                                     | 1. Slow <br />2. Cannot be run at a high rate (due to slowness) and thus cannot be used to ascertain failure rates <br />3. Easy to write bugs      |
 | API-based end-to-end tests using common general-purpose frameworks | 1. Easy to write bugs<br />2. Common test frameworks are not designed to re-run tests and calculate failure rates<br />3. Significant start-up time |
 
 # What?
 
 ## Agnostic API Reliability Testing Language
 
-Agnostic API Reliability Testing Language (AARTL) is a platform-agnostic declarative domain-specific language for testing HTTP servers using the server’s API, it is implemented in TypeScript as a dependency-free high-performance Node.js application and can run on all major operating systems (Windows, macOS, Linux-based OSs and FreeBSD), it can also run on GraalVM, and can test servers irrespective of the platform used by the server. An AARTL test is a human-readable declaration of the expected response from a server endpoint given one or more requests. Its simple syntax offers fewer opportunities for writing bugs than a traditional test which may include any arbitrary code. 
+Agnostic API Reliability Testing Language (AARTL) is a platform-agnostic declarative domain-specific language for testing HTTP servers using the server’s API, it is implemented in TypeScript as a dependency-free high-performance Node.js application and can run on all major operating systems (Windows, macOS, Linux-based OSs and FreeBSD), it can also run on GraalVM, and can test servers irrespective of the platform used by the server. An AARTL test is a human-readable declaration of the expected response from a server endpoint given one or more requests. Its simple syntax offers fewer opportunities for writing bugs than a traditional test which may include any arbitrary code.
 
 ## Design goals
 
@@ -101,7 +101,7 @@ The possible rules are (_x, y, x in the rules refer to parameters_):
 |count >= x| checks if the number of values that matches the JSON path is greater than or equal to x|
 |count < x| checks if the number of values that matches the JSON path is less than x|
 |count <= x| checks if the number of values that matches the JSON path is less than or equal to x|
-|each has a x| checks if each of values that matches the JSON path is an object with a property called x|
+|each has x| checks if each of values that matches the JSON path is an object with a property called x|
 
 ## Comments
 
