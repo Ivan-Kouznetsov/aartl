@@ -126,4 +126,15 @@ describe('Test runner', () => {
 
     expect(result.passed).toBe(true);
   });
+
+  it('should be able to use each has a with a root query', async () => {
+    const badResult = await runTestThruAllSteps(fixtures.hasEachRootQueryFail);
+
+    expect(badResult.passed).toBe(false);
+    expect(badResult.failReasons[0]).toEqual('Expected $ to be each has XXX, got {"id":0,"text":"0th Post"}');
+
+    const goodResult = await runTestThruAllSteps(fixtures.hasEachRootQueryPass);
+
+    expect(goodResult.passed).toBe(true);
+  });
 });

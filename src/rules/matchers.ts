@@ -87,5 +87,5 @@ export const aliasesedMatchers = [
   { factory: <Factory>validateCountGreaterThanOrEqual, alias: 'count >=', argCount: 1 },
   { factory: <Factory>validateCountLessThan, alias: 'count <', argCount: 1 },
   { factory: <Factory>validateCountLessThanOrEqual, alias: 'count <=', argCount: 1 },
-  { factory: <Factory>validateArrayHasProp, alias: 'each has a', argCount: 1 },
+  { factory: <Factory>validateArrayHasProp, alias: 'each has', argCount: 1 },
 ];

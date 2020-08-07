@@ -126,7 +126,7 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
             const nonCompliantValue = Array.isArray(data) ? rule.rule(data) : 'nothing';
             if (nonCompliantValue !== undefined) {
               failReasons.push(
-                `Expected ${rule.jsonpath} to be ${rule.originalRule}, got ${nonCompliantValue.toString()}`
+                `Expected ${rule.jsonpath} to be ${rule.originalRule}, got ${JSON.stringify(nonCompliantValue)}`
               );
             }
           } else {
