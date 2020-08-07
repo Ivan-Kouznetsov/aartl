@@ -134,11 +134,6 @@ Expect HTTP request
   url: http://localhost:3000/null   
 To match JSON rules
   "$..id": null
-  "$..text": count = 0
-  "$..text": count < 1
-  "$..text": count <= 1
-  "$..text": count > -1
-  "$..text": count >= 0
 `;
 
 export const invalidExampleSuite = `

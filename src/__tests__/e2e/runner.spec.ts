@@ -87,7 +87,7 @@ describe('Test runner', () => {
     expect(result.passed).toBe(true);
   });
 
-  it('should pass when is null and text property is absent', async () => {
+  it('should pass when id is null', async () => {
     const result = await runTestThruAllSteps(fixtures.getNull);
 
     expect(result.passed).toBe(true);
