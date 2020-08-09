@@ -1,25 +1,31 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const { graphqlHTTP } = require('express-graphql');
+const { buildSchema } = require('graphql');
 
-const app = express();
-app.use(bodyParser.raw({ type: '*/*' }));
+/*
+ * REST
+ */
 
-const port = 3000;
+const restApp = express();
+restApp.use(bodyParser.raw({ type: '*/*' }));
+
+const restPort = 3000;
 
 const posts = ['0th Post'];
 
-app.get('/', (_, response) => {
+restApp.get('/', (_, response) => {
   response.status(200).send('Ready').end();
 });
 
-app.get('/null', (_, response) => {
+restApp.get('/null', (_, response) => {
   response
     .status(200)
     .send(JSON.stringify({ id: null, text: undefined }))
     .end();
 });
 
-app.get('/posts/:id', (request, response) => {
+restApp.get('/posts/:id', (request, response) => {
   const id = parseInt(request.params['id']);
 
   if (typeof posts[id] !== 'undefined') {
@@ -31,7 +37,7 @@ app.get('/posts/:id', (request, response) => {
   }
 });
 
-app.delete('/posts/:id', (request, response) => {
+restApp.delete('/posts/:id', (request, response) => {
   const id = parseInt(request.params['id']);
 
   if (typeof posts[id] !== 'undefined') {
@@ -42,13 +48,13 @@ app.delete('/posts/:id', (request, response) => {
   }
 });
 
-app.post('/posts', (request, response) => {
+restApp.post('/posts', (request, response) => {
   posts.push(request.body.toString());
 
   response.send(JSON.stringify({ id: posts.length - 1, success: true }));
 });
 
-app.get('/posts', (_, response) => {
+restApp.get('/posts', (_, response) => {
   const results = [];
   for (let id = 0; id < posts.length; id++) {
     results.push({ id, text: posts[id] });
@@ -57,13 +63,45 @@ app.get('/posts', (_, response) => {
   response.send(JSON.stringify(results)).end();
 });
 
-app.get('/random', (_, response) => {
+restApp.get('/random', (_, response) => {
   response.send(JSON.stringify({ id: Math.floor(Math.random() * Math.floor(100)), text: Math.random().toFixed(10) }));
 });
 
-app.listen(port, (err) => {
+restApp.listen(restPort, (err) => {
   if (err) {
     console.error('Error:', err);
   }
-  console.log(`listening on port ${port}`);
+  console.log(`listening on port ${restPort}`);
 });
+
+/*
+ * GraphQL
+ */
+
+const graphqlPort = 4000;
+
+// Construct a schema, using GraphQL schema language
+const schema = buildSchema(`
+type Query {
+  post(id: Int!): String
+}
+`);
+
+// The root provides a resolver function for each API endpoint
+const root = {
+  post: (args) => {
+    return posts[args.id];
+  },
+};
+
+const graphqlApp = express();
+graphqlApp.use(
+  '/graphql',
+  graphqlHTTP({
+    schema: schema,
+    rootValue: root,
+    graphiql: true,
+  })
+);
+graphqlApp.listen(graphqlPort);
+console.log(`Running a GraphQL API server at http://localhost:${graphqlPort}/graphql`);
