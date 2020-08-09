@@ -108,6 +108,7 @@ const getRequests = (text: string) =>
  */
 export const preProcess = (text: string): string =>
   text
+    .replace(/\r/g, '')
     .replace(/^\s*/gm, '')
     .replace(/\s*$/gm, '')
     .replace(/\/\*\*.+?\*\*\//gm, '');
