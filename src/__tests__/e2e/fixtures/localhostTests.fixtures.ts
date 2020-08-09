@@ -132,6 +132,28 @@ export const wrongHeaderValue = `
     "X-Powered-By":"XXXX"
   `;
 
+export const headerNotPresentFail = `
+  Test that it should xxxx
+  Expect HTTP request
+    headers:
+      "Accept-Encoding":"*/*"
+    method: get
+    url: http://localhost:3000/posts/0
+  To match header rules
+    "X-Powered-By": must not be present
+  `;
+
+export const headerNotPresentPass = `
+  Test that it should xxxx
+  Expect HTTP request
+    headers:
+      "Accept-Encoding":"*/*"
+    method: get
+    url: http://localhost:3000/posts/0
+  To match header rules
+    "X-Cached": must not be present
+  `;
+
 export const checkLiteral = `
   Test that it should check that post id is 0
   Using values
