@@ -1,19 +1,21 @@
 import { aliasesedMatchers } from '../rules/matchers';
 import { IRequest, Factory, MatcherFunction } from '../interfaces/test';
 import { getArgs } from './util';
+import { ArgCount } from '../enums/argCount';
 
 const parseRule = (rule: string): string | MatcherFunction => {
   const aliasesedMatcher = aliasesedMatchers.find(
     (am) =>
       rule.startsWith(am.alias) &&
-      (am.argCount === getArgs(rule, am.alias).length ||
-        (getArgs(rule, am.alias).length > 0 && am.argCount === Infinity))
+      ((getArgs(rule, am.alias).length === 0 && am.argCount === ArgCount.None) ||
+        (getArgs(rule, am.alias).length === 1 && am.argCount === ArgCount.One) ||
+        (getArgs(rule, am.alias).length > 0 && am.argCount === ArgCount.Many))
   );
 
   if (aliasesedMatcher !== undefined) {
-    if (aliasesedMatcher.argCount === 0) {
+    if (aliasesedMatcher.argCount === ArgCount.None) {
       return (<Factory>aliasesedMatcher.factory)();
-    } else if (aliasesedMatcher.argCount === 1) {
+    } else if (aliasesedMatcher.argCount === ArgCount.One) {
       return (<Factory>aliasesedMatcher.factory)(getArgs(rule, aliasesedMatcher.alias)[0]);
     } else {
       return (<Factory>aliasesedMatcher.factory)(getArgs(rule, aliasesedMatcher.alias));
