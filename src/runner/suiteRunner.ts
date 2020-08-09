@@ -16,11 +16,11 @@ export const suiteRunner = async (args: {
   maxConcurrent?: number;
 }): Promise<ITestResult[]> => {
   return new Promise(async (resolve, reject) => {
-    const { content: contents, testName, numberOfRuns, randomize, noValidation, realTimeLogger, maxConcurrent } = args;
+    const { content, testName, numberOfRuns, randomize, noValidation, realTimeLogger, maxConcurrent } = args;
 
     const lim = RateLimit(maxConcurrent ?? 100);
 
-    const preProcessedText = parser.preProcess(contents);
+    const preProcessedText = parser.preProcess(content);
     const tests = parser.splitTests(preProcessedText);
 
     const parsedTests: ITest[] = [];
