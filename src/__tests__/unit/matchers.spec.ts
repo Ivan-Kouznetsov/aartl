@@ -82,8 +82,15 @@ describe('Matchers', () => {
     expect(matchers.validateStringNotContaining('hello')(['hello', 'hi'])).toEqual('hello');
   });
 
-  it('should match via validateArrayHasProp correctly', () => {
-    expect(matchers.validateArrayHasProp('hello')([{ hello: 123 }])).toBeUndefined();
-    expect(matchers.validateArrayHasProp('hello')([{}])).toEqual({});
+  it('should match via validateEachHasProp correctly', () => {
+    expect(matchers.validateEachHasProp('hello')([{ hello: 123 }])).toBeUndefined();
+    expect(matchers.validateEachHasProp('hello')([{}])).toEqual({});
+  });
+
+  it('should match via validateEachHasPropsLimitedTo correctly', () => {
+    expect(matchers.validateEachHasPropsLimitedTo(['name', 'age'])([{ name: 'Ivan' }])).toBeUndefined();
+    expect(
+      matchers.validateEachHasPropsLimitedTo(['name', 'age'])([{ name: 'Ann', age: 99, phone: '1234567890' }])
+    ).toEqual({ name: 'Ann', age: 99, phone: '1234567890' });
   });
 });

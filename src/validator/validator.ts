@@ -1,6 +1,7 @@
 import { ITest } from '../interfaces/test';
 import { getArgs } from '../parser/util';
 import { aliasesedMatchers } from '../rules/matchers';
+import { ArgCount } from '../enums/argCount';
 
 export const getFirstValidationError = (test: ITest): string | undefined => {
   for (let i = 0; i < test.usingValues.length; i++) {
@@ -38,11 +39,19 @@ export const getFirstValidationError = (test: ITest): string | undefined => {
       for (const am of sortedAliasedMatchers) {
         const key = Object.keys(rule)[0];
         if (rule[key].toString().startsWith(am.alias)) {
-          if (getArgs(rule[key].toString(), am.alias).length > am.argCount) {
-            return `Rule: ${JSON.stringify(rule)} has too many arguments`;
-          } else {
-            break;
+          const argLength = getArgs(rule[key].toString(), am.alias).length;
+
+          switch (am.argCount) {
+            case ArgCount.None:
+              if (argLength !== 0) return `Rule: ${JSON.stringify(rule)} has too many arguments`;
+              break;
+            case ArgCount.One:
+              if (argLength !== 1) return `Rule: ${JSON.stringify(rule)} requires 1 argument, got ${argLength}`;
+              break;
+            case ArgCount.Many:
+              if (argLength == 0) return `Rule: ${JSON.stringify(rule)} requires 1 or more arguments, got 0`;
           }
+          break;
         }
       }
     }

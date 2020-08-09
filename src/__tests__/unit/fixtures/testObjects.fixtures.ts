@@ -154,6 +154,57 @@ export const tooManyArgs: ITest = {
   ],
 };
 
+export const tooManyArgs1: ITest = {
+  name: 'should return stuff when queried',
+  usingValues: [{ '@id': 10 }],
+  requests: [
+    {
+      headers: [{ 'Accept-Encoding': '*/*' }],
+      method: 'get',
+      url: 'http://example.org/@id',
+
+      passOn: [],
+      headerRules: [],
+
+      jsonRules: [{ '$..id': 'is a number 1 2' }],
+    },
+  ],
+};
+
+export const isANumber: ITest = {
+  name: 'should return stuff when queried',
+  usingValues: [{ '@id': 10 }],
+  requests: [
+    {
+      headers: [{ 'Accept-Encoding': '*/*' }],
+      method: 'get',
+      url: 'http://example.org/@id',
+
+      passOn: [],
+      headerRules: [],
+
+      jsonRules: [{ '$..id': 'is a number' }],
+    },
+  ],
+};
+
+export const tooFewArgs: ITest = {
+  name: 'should return stuff when queried',
+  usingValues: [{ '@id': 10 }],
+  requests: [
+    {
+      headers: [{ 'Accept-Encoding': '*/*' }],
+      method: 'get',
+      url: 'http://example.org/@id',
+
+      passOn: [],
+      headerRules: [],
+
+      jsonRules: [{ '$..id': 'is any of' }],
+    },
+  ],
+};
+
 export const notTooManyArgs: ITest = {
   name: 'should return stuff when queried',
   usingValues: [{ '@id': 10 }],
