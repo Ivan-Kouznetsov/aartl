@@ -162,4 +162,19 @@ describe('Test runner', () => {
     expect(badResult.passed).toBe(false);
     expect(badResult.failReasons[0]).toEqual('Expected $..AAAAA to be > 10, got nothing');
   });
+
+  it('should fail when extra properties are present', async () => {
+    const badResult = await runTestThruAllSteps(fixtures.limitedPropsFail);
+
+    expect(badResult.passed).toBe(false);
+    expect(badResult.failReasons[0]).toEqual(
+      'Expected $ to be properties limited to text, got {"id":0,"text":"0th Post"}'
+    );
+  });
+
+  it('should pass when extra properties are not present', async () => {
+    const badResult = await runTestThruAllSteps(fixtures.limitedPropsPass);
+
+    expect(badResult.passed).toBe(true);
+  });
 });

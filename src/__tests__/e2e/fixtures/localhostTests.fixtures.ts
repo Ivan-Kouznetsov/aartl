@@ -280,3 +280,21 @@ export const nonExistentJsonPathRule = `
   To match JSON rules
     "$..AAAAA": > 10
   `;
+
+export const limitedPropsPass = `
+  Test that it should have correct props
+  Expect HTTP request
+    method: get
+    url: http://localhost:3000/posts/0   
+  To match JSON rules
+    "$": properties limited to id text
+  `;
+
+export const limitedPropsFail = `
+  Test that it should have correct props
+  Expect HTTP request
+    method: get
+    url: http://localhost:3000/posts/0   
+  To match JSON rules
+    "$": properties limited to text
+  `;

@@ -67,8 +67,13 @@ export const validateCountLessThanOrEqual = (count: number): MatcherFunction => 
 ): Primitive | undefined => (!(arr.length <= count) ? arr.length : undefined);
 
 /* Array Props */
-export const validateArrayHasProp = (props: string): MatcherFunction => (arr: Primitive[]): Primitive | undefined =>
-  arr.find((item) => typeof item !== 'object' || typeof (<Record<string, unknown>>item)[props] === 'undefined');
+export const validateEachHasProp = (prop: string): MatcherFunction => (arr: Primitive[]): Primitive | undefined =>
+  arr.find((item) => typeof item !== 'object' || typeof (<Record<string, unknown>>item)[prop] === 'undefined');
+
+export const validateEachHasPropsLimitedTo = (props: string[]): MatcherFunction => (
+  arr: Primitive[]
+): Primitive | undefined =>
+  arr.find((item) => typeof item !== 'object' || Object.keys(item).find((p) => !props.includes(p)));
 
 export const aliasesedMatchers = [
   { factory: <Factory>validateNumber, alias: 'is a number', argCount: 0 },
@@ -87,5 +92,6 @@ export const aliasesedMatchers = [
   { factory: <Factory>validateCountGreaterThanOrEqual, alias: 'count >=', argCount: 1 },
   { factory: <Factory>validateCountLessThan, alias: 'count <', argCount: 1 },
   { factory: <Factory>validateCountLessThanOrEqual, alias: 'count <=', argCount: 1 },
-  { factory: <Factory>validateArrayHasProp, alias: 'each has', argCount: 1 },
+  { factory: <Factory>validateEachHasProp, alias: 'each has', argCount: 1 },
+  { factory: <Factory>validateEachHasPropsLimitedTo, alias: 'properties limited to', argCount: Infinity },
 ];
