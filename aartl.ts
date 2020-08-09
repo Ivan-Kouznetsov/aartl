@@ -49,6 +49,7 @@ const main = async (): Promise<void> => {
       '--novalidation': Boolean,
       '--report': Boolean,
       '--q': Boolean,
+      '--logs': Boolean,
     });
   } catch (ex) {
     console.log(ex.message);
@@ -66,6 +67,7 @@ const main = async (): Promise<void> => {
   const report = <boolean>args['--report'];
   const directory = <string>args['-d'];
   const quiet = <boolean>args['--q'];
+  const logs = <boolean>args['--logs'];
 
   if (directory && filePath) {
     console.log('Error: cannot specific both a file and a directory');
@@ -105,7 +107,7 @@ const main = async (): Promise<void> => {
           randomize,
           noValidation,
           realTimeLogger: (result) => {
-            if (!quiet) console.log(prettyPrintResult(result));
+            if (!quiet) console.log(prettyPrintResult(result, logs));
           },
         })
           .then((testResults) => {
