@@ -91,11 +91,17 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
           );
         }
       }
+      const headerNotPresentRule = 'must not be present';
 
       if (currentRequest.headerRules.length > 0) {
         currentRequest.headerRules.forEach((hr) => {
           const headerRule = util.keyValueToObject(hr);
-          if (currentRequestResponse.headers[headerRule.key] !== headerRule.value) {
+          if (
+            (headerRule.value === headerNotPresentRule &&
+              typeof currentRequestResponse.headers[headerRule.key] !== 'undefined') ||
+            (headerRule.value !== headerNotPresentRule &&
+              currentRequestResponse.headers[headerRule.key] !== headerRule.value)
+          ) {
             failReasons.push(
               `Expected header ${headerRule.key} to be ${headerRule.value}, got: ${
                 currentRequestResponse.headers[headerRule.key] === undefined

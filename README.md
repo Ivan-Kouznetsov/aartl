@@ -104,6 +104,15 @@ The possible rules are (_x, y, z in the rules refer to parameters_):
 |each has x| checks if each of values that matches the JSON path is an object with a property called x|
 |properties limited to x y z| checks if each of values that matches the JSON path is an object the properties of which cannot be anything other than x y or z|
 
+Header expectations consist of:
+
+Header name followed by a colon and the expected value or a rule.
+There is one header rule, it is "must not be present".
+Examples:
+
+    "X-Powered-By":"Express"
+    "X-Powered-By": must not be present /* will fail if this header is sent */
+
 ## Comments
 
 Comments can be written within `/** **/` and are ignored. Example:
@@ -157,6 +166,7 @@ And now you can run AARTL like so
 | \-m N            | Maximum concurrent tests. Default = 100.           |
 | \-\-report       | Output a report with failure rates                 |
 | \-\-q            | Don't output real-time test results                |
+| \-\-log          | Output logs                                        |
 
 ## Editor Support
 

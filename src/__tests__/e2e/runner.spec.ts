@@ -67,6 +67,19 @@ describe('Test runner', () => {
     expect(result.failReasons[0]).toEqual('Expected header X-Powered-By to be XXXX, got: Express');
   });
 
+  it('should not pass when prohibited header is present', async () => {
+    const result = await runTestThruAllSteps(fixtures.headerNotPresentFail);
+
+    expect(result.passed).toBe(false);
+    expect(result.failReasons[0]).toEqual('Expected header X-Powered-By to be must not be present, got: Express');
+  });
+
+  it('should pass when prohibited header is not present', async () => {
+    const result = await runTestThruAllSteps(fixtures.headerNotPresentPass);
+
+    expect(result.passed).toBe(true);
+  });
+
   it('should fail when literal rules do not match', async () => {
     const result = await runTestThruAllSteps(fixtures.checkLiteral);
 
