@@ -168,10 +168,15 @@ const prettyPrintRequestLog = (log: IRequestLog): string => {
   ${log.received.string}`;
 };
 
-export const prettyPrintResult = (testResult: ITestResult): string => {
-  return `
+export const prettyPrintResult = (testResult: ITestResult, printLogs: boolean): string => {
+  return (
+    `
 ${testResult.passed ? '✔ Passed' : '✘ Failed'} ${testResult.testName} 
 Duration: ${testResult.duration}ns
-${testResult.failReasons.length > 0 ? 'Failure Reasons:\n\t' + testResult.failReasons.join('\n\t').trim() : ''}
-\t\t\tRequests${testResult.requestLogs.map((log) => prettyPrintRequestLog(log)).join('')}`;
+${testResult.failReasons.length > 0 ? 'Failure Reasons:\n\t' + testResult.failReasons.join('\n\t').trim() : ''}` +
+    (printLogs
+      ? `
+\t\t\tRequests${testResult.requestLogs.map((log) => prettyPrintRequestLog(log)).join('')}`
+      : '')
+  );
 };
