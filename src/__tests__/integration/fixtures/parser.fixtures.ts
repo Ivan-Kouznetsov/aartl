@@ -103,3 +103,15 @@ export const saveAndCheckPost = `
 export const noRequests = `
     Test that it should save a post
     `;
+
+export const invalidKvPairs = `
+Test that it should save a post
+Expect HTTP request
+  headers:
+    "Accept-Encoding":"*/*"
+  method: get
+  url: http://localhost:3000/posts/0
+To match JSON rules
+  "$..id":
+         : @postText
+    `;

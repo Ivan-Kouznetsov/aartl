@@ -12,7 +12,7 @@ function flow(ab: Function, bc: Function): (str: string) => string {
 /**
  * Functions used to transform text into different text and into objects
  */
-
+const safeTrim = (str: string | undefined) => (typeof str === 'string' ? str.trim() : '');
 const safeSplitIntoLines = (match: RegExpMatchArray) =>
   match && match.length === 1
     ? match[0]
@@ -26,10 +26,11 @@ const stringToTypedValue = (s: string): number | boolean | string => {
   if (/(true|false)/.test(s)) return JSON.parse(s);
   return s;
 };
-const regexMatchToString = (match: RegExpMatchArray) => (match && match.length === 1 ? match[0].trim() : undefined);
+const regexMatchToString = (match: RegExpMatchArray) => (match && match.length === 1 ? safeTrim(match[0]) : undefined);
 const arrayToPair = (arr?: string[]) =>
-  arr ? { [removeQuotes(arr[0].trim())]: stringToTypedValue(arr[1].trim()) } : undefined;
-const splitStringByFirstColon = (s: string) => (s.includes(':') ? s.split(/:(.+)/, 2).map((s) => s.trim()) : undefined);
+  arr ? { [removeQuotes(safeTrim(arr[0]))]: stringToTypedValue(safeTrim(arr[1])) } : undefined;
+const splitStringByFirstColon = (s: string) =>
+  s.includes(':') ? s.split(/:(.+)/, 2).map((s) => safeTrim(s)) : undefined;
 const stringToPair = (s: string) => arrayToPair(splitStringByFirstColon(s) ?? undefined);
 const passOnStringToPair = (text: string) =>
   text.includes('as') ? arrayToPair(text.split(/as(.+)/, 2)) : arrayToPair([text, text]);

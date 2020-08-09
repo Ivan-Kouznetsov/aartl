@@ -76,4 +76,11 @@ describe('Parser', () => {
 
     expect(arr).toBeDefined();
   });
+
+  it('should not throw when parsing invalid key value pairs', () => {
+    const preprocessedText = parser.preProcess(fixtures.invalidKvPairs);
+    const test = parser.splitTestIntoSections(preprocessedText);
+
+    expect(test).toBeDefined();
+  });
 });
