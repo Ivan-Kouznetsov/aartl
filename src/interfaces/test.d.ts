@@ -1,3 +1,5 @@
+import { NotFound } from '../rules/matchers';
+
 export interface IKeyValuePair {
   [key: string]: string | number | boolean;
 }
@@ -21,7 +23,7 @@ export interface ITest {
 }
 
 export type Primitive = boolean | string | number | Record<string, unknown>;
-export type MatcherFunction = (arr: Primitive[]) => Primitive | undefined;
+export type MatcherFunction = (arr: Primitive[]) => Primitive | typeof NotFound;
 export type Factory = (arg?: RegExp | Primitive | Primitive[]) => MatcherFunction;
 
 export interface IRule {
