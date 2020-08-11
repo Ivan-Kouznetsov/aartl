@@ -7,6 +7,7 @@
     "test-cov": "jest --coverage",
     "test-server": "node src/__tests__/__server__/testServer.js",
     "build": "rimraf dist && tsc && cp report.css ./dist && cp example.aartl ./dist",
+    "pkg": "bash ./release_scripts/releases.sh",
     "lint": "eslint **/*.ts",
     "test": "start-server-and-test test-server http://localhost:3000 test-cov"
   },
