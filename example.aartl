@@ -1,152 +1,116 @@
-  Test that it should save a post
-  Using values
-    @postText: Hello world
-  After HTTP request
-    method: post
-    url: http://localhost:3000/posts
-    body: @postText
-    Pass on "$..id" as _id  
-  Expect HTTP request
-    headers:
-      "Accept-Encoding":"*/*"
-    method: get
-    url: http://localhost:3000/posts/_id
-  To respond with status code 200 /** OK **/
-  To match JSON rules
-    "$..id": _id
-    "$..text": @postText
-  Expect HTTP request  
-    method: DELETE
-    url: http://localhost:3000/posts/_id
-  To respond with status code 200 /** OK **/
+Test that it should get users
+Expect HTTP request
+    url: https://jsonplaceholder.typicode.com/users
+    method: GET
+To match JSON rules
+	"$[*]": count > 0
+	"$[*]": each has id
+	"$[*]": each has name
+	"$[*]": each has username
+	"$[*]": each has email
+	"$[*]": each has address
+	"$[*]": each has phone
+	"$[*]": each has website
+	"$[*]": each has company
+	"$[*].id": count > 0
+	"$[*].id": >= 1
+	"$[*].name": count > 0
+	"$[*].name": is text
+	"$[*].username": count > 0
+	"$[*].username": is text
+	"$[*].email": count > 0
+	"$[*].email": is text
+	"$[*].address": count > 0
+	"$[*].address": each has street
+	"$[*].address": each has suite
+	"$[*].address": each has city
+	"$[*].address": each has zipcode
+	"$[*].address": each has geo
+	"$[*].address.street": count > 0
+	"$[*].address.street": is text
+	"$[*].address.suite": count > 0
+	"$[*].address.suite": is text
+	"$[*].address.city": count > 0
+	"$[*].address.city": is text
+	"$[*].address.zipcode": count > 0
+	"$[*].address.zipcode": is text
+	"$[*].address.geo": count > 0
+	"$[*].address.geo": each has lat
+	"$[*].address.geo": each has lng
+	"$[*].address.geo.lat": count > 0
+	"$[*].address.geo.lat": is text
+	"$[*].address.geo.lng": count > 0
+	"$[*].address.geo.lng": is text
+	"$[*].phone": count > 0
+	"$[*].phone": is text
+	"$[*].website": count > 0
+	"$[*].website": is text
+	"$[*].company": count > 0
+	"$[*].company": each has name
+	"$[*].company": each has catchPhrase
+	"$[*].company": each has bs
+	"$[*].company.name": count > 0
+	"$[*].company.name": is text
+	"$[*].company.catchPhrase": count > 0
+	"$[*].company.catchPhrase": is text
+	"$[*].company.bs": count > 0
+	"$[*].company.bs": is text
 
 
-  Test that it should save a post and check id
-  Using values
-    @postText: Hello world
-  Expect HTTP request
-    method: post
-    url: http://localhost:3000/posts
-    body: @postText
-  To match JSON rules
-    "$..id": >= 0
-
-  Test that it should save a post and make sure id is less than 0
-  Using values
-    @postText: Hello world
-  Expect HTTP request
-    method: post
-    url: http://localhost:3000/posts
-    body: @postText
-  To match JSON rules
-    "$..id": < 0
-
-  Test that it should get apost with id of -1
-  Using values
-    @postText: Hello world
-  Expect HTTP request
-    method: get
-    url: http://localhost:3000/posts/-1
-  To respond with status code 200 /** OK **/
-  To match JSON rules
-    "$..id": < 0
-
-  Test that it should save a post and cache it
-  Using values
-    @postText: Hello world
-  After HTTP request
-    method: post
-    url: http://localhost:3000/posts
-    body: @postText
-    Pass on "$..id" as _id
-  
-  Expect HTTP request
-    headers:
-      "Accept-Encoding":"*/*"
-    method: get
-    url: http://localhost:3000/posts/_id
-  To respond with status code 200 /** OK **/
-  To match header rules
-    "X-Cache":"true"
-
-  Test that it should save a post and be powered by Express
-  Using values
-    @postText: Hello world
-  After HTTP request
-    method: post
-    url: http://localhost:3000/posts
-    body: @postText
-    Pass on "$..id" as _id
-  
-  Expect HTTP request
-    headers:
-      "Accept-Encoding":"*/*"
-    method: get
-    url: http://localhost:3000/posts/_id
-  To respond with status code 200 /** OK **/
-  To match header rules
-    "X-Powered-By":"Express"
-
-  Test that it should save a post and be powered by XXXX
-  Using values
-    @postText: Hello world
-  After HTTP request
-    method: post
-    url: http://localhost:3000/posts
-    body: @postText
-    Pass on "$..id" as _id
-  
-  Expect HTTP request
-    headers:
-      "Accept-Encoding":"*/*"
-    method: get
-    url: http://localhost:3000/posts/_id
-  To respond with status code 200 /** OK **/
-  To match header rules
-    "X-Powered-By":"XXXX"
-
-  Test that it should check that post id is 0
-  Using values
-    @postText: Hello world
-  Expect HTTP request
-    method: post
-    url: http://localhost:3000/posts
-    body: @postText
-  To match JSON rules
-    "$..id": 0
-
-  Test that it should check that post id is 1 - 5
-  Using values
-    @postText: Hello world
-  Expect HTTP request
-    method: get
-    url: http://localhost:3000/posts/0   
-  To match JSON rules
-    "$..id": is any of 1 2 3 4 5
-
-  Test that it should check post id 0 - 5
-  Expect HTTP request
-    method: get
-    url: http://localhost:3000/posts/0   
-  To match JSON rules
-    "$..id": is any of 1 2 3 4 5 0
-    "$..text": is any of 1 2 "0th Post" "hi" 72
-
-  Test that it should be null
-  Expect HTTP request
-    method: get
-    url: http://localhost:3000/null   
-  To match JSON rules
-    "$..id": null
-    "$..text": count = 0
-    "$..text": count < 1
-    "$..text": count <= 1
-    "$..text": count > -1
-    "$..text": count >= 0
-
-  Test that it should have id greater than 50
-  Expect HTTP request
-    method: get
-    url: http://localhost:3000/random   
-  To match JSON rules
-    "$..id": > 50
+Test that it should get users with cellphones (should fail)
+Expect HTTP request
+    url: https://jsonplaceholder.typicode.com/users
+    method: GET
+To match JSON rules
+	"$[*]": count > 0
+	"$[*]": each has id
+	"$[*]": each has name
+	"$[*]": each has username
+	"$[*]": each has email 
+	"$[*]": each has address
+	"$[*]": each has cellphone
+	"$[*]": each has website
+	"$[*]": each has company
+	"$[*].id": count > 0
+	"$[*].id": >= 1
+	"$[*].name": count > 0
+	"$[*].name": is text
+	"$[*].username": count > 0
+	"$[*].username": is text
+	"$[*].email": count > 0
+	"$[*].email": is text
+	"$[*].address": count > 0
+	"$[*].address": each has street
+	"$[*].address": each has suite
+	"$[*].address": each has city
+	"$[*].address": each has zipcode
+	"$[*].address": each has geo
+	"$[*].address.street": count > 0
+	"$[*].address.street": is text
+	"$[*].address.suite": count > 0
+	"$[*].address.suite": is text
+	"$[*].address.city": count > 0
+	"$[*].address.city": is text
+	"$[*].address.zipcode": count > 0
+	"$[*].address.zipcode": is text
+	"$[*].address.geo": count > 0
+	"$[*].address.geo": each has lat
+	"$[*].address.geo": each has lng
+	"$[*].address.geo.lat": count > 0
+	"$[*].address.geo.lat": is text
+	"$[*].address.geo.lng": count > 0
+	"$[*].address.geo.lng": is text
+	"$[*].phone": count > 0
+	"$[*].phone": is text
+	"$[*].website": count > 0
+	"$[*].website": is text
+	"$[*].company": count > 0
+	"$[*].company": each has name
+	"$[*].company": each has catchPhrase
+	"$[*].company": each has bs
+	"$[*].company.name": count > 0
+	"$[*].company.name": is text
+	"$[*].company.catchPhrase": count > 0
+	"$[*].company.catchPhrase": is text
+	"$[*].company.bs": count > 0
+	"$[*].company.bs": is text
