@@ -4,6 +4,7 @@ import * as util from './util';
 import * as ruleParser from '../parser/ruleParser';
 import * as http_promise from '../lib/http-promise';
 import { jsonPath } from '../lib/jsonpath';
+import { NotFound } from '../rules/matchers';
 
 export const runTest = async (test: ITest): Promise<ITestResult> => {
   const testWithValues = util.applyRandomValues(util.applyValues(test));
@@ -130,7 +131,7 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
           if (data === false) {
             if (typeof rule.rule === 'function' && rule.originalRule.toString().includes('count')) {
               const ruleCheckResult = rule.rule([]);
-              if (ruleCheckResult !== undefined) {
+              if (ruleCheckResult !== NotFound) {
                 failReasons.push(`Expected ${rule.jsonpath} to be ${rule.originalRule}, got ${ruleCheckResult}`);
               }
             } else {
@@ -138,7 +139,7 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
             }
           } else if (typeof rule.rule === 'function') {
             const nonCompliantValue = rule.rule(data);
-            if (nonCompliantValue !== undefined) {
+            if (nonCompliantValue !== NotFound) {
               failReasons.push(
                 `Expected ${rule.jsonpath} to be ${rule.originalRule}, got ${JSON.stringify(nonCompliantValue)}`
               );
