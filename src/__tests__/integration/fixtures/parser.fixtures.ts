@@ -115,3 +115,21 @@ To match JSON rules
   "$..id":
          : @postText
     `;
+
+export const urlLast = `
+Test that it should save stuff
+Using values
+    hello: 123
+    hi: 123
+After HTTP request  
+    method: POST    
+    body: hello	 
+	url: http://localhost:3000/posts/
+Pass on "$..id" as _id
+Expect HTTP request
+    url: http://localhost:3000/posts/_id
+    method:GET
+To respond with status code 200
+To match JSON rules
+    "$..text": hello
+`; 
