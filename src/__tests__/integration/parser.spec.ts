@@ -83,4 +83,12 @@ describe('Parser', () => {
 
     expect(test).toBeDefined();
   });
+
+  it('should not append url to body when url is last', () => {
+    const preprocessedText = parser.preProcess(fixtures.urlLast);
+    const test = parser.splitTestIntoSections(preprocessedText);
+
+    expect(test).toBeDefined();
+    expect(test.requests[0].body?.includes('http')).toBe(false);
+  });
 });

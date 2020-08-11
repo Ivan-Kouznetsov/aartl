@@ -1,3 +1,4 @@
+0.4.6 Fix the if url is last it gets appended to body bug
 0.4.5 Replaced undefined with Symbol.for("NotFound") as indicator of lack of non compliant values
 0.4.4 Adding header rule "must not be present"
 0.4.3 Fixing issue with parsing invalid pairs

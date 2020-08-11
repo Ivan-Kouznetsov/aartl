@@ -50,7 +50,7 @@ const regexMatcher = (regex: RegExp) => (text: string) => text.match(regex);
 const getMethod = flow(regexMatcher(/(?<=method:\s{0,}).+/), regexMatchToString);
 const getUrl = flow(regexMatcher(/(?<=url:\s{0,}).+/), regexMatchToString);
 const getBody = flow(
-  regexMatcher(new RegExp(`(?<=body:\\s{0,})[\\s\\S]*?(?=(^\\s{0,}(${endTerms})))`, 'gm')),
+  regexMatcher(new RegExp(`(?<=body:\\s{0,})[\\s\\S]*?(?=(^\\s{0,}(headers:|method:|url:|${endTerms})))`, 'gm')),
   regexMatchToString
 );
 const getWait = flow(regexMatcher(/(?<=Wait\s{0,}).+/), regexMatchToString);
