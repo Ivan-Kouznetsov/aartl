@@ -54,8 +54,8 @@ export const validateNot = (not: string): MatcherFunction => (arr: Primitive[]):
   arr.find((item) => item === not) ?? NotFound;
 
 /* Regex */
-export const validateRegex = (regex: RegExp): MatcherFunction => (arr: Primitive[]): Primitive | typeof NotFound =>
-  arr.find((item) => !regex.test(item.toString())) ?? NotFound;
+export const validateRegex = (regex: string): MatcherFunction => (arr: Primitive[]): Primitive | typeof NotFound =>
+  arr.find((item) => !new RegExp(regex).test(item.toString())) ?? NotFound;
 
 /* Array Count */
 export const validateCountEquals = (count: number): MatcherFunction => (

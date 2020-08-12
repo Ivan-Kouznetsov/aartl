@@ -1,3 +1,4 @@
+0.5.1 More comprehensive e2e tests
 0.5.0 Fail fast mode
 0.4.8 Validate argument types for JSON rules
 0.4.7 Adding more types to jsonpath lib, not awaiting lim if max concurrent tests is not set, refactoring validator
