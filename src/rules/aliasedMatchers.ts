@@ -97,7 +97,7 @@ export const aliasedMatchers: {
     argCount: ArgCount.One,
     argValidator: validateArgNumber,
   },
-  { factory: <Factory>validateEachHasProp, alias: 'each has', argCount: ArgCount.One, argValidator: validateArgNumber },
+  { factory: <Factory>validateEachHasProp, alias: 'each has', argCount: ArgCount.One, argValidator: validateArgString },
   {
     factory: <Factory>validateEachHasPropsLimitedTo,
     alias: 'properties limited to',
