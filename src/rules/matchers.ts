@@ -1,5 +1,4 @@
-import { Primitive, MatcherFunction, Factory } from '../interfaces/test';
-import { ArgCount } from '../enums/argCount';
+import { Primitive, MatcherFunction } from '../interfaces/test';
 
 export const NotFound = Symbol.for('NotFound');
 
@@ -84,24 +83,3 @@ export const validateEachHasPropsLimitedTo = (props: string[]): MatcherFunction 
   arr: Primitive[]
 ): Primitive | typeof NotFound =>
   arr.find((item) => typeof item !== 'object' || Object.keys(item).find((p) => !props.includes(p))) ?? NotFound;
-
-export const aliasesedMatchers = [
-  { factory: <Factory>validateNumber, alias: 'is a number', argCount: ArgCount.None },
-  { factory: <Factory>validateGreaterThan, alias: '>', argCount: ArgCount.One },
-  { factory: <Factory>validateGreaterThanOrEqual, alias: '>=', argCount: ArgCount.One },
-  { factory: <Factory>validateLessThan, alias: '<', argCount: ArgCount.One },
-  { factory: <Factory>validateLessThanOrEqual, alias: '<=', argCount: ArgCount.One },
-  { factory: <Factory>validateNonEmptyString, alias: 'is text', argCount: ArgCount.None },
-  { factory: <Factory>validateStringContaining, alias: 'is text containing', argCount: ArgCount.One },
-  { factory: <Factory>validateStringNotContaining, alias: 'is text not containing', argCount: ArgCount.One },
-  { factory: <Factory>validateAnyOf, alias: 'is any of', argCount: ArgCount.Many },
-  { factory: <Factory>validateNot, alias: 'is not', argCount: ArgCount.One },
-  { factory: <Factory>validateRegex, alias: 'matches', argCount: ArgCount.One },
-  { factory: <Factory>validateCountEquals, alias: 'count =', argCount: ArgCount.One },
-  { factory: <Factory>validateCountGreaterThan, alias: 'count >', argCount: ArgCount.One },
-  { factory: <Factory>validateCountGreaterThanOrEqual, alias: 'count >=', argCount: ArgCount.One },
-  { factory: <Factory>validateCountLessThan, alias: 'count <', argCount: ArgCount.One },
-  { factory: <Factory>validateCountLessThanOrEqual, alias: 'count <=', argCount: ArgCount.One },
-  { factory: <Factory>validateEachHasProp, alias: 'each has', argCount: ArgCount.One },
-  { factory: <Factory>validateEachHasPropsLimitedTo, alias: 'properties limited to', argCount: ArgCount.Many },
-];

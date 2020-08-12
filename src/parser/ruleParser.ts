@@ -1,10 +1,10 @@
-import { aliasesedMatchers } from '../rules/matchers';
+import { aliasedMatchers } from '../rules/aliasedMatchers';
 import { IRequest, Factory, MatcherFunction } from '../interfaces/test';
 import { getArgs } from './util';
 import { ArgCount } from '../enums/argCount';
 
 const parseRule = (rule: string): string | MatcherFunction => {
-  const aliasesedMatcher = aliasesedMatchers.find(
+  const aliasedMatcher = aliasedMatchers.find(
     (am) =>
       rule.startsWith(am.alias) &&
       ((getArgs(rule, am.alias).length === 0 && am.argCount === ArgCount.None) ||
@@ -12,13 +12,13 @@ const parseRule = (rule: string): string | MatcherFunction => {
         (getArgs(rule, am.alias).length > 0 && am.argCount === ArgCount.Many))
   );
 
-  if (aliasesedMatcher !== undefined) {
-    if (aliasesedMatcher.argCount === ArgCount.None) {
-      return (<Factory>aliasesedMatcher.factory)();
-    } else if (aliasesedMatcher.argCount === ArgCount.One) {
-      return (<Factory>aliasesedMatcher.factory)(getArgs(rule, aliasesedMatcher.alias)[0]);
+  if (aliasedMatcher !== undefined) {
+    if (aliasedMatcher.argCount === ArgCount.None) {
+      return (<Factory>aliasedMatcher.factory)();
+    } else if (aliasedMatcher.argCount === ArgCount.One) {
+      return (<Factory>aliasedMatcher.factory)(getArgs(rule, aliasedMatcher.alias)[0]);
     } else {
-      return (<Factory>aliasesedMatcher.factory)(getArgs(rule, aliasesedMatcher.alias));
+      return (<Factory>aliasedMatcher.factory)(getArgs(rule, aliasedMatcher.alias));
     }
   }
 

@@ -35,14 +35,34 @@ describe('Validator', () => {
     );
   });
   it('should return appropriate error message when non-unique Pass on JSON path is provided', () => {
-    expect(getFirstValidationError(fixtures.nonUniquepassOnJsonPath)).toContain(
+    expect(getFirstValidationError(fixtures.nonUniquepassOnJsonPath)).toEqual(
       '$..id is a non-unique Pass on JSON path'
     );
   });
   it('should return appropriate error message when a non-unique Pass on value name is provided', () => {
-    expect(getFirstValidationError(fixtures.nonUniquepassOnNameValues)).toContain(
+    expect(getFirstValidationError(fixtures.nonUniquepassOnNameValues)).toEqual(
       '_id is a non-unique Pass on value name'
     );
+  });
+
+  it('should return appropriate error message when a string is passed to a matching function expecting a number', () => {
+    expect(getFirstValidationError(fixtures.stringPassedToCount)).toEqual(
+      'Rule: {"$..num":"count > hello"} has the wrong type of argument, did not expect hello'
+    );
+  });
+
+  it('should return appropriate error message when a non-regex is passed to a matching function expecting a regex', () => {
+    expect(getFirstValidationError(fixtures.stringPassedToMatch)).toEqual(
+      'Rule: {"$..num":"matches (((("} has the wrong type of argument, did not expect (((('
+    );
+  });
+
+  it('should return no error message when a 0 is passed to a matching function expecting a number', () => {
+    expect(getFirstValidationError(fixtures.numberPassedToCount)).toBeUndefined();
+  });
+
+  it('should return no error message when a regex is passed to a matching function expecting a regex', () => {
+    expect(getFirstValidationError(fixtures.regexPassedToMatch)).toBeUndefined();
   });
 
   it('should validate valid tests', () => {
