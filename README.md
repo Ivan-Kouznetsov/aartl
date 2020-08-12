@@ -163,7 +163,7 @@ And now you can run AARTL like so
 | \-\-novalidation | Don't validate test file                           |
 | \-\-r            | Randomize test order                               |
 | \-n N            | Rerun the tests a number of times                  |
-| \-m N            | Maximum concurrent tests. Default = 100.           |
+| \-m N            | Maximum concurrent tests. Default = None.          |
 | \-\-report       | Output a report with failure rates                 |
 | \-\-q            | Don't output real-time test results                |
 | \-\-log          | Output logs                                        |
