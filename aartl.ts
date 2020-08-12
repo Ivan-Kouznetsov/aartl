@@ -71,6 +71,7 @@ const main = async (): Promise<void> => {
   const quiet = <boolean>args['--q'];
   const logs = <boolean>args['--logs'];
   const failFast = <boolean>args['--ff'];
+  const maxConcurrent = <number>args['-m'];
 
   if (directory && filePath) {
     console.log('Error: cannot specific both a file and a directory');
@@ -118,6 +119,7 @@ const main = async (): Promise<void> => {
               exit(1);
             }
           },
+          maxConcurrent,
         })
           .then((testResults) => {
             const suiteName = path.basename(file, path.extname(file));
