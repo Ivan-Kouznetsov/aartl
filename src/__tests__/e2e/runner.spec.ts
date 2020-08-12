@@ -190,4 +190,19 @@ describe('Test runner', () => {
 
     expect(badResult.passed).toBe(true);
   });
+
+  it('should have every rule pass when they match the data', async () => {
+    const goodResult = await runTestThruAllSteps(fixtures.allRulesPass);
+
+    expect(goodResult.passed).toBe(true);
+  });
+
+  it('should have every rule fail when they do not match the data', async () => {
+    const preprocessedText = parser.preProcess(fixtures.allRulesFail);
+    const test = parser.splitTestIntoSections(preprocessedText);
+    const result = await runTest(test);
+
+    expect(result.passed).toBe(false);
+    expect(result.failReasons.length).toBe(test.requests[0].jsonRules.length);
+  });
 });

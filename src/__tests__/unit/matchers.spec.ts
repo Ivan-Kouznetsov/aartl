@@ -69,8 +69,8 @@ describe('Matchers', () => {
   });
 
   it('should match via validateRegex correctly', () => {
-    expect(matchers.validateRegex(/\d+/)([12])).toEqual(NotFound);
-    expect(matchers.validateRegex(/\d+/)(['hello', ''])).toEqual('hello');
+    expect(matchers.validateRegex('\\d+')([12])).toEqual(NotFound);
+    expect(matchers.validateRegex('\\d+')(['hello', ''])).toEqual('hello');
   });
 
   it('should match via validateStringContaining correctly', () => {

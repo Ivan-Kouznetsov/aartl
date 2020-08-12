@@ -320,3 +320,55 @@ export const limitedPropsFail = `
   To match JSON rules
     "$": properties limited to text
   `;
+
+export const allRulesPass = `
+  Test that it should have every rule pass
+  Expect HTTP request
+    method: get
+    url: http://localhost:3000/posts/0  
+  To match JSON rules
+    "$..id": < 10
+    "$..id": <= 10
+    "$..id": > -1
+    "$..id": >= 0
+    "$..id": count < 10
+    "$..id": count <= 10
+    "$..id": count = 1
+    "$..id": count > 0
+    "$..id": count >= 0
+    "$": each has id
+    "$..id": is a number
+    "$..id": is any of 0 1 2 3
+    "$..id": is not 9999
+    "$..text": is text
+    "$..text": is text containing 0
+    "$..text": is text not containing AAAAA
+    "$..text": matches .+
+    "$": properties limited to id text
+  `;
+
+export const allRulesFail = `
+  Test that it should have every rule fail
+  Expect HTTP request
+    method: get
+    url: http://localhost:3000/posts/0  
+  To match JSON rules
+    "$..id": < 0
+    "$..id": <= -1
+    "$..id": > 0
+    "$..id": >= 1
+    "$..id": count < 1
+    "$..id": count <= 0
+    "$..id": count = 10
+    "$..id": count > 10
+    "$..id": count >= 10
+    "$": each has phone
+    "$..text": is a number
+    "$..id": is any of hello goodbye
+    "$..id": is not 0
+    "$..id": is text
+    "$..text": is text containing AAAAA
+    "$..text": is text not containing 0
+    "$..text": matches pie
+    "$": properties limited to id
+  `;
