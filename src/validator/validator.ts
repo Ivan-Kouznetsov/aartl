@@ -41,16 +41,16 @@ export const getFirstValidationError = (test: ITest): string | undefined => {
         if (rule[key].toString().startsWith(am.alias)) {
           const argLength = getArgs(rule[key].toString(), am.alias).length;
 
-          switch (am.argCount) {
-            case ArgCount.None:
-              if (argLength !== 0) return `Rule: ${JSON.stringify(rule)} has too many arguments`;
-              break;
-            case ArgCount.One:
-              if (argLength !== 1) return `Rule: ${JSON.stringify(rule)} requires 1 argument, got ${argLength}`;
-              break;
-            case ArgCount.Many:
-              if (argLength == 0) return `Rule: ${JSON.stringify(rule)} requires 1 or more arguments, got 0`;
+          if (am.argCount === ArgCount.None && argLength !== 0) {
+            return `Rule: ${JSON.stringify(rule)} has too many arguments`;
           }
+          if (am.argCount === ArgCount.One && argLength !== 1) {
+            return `Rule: ${JSON.stringify(rule)} requires 1 argument, got ${argLength}`;
+          }
+          if (am.argCount === ArgCount.Many && argLength === 0) {
+            return `Rule: ${JSON.stringify(rule)} requires 1 or more arguments, got 0`;
+          }
+
           break;
         }
       }

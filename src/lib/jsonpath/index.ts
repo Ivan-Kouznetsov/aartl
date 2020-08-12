@@ -6,10 +6,16 @@
  * Copyright (c) 2007 Stefan Goessner (goessner.net)
  * Licensed under the MIT licence.
  */
-export function jsonPath(obj: string | Record<string, any>, expr: string, arg?: { resultType: any }) {
+
+export enum ResultType {
+  Value,
+  Path,
+}
+
+export function jsonPath(obj: string | Record<string, any>, expr: string, arg?: { resultType: ResultType }) {
   if (expr === '$') return Array.isArray(obj) ? obj : [obj];
   const P = {
-    resultType: (arg && arg.resultType) || 'VALUE',
+    resultType: (arg && arg.resultType) || ResultType.Value,
     result: <any[]>[],
     normalize: function (expr: string) {
       const subx: any[] = [];
@@ -31,7 +37,7 @@ export function jsonPath(obj: string | Record<string, any>, expr: string, arg?: 
       return p;
     },
     store: function (p: any, v: any) {
-      if (p) P.result[P.result.length] = P.resultType == 'PATH' ? P.asPath(p) : v;
+      if (p) P.result[P.result.length] = P.resultType == ResultType.Path ? P.asPath(p) : v;
       return !!p;
     },
     trace: function (expr: string, val: string | Record<string, any>[], path: string) {
@@ -74,7 +80,7 @@ export function jsonPath(obj: string | Record<string, any>, expr: string, arg?: 
           P.slice(<any>loc, x, val, path);
       } else P.store(path, val);
     },
-    walk: function (loc: any, expr: any, val: string | object[], path: any, f: (...args: any) => void) {
+    walk: function (loc: any, expr: string, val: string | object[], path: any, f: (...args: any) => void) {
       if (val instanceof Array) {
         for (let i = 0, n = val.length; i < n; i++) if (i in val) f(i, loc, expr, val, path);
       } else if (typeof val === 'object') {
@@ -85,7 +91,7 @@ export function jsonPath(obj: string | Record<string, any>, expr: string, arg?: 
       loc: { replace: (arg0: RegExp, arg1: (_$0: any, $1: any, $2: any, $3: any) => void) => void },
       expr: string,
       val: string | any[],
-      path: any
+      path: string
     ) {
       if (val instanceof Array) {
         const len = val.length;
@@ -113,7 +119,7 @@ export function jsonPath(obj: string | Record<string, any>, expr: string, arg?: 
   };
 
   const $ = obj;
-  if (expr && obj && (P.resultType == 'VALUE' || P.resultType == 'PATH')) {
+  if (expr && obj && (P.resultType == ResultType.Value || P.resultType == ResultType.Path)) {
     P.trace(P.normalize(expr).replace(/^\$;/, ''), <any>obj, '$');
     return P.result.length ? P.result : false;
   }

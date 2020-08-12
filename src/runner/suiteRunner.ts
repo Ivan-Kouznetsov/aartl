@@ -48,7 +48,7 @@ export const suiteRunner = async (args: {
       }
 
       for (const parsedTest of parsedTests) {
-        await lim();
+        if (maxConcurrent) await lim();
         runTest(parsedTest).then((result) => {
           totalResults.push(result);
           if (realTimeLogger) realTimeLogger(result);
