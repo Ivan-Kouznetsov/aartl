@@ -167,6 +167,7 @@ And now you can run AARTL like so
 | \-\-report       | Output a report with failure rates                 |
 | \-\-q            | Don't output real-time test results                |
 | \-\-log          | Output logs                                        |
+| \-\-ff           | Exit with error code 1 as as soon as on test fails |
 
 ## Editor Support
 

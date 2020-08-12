@@ -9,18 +9,19 @@ import { prettyPrintResult } from './src/runner/util';
 const showUsage = () => {
   console.log('Usage: node aartl.js -f "path-to-test-file"');
   console.log('\nOptions:');
-  console.log('-t "name of test" - run a single test');
-  console.log('-d path - run all files in directory');
-  console.log('-n NUMBER - run the tests a number of times');
+  console.log('-t "name of test" - Run a single test');
+  console.log('-d path - Run all files in directory');
+  console.log('-n NUMBER - Run the tests a number of times');
   console.log('-m NUMBER - Maximum concurrent tests. Default: 100');
-  console.log('--hello - display name of this program');
-  console.log('--r - randomize test order');
-  console.log('--xml - output results as JUnit XML');
-  console.log('--novalidation - skip validation of tests');
-  console.log("--q - don't output realtime test results");
+  console.log('--hello - Display name of this program');
+  console.log('--r - Randomize test order');
+  console.log('--xml - Output results as JUnit XML');
+  console.log('--novalidation - Skip validation of tests');
+  console.log("--q - Don't output realtime test results");
   console.log(
-    '--report - instead of outputing all results, output a report with failure rates and duration statistics, overrides --xml'
+    '--report - Instead of outputing all results, output a report with failure rates and duration statistics, overrides --xml'
   );
+  console.log('--ff - Exit with error code 1 as as soon as on test fails');
 };
 
 const okDateTime = () => {
@@ -50,6 +51,7 @@ const main = async (): Promise<void> => {
       '--report': Boolean,
       '--q': Boolean,
       '--logs': Boolean,
+      '--ff': Boolean,
     });
   } catch (ex) {
     console.log(ex.message);
@@ -68,6 +70,7 @@ const main = async (): Promise<void> => {
   const directory = <string>args['-d'];
   const quiet = <boolean>args['--q'];
   const logs = <boolean>args['--logs'];
+  const failFast = <boolean>args['--ff'];
 
   if (directory && filePath) {
     console.log('Error: cannot specific both a file and a directory');
@@ -107,7 +110,13 @@ const main = async (): Promise<void> => {
           randomize,
           noValidation,
           realTimeLogger: (result) => {
-            if (!quiet) console.log(prettyPrintResult(result, logs));
+            if (!quiet) {
+              console.log(prettyPrintResult(result, logs));
+            }
+
+            if (failFast && !result.passed) {
+              exit(1);
+            }
           },
         })
           .then((testResults) => {
