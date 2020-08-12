@@ -287,3 +287,71 @@ export const nonUniquepassOnNameValues: ITest = {
     },
   ],
 };
+
+export const stringPassedToCount: ITest = {
+  name: 'should return stuff when queried',
+  usingValues: [{ '@id': 10 }],
+  requests: [
+    {
+      headers: [{ 'Accept-Encoding': '*/*' }],
+      method: 'get',
+      url: 'http://example.org/@id',
+
+      passOn: [],
+      expectedStatusCode: '200',
+      jsonRules: [{ '$..num': 'count > hello' }],
+      headerRules: [{ 'Accept-Encoding': '*/*' }, { 'X-cache': true }],
+    },
+  ],
+};
+
+export const stringPassedToMatch: ITest = {
+  name: 'should return stuff when queried',
+  usingValues: [{ '@id': 10 }],
+  requests: [
+    {
+      headers: [{ 'Accept-Encoding': '*/*' }],
+      method: 'get',
+      url: 'http://example.org/@id',
+
+      passOn: [],
+      expectedStatusCode: '200',
+      jsonRules: [{ '$..num': 'matches ((((' }],
+      headerRules: [{ 'Accept-Encoding': '*/*' }, { 'X-cache': true }],
+    },
+  ],
+};
+
+export const numberPassedToCount: ITest = {
+  name: 'should return stuff when queried',
+  usingValues: [{ '@id': 10 }],
+  requests: [
+    {
+      headers: [{ 'Accept-Encoding': '*/*' }],
+      method: 'get',
+      url: 'http://example.org/@id',
+
+      passOn: [],
+      expectedStatusCode: '200',
+      jsonRules: [{ '$..num': 'count > 0' }],
+      headerRules: [{ 'Accept-Encoding': '*/*' }, { 'X-cache': true }],
+    },
+  ],
+};
+
+export const regexPassedToMatch: ITest = {
+  name: 'should return stuff when queried',
+  usingValues: [{ '@id': 10 }],
+  requests: [
+    {
+      headers: [{ 'Accept-Encoding': '*/*' }],
+      method: 'get',
+      url: 'http://example.org/@id',
+
+      passOn: [],
+      expectedStatusCode: '200',
+      jsonRules: [{ '$..num': 'matches /aaa/' }],
+      headerRules: [{ 'Accept-Encoding': '*/*' }, { 'X-cache': true }],
+    },
+  ],
+};

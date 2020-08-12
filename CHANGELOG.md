@@ -1,3 +1,4 @@
+0.4.8 Validate argument types for JSON rules
 0.4.7 Adding more types to jsonpath lib, not awaiting lim if max concurrent tests is not set, refactoring validator
 0.4.6 Fix the if url is last it gets appended to body bug
 0.4.5 Replaced undefined with Symbol.for("NotFound") as indicator of lack of non compliant values

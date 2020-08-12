@@ -1,10 +1,10 @@
-import { aliasesedMatchers } from '../rules/matchers';
+import { aliasedMatchers } from '../rules/aliasedMatchers';
 import { IRequest, Factory, MatcherFunction } from '../interfaces/test';
 import { getArgs } from './util';
 import { ArgCount } from '../enums/argCount';
 
 const parseRule = (rule: string): string | MatcherFunction => {
-  const aliasesedMatcher = aliasesedMatchers.find(
+  const aliasesedMatcher = aliasedMatchers.find(
     (am) =>
       rule.startsWith(am.alias) &&
       ((getArgs(rule, am.alias).length === 0 && am.argCount === ArgCount.None) ||

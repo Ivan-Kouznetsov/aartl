@@ -1,6 +1,6 @@
 import { ITest } from '../interfaces/test';
 import { getArgs } from '../parser/util';
-import { aliasesedMatchers } from '../rules/matchers';
+import { aliasedMatchers } from '../rules/aliasedMatchers';
 import { ArgCount } from '../enums/argCount';
 
 export const getFirstValidationError = (test: ITest): string | undefined => {
@@ -26,7 +26,7 @@ export const getFirstValidationError = (test: ITest): string | undefined => {
 
   if (test.requests[test.requests.length - 1].wait) return 'Cannot have a wait in last request';
 
-  const sortedAliasedMatchers = [...aliasesedMatchers].sort((a, b) => b.alias.length - a.alias.length);
+  const sortedAliasedMatchers = [...aliasedMatchers].sort((a, b) => b.alias.length - a.alias.length);
   const getFirstDuplicate = <T>(arr: T[]) => arr.filter((item, index) => arr.indexOf(item) != index)[0];
 
   for (const request of test.requests) {
@@ -39,7 +39,8 @@ export const getFirstValidationError = (test: ITest): string | undefined => {
       for (const am of sortedAliasedMatchers) {
         const key = Object.keys(rule)[0];
         if (rule[key].toString().startsWith(am.alias)) {
-          const argLength = getArgs(rule[key].toString(), am.alias).length;
+          const args = getArgs(rule[key].toString(), am.alias);
+          const argLength = args.length;
 
           if (am.argCount === ArgCount.None && argLength !== 0) {
             return `Rule: ${JSON.stringify(rule)} has too many arguments`;
@@ -49,6 +50,13 @@ export const getFirstValidationError = (test: ITest): string | undefined => {
           }
           if (am.argCount === ArgCount.Many && argLength === 0) {
             return `Rule: ${JSON.stringify(rule)} requires 1 or more arguments, got 0`;
+          }
+
+          for (const a of args) {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            if (!am.argValidator!(a)) {
+              return `Rule: ${JSON.stringify(rule)} has the wrong type of argument, did not expect ${a}`;
+            }
           }
 
           break;
