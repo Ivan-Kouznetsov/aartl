@@ -94,4 +94,79 @@ describe('Matchers', () => {
       matchers.validateEachHasPropsLimitedTo(['name', 'age'])([{ name: 'Ann', age: 99, phone: '1234567890' }])
     ).toEqual({ name: 'Ann', age: 99, phone: '1234567890' });
   });
+
+  it('should match via validateEarlierThan correctly', () => {
+    expect(matchers.validateEarlierThan('Jan 10 2000')(['Jan 9 2000'])).toEqual(NotFound);
+    expect(matchers.validateEarlierThan('Jan 10 2000')(['Jan 10 2000'])).toEqual('Jan 10 2000');
+    expect(matchers.validateEarlierThan('Jan 10 2000')(['Jan 11 2000'])).toEqual('Jan 11 2000');
+  });
+
+  it('should match via validateAfter correctly', () => {
+    expect(matchers.validateAfter('Jan 10 2000')(['Jan 9 2000'])).toEqual('Jan 9 2000');
+    expect(matchers.validateAfter('Jan 10 2000')(['Jan 10 2000'])).toEqual('Jan 10 2000');
+    expect(matchers.validateAfter('Jan 10 2000')(['Jan 11 2000'])).toEqual(NotFound);
+  });
+
+  it('should match via validateSameDateAs correctly', () => {
+    expect(matchers.validateSameDateAs('Jan 10 2000')(['Jan 9 2000'])).toEqual('Jan 9 2000');
+    expect(matchers.validateSameDateAs('Jan 10 2000')(['Jan 10 2000'])).toEqual(NotFound);
+    expect(matchers.validateSameDateAs('Jan 10 2000')(['Jan 10 2000 10:30 AM'])).toEqual(NotFound);
+    expect(matchers.validateSameDateAs('Jan 10 2000')(['Jan 11 2000'])).toEqual('Jan 11 2000');
+  });
+
+  it('should match via validateAsEarlyAs correctly', () => {
+    expect(matchers.validateAsEarlyAs('Jan 10 2000')(['Jan 9 2000'])).toEqual('Jan 9 2000');
+    expect(matchers.validateAsEarlyAs('Jan 10 2000')(['Jan 10 2000'])).toEqual(NotFound);
+    expect(matchers.validateAsEarlyAs('Jan 10 2000')(['Jan 11 2000'])).toEqual(NotFound);
+  });
+
+  it('should match via validateAsLateAs correctly', () => {
+    expect(matchers.validateAsLateAs('Jan 10 2000')(['Jan 9 2000'])).toEqual(NotFound);
+    expect(matchers.validateAsLateAs('Jan 10 2000')(['Jan 10 2000'])).toEqual(NotFound);
+    expect(matchers.validateAsLateAs('Jan 10 2000')(['Jan 11 2000'])).toEqual('Jan 11 2000');
+  });
+
+  it('should validate date strings', () => {
+    expect(matchers.validateDate()(['Jan 9 2000'])).toEqual(NotFound);
+    expect(matchers.validateDate()(['((((('])).toEqual('(((((');
+  });
+
+  it('should return NotFound when ordered number array is passed', () => {
+    expect(matchers.validateSorted('ASC')([1, 2, 3])).toEqual(NotFound);
+    expect(matchers.validateSorted('DESC')([3, 2, 1])).toEqual(NotFound);
+  });
+
+  it('should return array when unordered number array is passed', () => {
+    expect(matchers.validateSorted('ASC')([1, 7, 3])).toEqual('[1,7,3]');
+    expect(matchers.validateSorted('DESC')([3, 7, 1])).toEqual('[3,7,1]');
+  });
+
+  it('should return array when an array when a number array ordered the wrong way is passed', () => {
+    expect(matchers.validateSorted('DESC')([1, 2, 3])).toEqual('[1,2,3]');
+    expect(matchers.validateSorted('ASC')([3, 2, 1])).toEqual('[3,2,1]');
+  });
+
+  it('should return NotFound when ordered date array is passed', () => {
+    expect(matchers.validateSorted('ASC')(['Jan 1 2000', 'Jan 2 2000', 'Jan 3 2000'])).toEqual(NotFound);
+    expect(matchers.validateSorted('DESC')(['Jan 1 2000', 'Jan 2 2000', 'Jan 3 2000'].reverse())).toEqual(NotFound);
+  });
+
+  it('should return array when unordered date array is passed', () => {
+    expect(matchers.validateSorted('ASC')(['Jan 1 2000', 'Jan 7 2000', 'Jan 3 2000'])).toEqual(
+      '["Jan 1 2000","Jan 7 2000","Jan 3 2000"]'
+    );
+    expect(matchers.validateSorted('DESC')(['Jan 1 2000', 'Jan 7 2000', 'Jan 3 2000'])).toEqual(
+      '["Jan 1 2000","Jan 7 2000","Jan 3 2000"]'
+    );
+  });
+
+  it('should return NotFound when ordered string array is passed', () => {
+    expect(matchers.validateSorted('ASC')(['A', 'B', 'C'])).toEqual(NotFound);
+    expect(matchers.validateSorted('DESC')(['A', 'B', 'C'].reverse())).toEqual(NotFound);
+  });
+
+  it('should return array when unordered string array is passed', () => {
+    expect(matchers.validateSorted('ASC')(['A', 'Z', 'C'])).toEqual('["A","Z","C"]');
+    expect(matchers.validateSorted('DESC')(['A', 'Z', 'C'])).toEqual('["A","Z","C"]');
+  });
 });
