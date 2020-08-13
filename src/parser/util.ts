@@ -1,4 +1,4 @@
-const numberRegex = /^-{0,1}[0-9]+(\.\d+){0,1}$/;
+const numberRegex = /^-{0,1}\d+(\.\d+){0,1}$/;
 
 /**
  * Get the arguments, only allowing all to be quoted or all to be unquoted

@@ -9,7 +9,7 @@ export const NotFound = Symbol.for('NotFound');
 
 /* Numbers */
 
-const numberRegex = /^-{0,1}[0-9]+(\.\d+){0,1}$/;
+const numberRegex = /^-{0,1}\d+(\.\d+){0,1}$/;
 
 export const validateNumber = (): MatcherFunction => (arr: Primitive[]): Primitive | typeof NotFound =>
   arr.find((item) => !numberRegex.test(item.toString())) ?? NotFound;
