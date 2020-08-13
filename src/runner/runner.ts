@@ -5,6 +5,7 @@ import * as ruleParser from '../parser/ruleParser';
 import * as http_promise from '../lib/http-promise';
 import { jsonPath } from '../lib/jsonpath';
 import { NotFound } from '../rules/matchers';
+import { ArgCount } from '../enums/argCount';
 
 export const runTest = async (test: ITest): Promise<ITestResult> => {
   const testWithValues = util.applyRandomValues(util.applyValues(test));
@@ -129,27 +130,24 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
         parsedRules.forEach(async (rule) => {
           const data = jsonPath(json, rule.jsonpath);
           if (data === false) {
-            if (typeof rule.rule === 'function' && rule.originalRule.toString().includes('count')) {
-              const ruleCheckResult = rule.rule([]);
+            if (rule.originalRule.toString().includes('count')) {
+              const ruleCheckResult = rule.matching.factory(rule.matching.args[0])([]);
               if (ruleCheckResult !== NotFound) {
                 failReasons.push(`Expected ${rule.jsonpath} to be ${rule.originalRule}, got ${ruleCheckResult}`);
               }
             } else {
               failReasons.push(`Expected ${rule.jsonpath} to be ${rule.originalRule}, got nothing`);
             }
-          } else if (typeof rule.rule === 'function') {
-            const nonCompliantValue = rule.rule(data);
+          } else {
+            const nonCompliantValue =
+              rule.matching.expectedArgs === ArgCount.One
+                ? rule.matching.factory(rule.matching.args[0])(data)
+                : rule.matching.factory(rule.matching.args)(data);
             if (nonCompliantValue !== NotFound) {
               failReasons.push(
                 `Expected ${rule.jsonpath} to be ${rule.originalRule}, got ${JSON.stringify(nonCompliantValue)}`
               );
             }
-          } else {
-            data.forEach((item) => {
-              if (rule.rule !== (item ?? 'null').toString()) {
-                failReasons.push(`Expected ${rule.jsonpath} to be ${rule.originalRule}, got ${item}`);
-              }
-            });
           }
         });
       }
