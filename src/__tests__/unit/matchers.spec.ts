@@ -114,6 +114,13 @@ describe('Matchers', () => {
     expect(matchers.validateSameDateAs('Jan 10 2000')(['Jan 11 2000'])).toEqual('Jan 11 2000');
   });
 
+  it('should match via validateSameDateTimeAs correctly', () => {
+    expect(matchers.validateSameDateTimeAs('Jan 10 2000')(['Jan 9 2000'])).toEqual('Jan 9 2000');
+    expect(matchers.validateSameDateTimeAs('Jan 10 2000')(['Jan 10 2000'])).toEqual(NotFound);
+    expect(matchers.validateSameDateTimeAs('Jan 10 2000 10:30 am')(['Jan 10 2000 10:30 AM'])).toEqual(NotFound);
+    expect(matchers.validateSameDateTimeAs('Jan 10 2000')(['Jan 11 2000'])).toEqual('Jan 11 2000');
+  });
+
   it('should match via validateAsEarlyAs correctly', () => {
     expect(matchers.validateAsEarlyAs('Jan 10 2000')(['Jan 9 2000'])).toEqual('Jan 9 2000');
     expect(matchers.validateAsEarlyAs('Jan 10 2000')(['Jan 10 2000'])).toEqual(NotFound);
