@@ -1,3 +1,4 @@
+0.6.0 Adding date and sort rules
 0.5.1 More comprehensive e2e tests
 0.5.0 Fail fast mode
 0.4.8 Validate argument types for JSON rules

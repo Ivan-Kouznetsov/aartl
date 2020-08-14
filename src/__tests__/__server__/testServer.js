@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
+const { response } = require('express');
 
 /*
  * REST
@@ -13,6 +14,12 @@ restApp.use(bodyParser.raw({ type: '*/*' }));
 const restPort = 3000;
 
 const posts = ['0th Post'];
+const books = [
+  { id: 1, title: 'My story', releaseDate: 'Jan 10, 2000' },
+  { id: 2, title: 'Why are things?', releaseDate: 'Jan 12, 2000' },
+  { id: 3, title: 'I did and you can too', releaseDate: 'Feb 14, 2000' },
+  { id: 4, title: 'Aaarhg', releaseDate: 'Aug 1, 2000' },
+];
 
 restApp.get('/', (_, response) => {
   response.status(200).send('Ready').end();
@@ -65,6 +72,16 @@ restApp.get('/posts', (_, response) => {
 
 restApp.get('/random', (_, response) => {
   response.send(JSON.stringify({ id: Math.floor(Math.random() * Math.floor(100)), text: Math.random().toFixed(10) }));
+});
+
+restApp.get('/books', (request, response) => {
+  if (request.query['sort'] == 'desc') {
+    response.send(JSON.stringify([...books].reverse()));
+  } else if (request.query['sort'] == 'unsorted') {
+    response.send(JSON.stringify([books[1], books[3], books[2], books[4]]));
+  } else {
+    response.send(JSON.stringify(books));
+  }
 });
 
 restApp.listen(restPort, (err) => {

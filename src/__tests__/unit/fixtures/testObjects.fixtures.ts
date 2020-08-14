@@ -355,3 +355,71 @@ export const regexPassedToMatch: ITest = {
     },
   ],
 };
+
+export const invalidDate: ITest = {
+  name: 'should return stuff when queried',
+  usingValues: [],
+  requests: [
+    {
+      headers: [],
+      method: 'get',
+      url: 'http://example.org/',
+
+      passOn: [],
+      expectedStatusCode: '200',
+      jsonRules: [{ '$..date': 'is as early as ((((' }],
+      headerRules: [],
+    },
+  ],
+};
+
+export const numbericSortDirection: ITest = {
+  name: 'should return stuff when queried',
+  usingValues: [],
+  requests: [
+    {
+      headers: [],
+      method: 'get',
+      url: 'http://example.org/',
+
+      passOn: [],
+      expectedStatusCode: '200',
+      jsonRules: [{ '$..date': 'is sorted 1' }],
+      headerRules: [],
+    },
+  ],
+};
+
+export const validDate: ITest = {
+  name: 'should return stuff when queried',
+  usingValues: [],
+  requests: [
+    {
+      headers: [],
+      method: 'get',
+      url: 'http://example.org/',
+
+      passOn: [],
+      expectedStatusCode: '200',
+      jsonRules: [{ '$..date': 'as early as Jan 10 2000' }],
+      headerRules: [],
+    },
+  ],
+};
+
+export const okSortDirection: ITest = {
+  name: 'should return stuff when queried',
+  usingValues: [],
+  requests: [
+    {
+      headers: [],
+      method: 'get',
+      url: 'http://example.org/',
+
+      passOn: [],
+      expectedStatusCode: '200',
+      jsonRules: [{ '$..date': 'is sorted asc' }],
+      headerRules: [],
+    },
+  ],
+};

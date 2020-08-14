@@ -70,4 +70,24 @@ describe('Validator', () => {
     expect(getFirstValidationError(fixtures.notTooManyArgs)).toBeUndefined();
     expect(getFirstValidationError(fixtures.isANumber)).toBeUndefined();
   });
+
+  it('should return appropriate error message when invalid date is used with a date rule', () => {
+    expect(getFirstValidationError(fixtures.invalidDate)).toEqual(
+      'Rule: {"$..date":"is as early as (((("} has the wrong type of argument, did not expect (((('
+    );
+  });
+
+  it('should return appropriate error message when invalid sort directiion is used with a sorting rule', () => {
+    expect(getFirstValidationError(fixtures.numbericSortDirection)).toEqual(
+      'Rule: {"$..date":"is sorted 1"} has the wrong type of argument, did not expect 1'
+    );
+  });
+
+  it('should return no error message when valid date is used with a date rule', () => {
+    expect(getFirstValidationError(fixtures.validDate)).toBeUndefined();
+  });
+
+  it('should return appropriate error message when invalid sort directiion is used with a sorting rule', () => {
+    expect(getFirstValidationError(fixtures.okSortDirection)).toBeUndefined();
+  });
 });
