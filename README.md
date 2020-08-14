@@ -80,7 +80,7 @@ JSON data expectations consist of:
 
 - A JSON path and either a literal value or a rule.
 
-The possible rules are (_x, y, z in the rules refer to parameters_):
+**Examples** of rules are (_x, y, z in the rules refer to parameters_):
 | Rule | What it means |
 |--|--|
 | is a number | checks if every value that matches the JSON path is a number |
@@ -93,16 +93,8 @@ The possible rules are (_x, y, z in the rules refer to parameters_):
 |is text not containing x| checks if every value that matches the JSON path is text that does not contain x|
 |is any of x y z| checks if every value that matches the JSON path is one of the values
 |is not x| checks if every value that matches the JSON path is not x|
-|matches x| checks if every value that matches the JSON path matches the regular expression x|
-|count = x| checks if the number of values that matches the JSON path is x|
-|count > x| checks if the number of values that matches the JSON path is greater than x|
-|count >= x| checks if the number of values that matches the JSON path is greater than or equal to x|
-|count > x| checks if the number of values that matches the JSON path is greater than x|
-|count >= x| checks if the number of values that matches the JSON path is greater than or equal to x|
-|count < x| checks if the number of values that matches the JSON path is less than x|
-|count <= x| checks if the number of values that matches the JSON path is less than or equal to x|
-|each has x| checks if each of values that matches the JSON path is an object with a property called x|
-|properties limited to x y z| checks if each of values that matches the JSON path is an object the properties of which cannot be anything other than x y or z|
+
+For an up to date list of rules consult the wiki page on [rules](https://github.com/Ivan-Kouznetsov/aartl/wiki/Rules)
 
 Header expectations consist of:
 
