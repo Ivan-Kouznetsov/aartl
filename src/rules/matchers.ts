@@ -34,6 +34,39 @@ export const validateLessThanOrEqual = (compareWith: number): MatcherFunction =>
 ): Primitive | typeof NotFound =>
   arr.find((item) => !(numberRegex.test(item.toString()) && parseFloat(item.toString()) <= compareWith)) ?? NotFound;
 
+/* Dates */
+const sameDate = (d1: Date, d2: Date) =>
+  d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate();
+
+export const validateEarlierThan = (compareWith: string): MatcherFunction => (
+  arr: Primitive[]
+): Primitive | typeof NotFound => arr.find((item) => new Date(item.toString()) >= new Date(compareWith)) ?? NotFound;
+
+export const validateAfter = (compareWith: string): MatcherFunction => (
+  arr: Primitive[]
+): Primitive | typeof NotFound => arr.find((item) => new Date(item.toString()) <= new Date(compareWith)) ?? NotFound;
+
+export const validateSameDateAs = (compareWith: string): MatcherFunction => (
+  arr: Primitive[]
+): Primitive | typeof NotFound =>
+  arr.find((item) => !sameDate(new Date(item.toString()), new Date(compareWith))) ?? NotFound;
+
+export const validateSameDateTimeAs = (compareWith: string): MatcherFunction => (
+  arr: Primitive[]
+): Primitive | typeof NotFound =>
+  arr.find((item) => new Date(item.toString()).valueOf() !== new Date(compareWith).valueOf()) ?? NotFound;
+
+export const validateAsEarlyAs = (compareWith: string): MatcherFunction => (
+  arr: Primitive[]
+): Primitive | typeof NotFound => arr.find((item) => new Date(item.toString()) < new Date(compareWith)) ?? NotFound;
+
+export const validateAsLateAs = (compareWith: string): MatcherFunction => (
+  arr: Primitive[]
+): Primitive | typeof NotFound => arr.find((item) => new Date(item.toString()) > new Date(compareWith)) ?? NotFound;
+
+export const validateDate = (): MatcherFunction => (arr: Primitive[]): Primitive | typeof NotFound =>
+  arr.find((item) => isNaN(new Date(item.toString()).valueOf())) ?? NotFound;
+
 /* Strings */
 
 export const validateNonEmptyString = (): MatcherFunction => (arr: Primitive[]): Primitive | typeof NotFound =>
@@ -83,3 +116,42 @@ export const validateEachHasPropsLimitedTo = (props: string[]): MatcherFunction 
   arr: Primitive[]
 ): Primitive | typeof NotFound =>
   arr.find((item) => typeof item !== 'object' || Object.keys(item).find((p) => !props.includes(p))) ?? NotFound;
+
+/* Sorting */
+
+enum SortDirection {
+  Ascending,
+  Descending,
+}
+
+const isSorted = (arr: (number | string)[], direction: SortDirection) => {
+  for (let i = 0; i < arr.length - 1; i++) {
+    if (
+      (direction === SortDirection.Descending && arr[i] < arr[i + 1]) ||
+      (direction === SortDirection.Ascending && arr[i] > arr[i + 1])
+    ) {
+      return false;
+    }
+  }
+  return true;
+};
+
+export const validateSorted = (direction: string) => (arr: Primitive[]): Primitive | typeof NotFound => {
+  const isDateArray = validateNumber()(arr) !== NotFound && validateDate()(arr) === NotFound;
+  const preProcessedArray = arr.map((item) => {
+    const str = item.toString();
+    if (isDateArray) {
+      return new Date(str).valueOf();
+    } else if (numberRegex.test(str)) {
+      return parseFloat(str);
+    } else {
+      return str;
+    }
+  });
+  const dir: SortDirection = direction.toLowerCase().startsWith('asc')
+    ? SortDirection.Ascending
+    : SortDirection.Descending;
+
+  if (isSorted(preProcessedArray, dir)) return NotFound;
+  return JSON.stringify(arr);
+};

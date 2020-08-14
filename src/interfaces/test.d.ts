@@ -24,7 +24,7 @@ export interface ITest {
 
 export type Primitive = boolean | string | number | Record<string, unknown>;
 export type MatcherFunction = (arr: Primitive[]) => Primitive | typeof NotFound;
-export type Factory = (arg?: RegExp | Primitive | Primitive[]) => MatcherFunction;
+export type Factory = (arg?: Primitive | Primitive[]) => MatcherFunction;
 
 export interface IRule {
   factory: Factory;

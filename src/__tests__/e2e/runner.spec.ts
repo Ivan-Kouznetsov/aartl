@@ -1,4 +1,5 @@
 import * as fixtures from './fixtures/localhostTests.fixtures';
+import * as sortingFixtures from './fixtures/sorting.fixtures';
 import { runTest } from '../../runner/runner';
 import * as parser from '../../parser/parser';
 
@@ -204,5 +205,26 @@ describe('Test runner', () => {
 
     expect(result.passed).toBe(false);
     expect(result.failReasons.length).toBe(test.requests[0].jsonRules.length);
+  });
+
+  it('should have sorted rule fail when dates are not sorted', async () => {
+    const badResult = await runTestThruAllSteps(sortingFixtures.unsorted);
+
+    expect(badResult.passed).toBe(false);
+    expect(badResult.failReasons).toEqual([
+      'Expected $..releaseDate to be is sorted asc, got "[\\"Jan 12, 2000\\",\\"Aug 1, 2000\\",\\"Feb 14, 2000\\"]"',
+    ]);
+  });
+
+  it('should have sorted rule pass when dates are sorted asc', async () => {
+    const badResult = await runTestThruAllSteps(sortingFixtures.sortedAsc);
+
+    expect(badResult.passed).toBe(true);
+  });
+
+  it('should have sorted rule pass when dates are sorted desc', async () => {
+    const badResult = await runTestThruAllSteps(sortingFixtures.sortedDesc);
+
+    expect(badResult.passed).toBe(true);
   });
 });

@@ -14,7 +14,7 @@ const splitUrl = (url: string) => {
   if (parts === null) throw `Invalid url: ${url}`;
   const protocol = parts[2];
   const rawHostname = parts[4];
-  const path = parts[5];
+  const path = parts[5] + (parts[6] ?? '');
 
   const port = /(?<=:)\d+/.test(rawHostname) ? (/(?<=:)\d+/.exec(rawHostname) ?? [null])[0] : null;
   const hostnameMatches = /(\w|\.)+(?=:{0,1})/.exec(rawHostname);

@@ -1,23 +1,4 @@
-import {
-  validateNumber,
-  validateGreaterThan,
-  validateGreaterThanOrEqual,
-  validateLessThan,
-  validateLessThanOrEqual,
-  validateNonEmptyString,
-  validateStringContaining,
-  validateStringNotContaining,
-  validateAnyOf,
-  validateNot,
-  validateRegex,
-  validateCountEquals,
-  validateCountGreaterThan,
-  validateCountGreaterThanOrEqual,
-  validateCountLessThan,
-  validateCountLessThanOrEqual,
-  validateEachHasProp,
-  validateEachHasPropsLimitedTo,
-} from './matchers';
+import * as matchers from './matchers';
 import { Factory } from '../interfaces/test';
 import { ArgCount } from '../enums/argCount';
 
@@ -31,6 +12,9 @@ const validateArgRegex = (a: string | number): boolean => {
     return false;
   }
 };
+const validateArgDate = (a: string | number): boolean => typeof a === 'string' && !isNaN(new Date(a).valueOf());
+const validateArgSortDir = (a: string | number): boolean =>
+  typeof a === 'string' && ['ascending', 'descending', 'asc', 'desc'].includes(a.toLowerCase());
 
 export const aliasedMatchers: {
   factory: Factory;
@@ -39,69 +23,148 @@ export const aliasedMatchers: {
   argValidator?: (a: string | number) => boolean;
 }[] = [
   {
-    factory: <Factory>validateNumber,
+    factory: <Factory>matchers.validateNumber,
     alias: 'is a number',
     argCount: ArgCount.None,
   },
-  { factory: <Factory>validateGreaterThan, alias: '>', argCount: ArgCount.One, argValidator: validateArgNumber },
   {
-    factory: <Factory>validateGreaterThanOrEqual,
+    factory: <Factory>matchers.validateGreaterThan,
+    alias: '>',
+    argCount: ArgCount.One,
+    argValidator: validateArgNumber,
+  },
+  {
+    factory: <Factory>matchers.validateGreaterThanOrEqual,
     alias: '>=',
     argCount: ArgCount.One,
     argValidator: validateArgNumber,
   },
-  { factory: <Factory>validateLessThan, alias: '<', argCount: ArgCount.One, argValidator: validateArgNumber },
-  { factory: <Factory>validateLessThanOrEqual, alias: '<=', argCount: ArgCount.One, argValidator: validateArgNumber },
+  { factory: <Factory>matchers.validateLessThan, alias: '<', argCount: ArgCount.One, argValidator: validateArgNumber },
   {
-    factory: <Factory>validateNonEmptyString,
+    factory: <Factory>matchers.validateLessThanOrEqual,
+    alias: '<=',
+    argCount: ArgCount.One,
+    argValidator: validateArgNumber,
+  },
+  {
+    factory: <Factory>matchers.validateNonEmptyString,
     alias: 'is text',
     argCount: ArgCount.None,
   },
   {
-    factory: <Factory>validateStringContaining,
+    factory: <Factory>matchers.validateStringContaining,
     alias: 'is text containing',
     argCount: ArgCount.One,
     argValidator: validateArgString,
   },
   {
-    factory: <Factory>validateStringNotContaining,
+    factory: <Factory>matchers.validateStringNotContaining,
     alias: 'is text not containing',
     argCount: ArgCount.One,
     argValidator: validateArgString,
   },
-  { factory: <Factory>validateAnyOf, alias: 'is any of', argCount: ArgCount.Many, argValidator: validateArgString },
-  { factory: <Factory>validateNot, alias: 'is not', argCount: ArgCount.One, argValidator: validateArgString },
-  { factory: <Factory>validateRegex, alias: 'matches', argCount: ArgCount.One, argValidator: validateArgRegex },
-  { factory: <Factory>validateCountEquals, alias: 'count =', argCount: ArgCount.One, argValidator: validateArgNumber },
   {
-    factory: <Factory>validateCountGreaterThan,
+    factory: <Factory>matchers.validateAnyOf,
+    alias: 'is any of',
+    argCount: ArgCount.Many,
+    argValidator: validateArgString,
+  },
+  { factory: <Factory>matchers.validateNot, alias: 'is not', argCount: ArgCount.One, argValidator: validateArgString },
+  {
+    factory: <Factory>matchers.validateRegex,
+    alias: 'matches',
+    argCount: ArgCount.One,
+    argValidator: validateArgRegex,
+  },
+  {
+    factory: <Factory>matchers.validateCountEquals,
+    alias: 'count =',
+    argCount: ArgCount.One,
+    argValidator: validateArgNumber,
+  },
+  {
+    factory: <Factory>matchers.validateCountGreaterThan,
     alias: 'count >',
     argCount: ArgCount.One,
     argValidator: validateArgNumber,
   },
   {
-    factory: <Factory>validateCountGreaterThanOrEqual,
+    factory: <Factory>matchers.validateCountGreaterThanOrEqual,
     alias: 'count >=',
     argCount: ArgCount.One,
     argValidator: validateArgNumber,
   },
   {
-    factory: <Factory>validateCountLessThan,
+    factory: <Factory>matchers.validateCountLessThan,
     alias: 'count <',
     argCount: ArgCount.One,
     argValidator: validateArgNumber,
   },
   {
-    factory: <Factory>validateCountLessThanOrEqual,
+    factory: <Factory>matchers.validateCountLessThanOrEqual,
     alias: 'count <=',
     argCount: ArgCount.One,
     argValidator: validateArgNumber,
   },
-  { factory: <Factory>validateEachHasProp, alias: 'each has', argCount: ArgCount.One, argValidator: validateArgString },
   {
-    factory: <Factory>validateEachHasPropsLimitedTo,
+    factory: <Factory>matchers.validateEachHasProp,
+    alias: 'each has',
+    argCount: ArgCount.One,
+    argValidator: validateArgString,
+  },
+  {
+    factory: <Factory>matchers.validateEachHasPropsLimitedTo,
     alias: 'properties limited to',
     argCount: ArgCount.Many,
     argValidator: validateArgString,
+  },
+
+  {
+    factory: <Factory>matchers.validateAfter,
+    alias: 'is after',
+    argCount: ArgCount.One,
+    argValidator: validateArgDate,
+  },
+  {
+    factory: <Factory>matchers.validateAsEarlyAs,
+    alias: 'is as early as',
+    argCount: ArgCount.One,
+    argValidator: validateArgDate,
+  },
+  {
+    factory: <Factory>matchers.validateAsLateAs,
+    alias: 'is as late as',
+    argCount: ArgCount.One,
+    argValidator: validateArgDate,
+  },
+  {
+    factory: <Factory>matchers.validateDate,
+    alias: 'is a date',
+    argCount: ArgCount.One,
+    argValidator: validateArgDate,
+  },
+  {
+    factory: <Factory>matchers.validateEarlierThan,
+    alias: 'is earlier than',
+    argCount: ArgCount.One,
+    argValidator: validateArgDate,
+  },
+  {
+    factory: <Factory>matchers.validateSameDateAs,
+    alias: 'is same date as',
+    argCount: ArgCount.One,
+    argValidator: validateArgDate,
+  },
+  {
+    factory: <Factory>matchers.validateSameDateTimeAs,
+    alias: 'is same date and time as',
+    argCount: ArgCount.One,
+    argValidator: validateArgDate,
+  },
+  {
+    factory: <Factory>matchers.validateSorted,
+    alias: 'is sorted',
+    argCount: ArgCount.One,
+    argValidator: validateArgSortDir,
   },
 ];
