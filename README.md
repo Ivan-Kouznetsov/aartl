@@ -127,24 +127,19 @@ The syntax is case sensitive, statements start with an upper-case letter, data i
 
 ## How?
 
-### Setup and Use
+### Getting started
 
-1.  Ensure that git is installed
-2.  Ensure that Node.js is installed
-3.  Open a terminal
+1. [Download a release](https://github.com/Ivan-Kouznetsov/aartl/releases)
+2. Unzip it
+3. Open a terminal window
+4. Run the example file
 
-In the terminal:
+   `aartl.exe -f example.aartl --report` on Windows
+   `./aartl -f example.aartl --report` on Linux and macOS
 
-    git clone https://github.com/Ivan-Kouznetsov/aartl.git
-    cd aartl
-    npm ci
-    npm run build
+5. Observe the output and open the report file
 
-And now you can run AARTL like so
-
-    node dist/aartl.js [-f path/to/file/with/tests.aartl] [-d path/to/dir/with/.aartl]
-
-[A video showing setting up and running an example file in AARTL](https://vimeo.com/444741784)
+6. **Optionally** install [the Visual Studio Code extension](https://marketplace.visualstudio.com/items?itemName=IvanKouznetsov.aartl-lang-server)
 
 ### CLI options
 
@@ -161,12 +156,6 @@ And now you can run AARTL like so
 | \-\-log          | Output logs                                        |
 | \-\-ff           | Exit with error code 1 as as soon as on test fails |
 
-## Editor Support
-
-A work in progress VSCode extension is available at: https://github.com/Ivan-Kouznetsov/aartl-vscode-extension
-
-![VSCode Screenshot](https://raw.githubusercontent.com/Ivan-Kouznetsov/aartl-vscode-extension/master/vscodeScreenshot.png)
-
 ## Performance
 
 The "runs fast" claim refers to the following:
@@ -176,7 +165,7 @@ The "runs fast" claim refers to the following:
 - Tests are executed asynchronously so while one test is "waiting" for a response, other tests are being executed
 - Can send more concurrent requests than an Express-based server can handle and thus has to be throttled
 
-In other words, the bottleneck is likely to be how many requests the server being tested can handle not how fast the tests are executed.
+The bottleneck is likely to be how many requests the server being tested can handle not how fast the tests are executed.
 
 ## License
 
