@@ -1,4 +1,5 @@
 import { NotFound } from '../rules/matchers';
+import { ArgCount } from '../enums/argCount';
 
 export interface IKeyValuePair {
   [key: string]: string | number | boolean;
@@ -28,6 +29,6 @@ export type Factory = (arg?: Primitive | Primitive[]) => MatcherFunction;
 
 export interface IRule {
   factory: Factory;
-  alias: string;
-  argCount: number;
+  args: (string | number)[];
+  expectedArgs: ArgCount;
 }

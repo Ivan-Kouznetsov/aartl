@@ -1,10 +1,10 @@
 import { aliasedMatchers } from '../rules/aliasedMatchers';
-import { IRequest, Factory, Primitive } from '../interfaces/test';
+import { IRequest, Primitive, IRule } from '../interfaces/test';
 import { getArgs } from './util';
 import { ArgCount } from '../enums/argCount';
 import { NotFound } from '../rules/matchers';
 
-const parseRule = (rule: string): { factory: Factory; args: (string | number)[]; expectedArgs: ArgCount } => {
+const parseRule = (rule: string): IRule => {
   const sortedAliasedMatchers = [...aliasedMatchers].sort((a, b) => b.alias.length - a.alias.length);
 
   for (const aliasedMatcher of sortedAliasedMatchers) {
@@ -29,7 +29,7 @@ export const parseJsonRules = (
   request: IRequest
 ): {
   jsonpath: string;
-  matching: { factory: Factory; args: (string | number)[]; expectedArgs: ArgCount };
+  matching: IRule;
   originalRule: string | number | boolean;
 }[] =>
   request.jsonRules.map((r) => {
