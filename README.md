@@ -150,11 +150,11 @@ The syntax is case sensitive, statements start with an upper-case letter, data i
 | \-\-novalidation | Don't validate test file                           |
 | \-\-r            | Randomize test order                               |
 | \-n N            | Rerun the tests a number of times                  |
-| \-m N            | Maximum concurrent tests. Default = None.          |
-| \-\-report       | Output a report with failure rates                 |
+| \-m N            | Maximum concurrent tests. Default: no limit        |
+| \-\-report       | Output an html report with failure rates           |
 | \-\-q            | Don't output real-time test results                |
-| \-\-log          | Output logs                                        |
-| \-\-ff           | Exit with error code 1 as as soon as on test fails |
+| \-\-log          | Output request logs                                |
+| \-\-ff           | Exit with error code 1 as as soon as one test fails|
 
 ## Performance
 
