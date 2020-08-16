@@ -140,8 +140,7 @@ export const aliasedMatchers: {
   {
     factory: <Factory>matchers.validateDate,
     alias: 'is a date',
-    argCount: ArgCount.One,
-    argValidator: validateArgDate,
+    argCount: ArgCount.None,
   },
   {
     factory: <Factory>matchers.validateEarlierThan,
