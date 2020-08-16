@@ -1,3 +1,4 @@
+0.6.2 Fix validation of is a date
 0.6.1 Use ISO date format for report name
 0.6.0 Adding date and sort rules
 0.5.1 More comprehensive e2e tests
