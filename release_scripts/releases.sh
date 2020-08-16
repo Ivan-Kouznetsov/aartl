@@ -5,7 +5,7 @@ pkg aartl.js
 
 mkdir windows
 mkdir linux
-mkdir macOs
+mkdir macos
 
 ./aartl-win.exe -f example.aartl
 wsl ./aartl-linux -f example.aartl
