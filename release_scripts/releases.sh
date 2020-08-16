@@ -28,5 +28,5 @@ cp report.css ./macos/
 
 else
 echo something went wrong
-echo READ THE README :)
+echo see readme.md for requirements
 fi
