@@ -19,7 +19,7 @@ export const getFirstValidationError = (test: ITest): string | undefined => {
   if (
     test.requests[test.requests.length - 1].headerRules.length === 0 &&
     test.requests[test.requests.length - 1].expectedStatusCode === undefined &&
-    test.requests[test.requests.length - 1].jsonRules.length === 0
+    test.requests[test.requests.length - 1].jsonRules.filter((j) => !!j).length === 0
   ) {
     return 'Must have conditions in last request';
   }
