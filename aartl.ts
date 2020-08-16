@@ -24,16 +24,7 @@ const showUsage = () => {
   console.log('--ff - Exit with error code 1 as as soon as on test fails');
 };
 
-const okDateTime = () => {
-  const now = new Date();
-  return now
-    .toLocaleString()
-    .replace('a.m.', 'AM')
-    .replace('p.m.', 'PM')
-    .replace(/:/g, '-')
-    .replace(/(,|\s)/g, '_')
-    .replace('__', '_');
-};
+const okDateTime = () => new Date().toISOString().replace(/:/g, '-');
 
 const main = async (): Promise<void> => {
   let args;
@@ -126,7 +117,7 @@ const main = async (): Promise<void> => {
             if (outputXml) {
               console.log(resultsToXml(suiteName, testResults));
             } else if (report) {
-              const fileName = `${suiteName}${okDateTime()}.html`;
+              const fileName = `${suiteName}_${okDateTime()}.html`;
               const html = buildHtmlReport(suiteName, testResults);
               fileSystem.writeFileSync(fileName, html);
               console.log(`Saved report to: ${fileName}`);
