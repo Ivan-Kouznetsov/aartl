@@ -4,6 +4,7 @@
 
 [license-url]: https://opensource.org/licenses/MIT
 [license-image]: https://img.shields.io/npm/l/make-coverage-badge.svg
+
 # Why?
 
 Imagine you have a software-as-a-service product that includes multiple services that rely on each other. Each of the services is tested. Let's say for the sake of argument they have code coverage of between 85% and 95%, you may have some confidence that the services work.
@@ -149,18 +150,20 @@ The syntax is case sensitive, statements start with an upper-case letter, data i
 
 ### CLI options
 
-| Option           | What it means                                      |
-| ---------------- | -------------------------------------------------- |
-| \-\-hello        | Print the name of the program before running tests |
-| \-\-xml          | Output results as JUnit XML                        |
-| \-\-novalidation | Don't validate test file                           |
-| \-\-r            | Randomize test order                               |
-| \-n N            | Rerun the tests a number of times                  |
-| \-m N            | Maximum concurrent tests. Default: no limit        |
-| \-\-report       | Output an html report with failure rates           |
-| \-\-q            | Don't output real-time test results                |
-| \-\-log          | Output request logs                                |
-| \-\-ff           | Exit with error code 1 as as soon as one test fails|
+To see the CLI options run the program with no arguments, the key options are:
+
+| Option           | What it means                                       |
+| ---------------- | --------------------------------------------------- |
+| \-\-hello        | Print the name of the program before running tests  |
+| \-\-xml          | Output results as JUnit XML                         |
+| \-\-novalidation | Don't validate test file                            |
+| \-\-r            | Randomize test order                                |
+| \-n N            | Rerun the tests a number of times                   |
+| \-m N            | Maximum concurrent tests. Default: no limit         |
+| \-\-report       | Output an html report with failure rates            |
+| \-\-q            | Don't output real-time test results                 |
+| \-\-log          | Output request logs                                 |
+| \-\-ff           | Exit with error code 1 as as soon as one test fails |
 
 ## Performance
 
