@@ -134,7 +134,7 @@ describe('Runner util', () => {
       .map((l) => l.trim());
 
     expect(receivedLines).toEqual([
-      '✔ Passed should save a post and check id',
+      '+ Passed: should save a post and check id',
       'Duration: 50561014ns',
       'Requests',
       'Request ☎',
@@ -196,7 +196,7 @@ describe('Runner util', () => {
       .filter((l) => l.trim().length > 0)
       .map((l) => l.trim());
 
-    expect(receivedLines).toEqual(['✔ Passed should save a post and check id', 'Duration: 50561014ns']);
+    expect(receivedLines).toEqual(['+ Passed: should save a post and check id', 'Duration: 50561014ns']);
 
     expect(text).toBeDefined();
   });
