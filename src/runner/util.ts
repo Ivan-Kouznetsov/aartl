@@ -171,7 +171,7 @@ const prettyPrintRequestLog = (log: IRequestLog): string => {
 export const prettyPrintResult = (testResult: ITestResult, printLogs: boolean): string => {
   return (
     `
-${testResult.passed ? '✔ Passed' : '✘ Failed'} ${testResult.testName} 
+${testResult.passed ? '+ Passed:' : '- Failed:'} ${testResult.testName} 
 Duration: ${testResult.duration}ns
 ${testResult.failReasons.length > 0 ? 'Failure Reasons:\n\t' + testResult.failReasons.join('\n\t').trim() : ''}` +
     (printLogs
