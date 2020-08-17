@@ -150,7 +150,7 @@ export const shuffleArray = (array: unknown[]): void => {
 const prettyPrintRequestLog = (log: IRequestLog): string => {
   return `\n\nRequest ☎
   ${(log.sent.method ?? '').toUpperCase()} ${log.sent.url} ➥
-  Duration: ${log.duration}ns
+  Duration: ${(log.duration / 1e6).toFixed(2)}ms
 \t${Object.keys(log.sent.headers)
     .map((key) => `${key}: ${log.sent.headers[key]}`)
     .filter((l) => l.trim().length > 0)
@@ -168,11 +168,18 @@ const prettyPrintRequestLog = (log: IRequestLog): string => {
   ${log.received.string}`;
 };
 
-export const prettyPrintResult = (testResult: ITestResult, printLogs: boolean): string => {
+export const prettyPrintResult = (testResult: ITestResult, printLogs: boolean, color = false): string => {
+  const redCode = '\u001b[31m';
+  const greenCode = '\u001b[32m';
+  const resetCode = '\u001b[0m';
+
+  const passedMsg = color ? `${greenCode}+ Passed:${resetCode}` : '+ Passed:';
+  const failedMsg = color ? `${redCode}- Failed:${resetCode}` : '- Failed:';
+
   return (
     `
-${testResult.passed ? '+ Passed:' : '- Failed:'} ${testResult.testName} 
-Duration: ${testResult.duration}ns
+${testResult.passed ? passedMsg : failedMsg} ${testResult.testName} 
+Duration: ${(testResult.duration / 1e6).toFixed(2)}ms
 ${testResult.failReasons.length > 0 ? 'Failure Reasons:\n\t' + testResult.failReasons.join('\n\t').trim() : ''}` +
     (printLogs
       ? `

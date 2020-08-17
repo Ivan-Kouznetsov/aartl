@@ -22,6 +22,7 @@ const showUsage = () => {
     '--report - Instead of outputing all results, output a report with failure rates and duration statistics, overrides --xml'
   );
   console.log('--ff - Exit with error code 1 as as soon as on test fails');
+  console.log('--nocolor - Do not use color codes (useful if your console does not support color codes)');
 };
 
 const okDateTime = () => new Date().toISOString().replace(/:/g, '-');
@@ -43,6 +44,7 @@ const main = async (): Promise<void> => {
       '--q': Boolean,
       '--logs': Boolean,
       '--ff': Boolean,
+      '--nocolor': Boolean,
     });
   } catch (ex) {
     console.log(ex.message);
@@ -63,6 +65,7 @@ const main = async (): Promise<void> => {
   const logs = <boolean>args['--logs'];
   const failFast = <boolean>args['--ff'];
   const maxConcurrent = <number>args['-m'];
+  const noColor = <number>args['--nocolor'];
 
   if (directory && filePath) {
     console.log('Error: cannot specific both a file and a directory');
@@ -103,7 +106,7 @@ const main = async (): Promise<void> => {
           noValidation,
           realTimeLogger: (result) => {
             if (!quiet) {
-              console.log(prettyPrintResult(result, logs));
+              console.log(prettyPrintResult(result, logs, !noColor));
             }
 
             if (failFast && !result.passed) {

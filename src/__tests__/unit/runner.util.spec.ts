@@ -135,11 +135,11 @@ describe('Runner util', () => {
 
     expect(receivedLines).toEqual([
       '+ Passed: should save a post and check id',
-      'Duration: 50561014ns',
+      'Duration: 50.56ms',
       'Requests',
       'Request ☎',
       'POST http://localhost:3000/posts ➥',
-      'Duration: 45908175ns',
+      'Duration: 45.91ms',
       'Content-Length: 25',
       'Hello•world',
       'Response ⬎',
@@ -196,7 +196,7 @@ describe('Runner util', () => {
       .filter((l) => l.trim().length > 0)
       .map((l) => l.trim());
 
-    expect(receivedLines).toEqual(['+ Passed: should save a post and check id', 'Duration: 50561014ns']);
+    expect(receivedLines).toEqual(['+ Passed: should save a post and check id', 'Duration: 50.56ms']);
 
     expect(text).toBeDefined();
   });
@@ -235,5 +235,38 @@ describe('Runner util', () => {
     );
 
     expect(text).toBeDefined();
+  });
+
+  it('should pretty print with colors', () => {
+    const redCode = '\u001b[31m';
+    const greenCode = '\u001b[32m';
+    const resetCode = '\u001b[0m';
+
+    const passed = util.prettyPrintResult(
+      {
+        testName: 'should save a post and check id',
+        passed: true,
+        failReasons: ['hello'],
+        duration: 50561014,
+        requestLogs: [],
+      },
+      false,
+      true
+    );
+
+    const failed = util.prettyPrintResult(
+      {
+        testName: 'should save a post and check id',
+        passed: false,
+        failReasons: ['hello'],
+        duration: 50561014,
+        requestLogs: [],
+      },
+      false,
+      true
+    );
+
+    expect(passed).toContain(`${greenCode}+ Passed:${resetCode}`);
+    expect(failed).toContain(`${redCode}- Failed:${resetCode}`);
   });
 });
