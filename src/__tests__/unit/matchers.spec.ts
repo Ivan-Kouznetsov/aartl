@@ -1,5 +1,5 @@
 import * as matchers from '../../rules/matchers';
-import { NotFound } from '../../rules/matchers';
+import { NotFound } from '../../rules/notFound';
 
 describe('Matchers', () => {
   it('should match via AnyOf correctly', () => {

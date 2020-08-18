@@ -1,6 +1,5 @@
 import { Primitive, MatcherFunction } from '../interfaces/test';
-
-export const NotFound = Symbol.for('NotFound');
+import { NotFound } from './notFound';
 
 /**
  * Curring functions that return functions that take an array and return a non-compliant value if available.

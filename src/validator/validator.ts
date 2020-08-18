@@ -1,7 +1,7 @@
 import { ITest } from '../interfaces/test';
 import { getArgs } from '../parser/util';
-import { aliasedMatchers } from '../rules/aliasedMatchers';
 import { ArgCount } from '../enums/argCount';
+import { aliasedMatchers } from '../parser/aliasedMatchers';
 
 export const getFirstValidationError = (test: ITest): string | undefined => {
   for (let i = 0; i < test.usingValues.length; i++) {

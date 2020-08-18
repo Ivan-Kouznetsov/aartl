@@ -4,8 +4,8 @@ import * as util from './util';
 import * as ruleParser from '../parser/ruleParser';
 import * as http_promise from '../lib/http-promise';
 import { jsonPath } from '../lib/jsonpath';
-import { NotFound } from '../rules/matchers';
 import { ArgCount } from '../enums/argCount';
+import { NotFound } from '../rules/notFound';
 
 export const runTest = async (test: ITest): Promise<ITestResult> => {
   const testWithValues = util.applyRandomValues(util.applyValues(test));

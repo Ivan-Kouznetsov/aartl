@@ -1,6 +1,6 @@
 import * as ruleParser from '../../parser/ruleParser';
 import * as fixtures from './fixtures/request.fixtures';
-import { NotFound } from '../../rules/matchers';
+import { NotFound } from '../../rules/notFound';
 
 describe('Rule parser', () => {
   it('should parse rules', () => {
