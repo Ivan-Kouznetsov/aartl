@@ -1,3 +1,4 @@
+0.6.5 Include request duration only once in reports
 0.6.4 Use ms instead of ns, add colors
 0.6.3 Check for empty rule sets
 0.6.2 Fix validation of is a date

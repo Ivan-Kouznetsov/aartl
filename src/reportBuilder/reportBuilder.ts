@@ -53,8 +53,7 @@ export const requestLogToHtml = (log: IRequestLog): string => {
   <p>Received
   <br/>Headers: ${JSON.stringify(rec.headers)}  
   <br/>${rec.json ? escapeHtmlChars(JSON.stringify(rec.json)) : escapeHtmlChars(rec.string)}
-  <br/>Status: ${rec.status}
-  <br/>Duration: ${formatDuration(log.duration)} ms   
+  <br/>Status: ${rec.status}   
   `;
 };
 
