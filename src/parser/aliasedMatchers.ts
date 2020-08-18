@@ -1,4 +1,4 @@
-import * as matchers from './matchers';
+import * as matchers from '../rules/matchers';
 import { Factory } from '../interfaces/test';
 import { ArgCount } from '../enums/argCount';
 

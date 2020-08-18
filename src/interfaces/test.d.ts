@@ -1,5 +1,5 @@
-import { NotFound } from '../rules/matchers';
 import { ArgCount } from '../enums/argCount';
+import { NotFound } from '../rules/notFound';
 
 export interface IKeyValuePair {
   [key: string]: string | number | boolean;

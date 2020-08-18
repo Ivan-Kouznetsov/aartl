@@ -1,8 +1,8 @@
-import { aliasedMatchers } from '../rules/aliasedMatchers';
 import { IRequest, Primitive, IRule } from '../interfaces/test';
 import { getArgs } from './util';
 import { ArgCount } from '../enums/argCount';
-import { NotFound } from '../rules/matchers';
+import { aliasedMatchers } from './aliasedMatchers';
+import { NotFound } from '../rules/notFound';
 
 const parseRule = (rule: string): IRule => {
   const sortedAliasedMatchers = [...aliasedMatchers].sort((a, b) => b.alias.length - a.alias.length);
