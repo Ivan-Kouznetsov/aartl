@@ -34,45 +34,64 @@ export const validateLessThanOrEqual = (compareWith: number): MatcherFunction =>
   arr.find((item) => !(numberRegex.test(item.toString()) && parseFloat(item.toString()) <= compareWith)) ?? NotFound;
 
 /* Dates */
+
 const sameDate = (d1: Date, d2: Date) =>
   d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate();
 
+const toDate = (p: Primitive) => new Date(p.toString());
+const now = () => new Date();
+const isNotDate = (p: Primitive) => isNaN(toDate(p).valueOf());
+
 export const validateEarlierThan = (compareWith: string): MatcherFunction => (
   arr: Primitive[]
-): Primitive | typeof NotFound => arr.find((item) => new Date(item.toString()) >= new Date(compareWith)) ?? NotFound;
+): Primitive | typeof NotFound =>
+  arr.find((item) => isNotDate(item) || toDate(item) >= new Date(compareWith)) ?? NotFound;
 
 export const validateAfter = (compareWith: string): MatcherFunction => (
   arr: Primitive[]
-): Primitive | typeof NotFound => arr.find((item) => new Date(item.toString()) <= new Date(compareWith)) ?? NotFound;
+): Primitive | typeof NotFound =>
+  arr.find((item) => isNotDate(item) || toDate(item) <= new Date(compareWith)) ?? NotFound;
 
 export const validateSameDateAs = (compareWith: string): MatcherFunction => (
   arr: Primitive[]
 ): Primitive | typeof NotFound =>
-  arr.find((item) => !sameDate(new Date(item.toString()), new Date(compareWith))) ?? NotFound;
+  arr.find((item) => isNotDate(item) || !sameDate(toDate(item), new Date(compareWith))) ?? NotFound;
 
 export const validateSameDateTimeAs = (compareWith: string): MatcherFunction => (
   arr: Primitive[]
 ): Primitive | typeof NotFound =>
-  arr.find((item) => new Date(item.toString()).valueOf() !== new Date(compareWith).valueOf()) ?? NotFound;
+  arr.find((item) => isNotDate(item) || toDate(item).valueOf() !== new Date(compareWith).valueOf()) ?? NotFound;
 
 export const validateAsEarlyAs = (compareWith: string): MatcherFunction => (
   arr: Primitive[]
-): Primitive | typeof NotFound => arr.find((item) => new Date(item.toString()) < new Date(compareWith)) ?? NotFound;
+): Primitive | typeof NotFound =>
+  arr.find((item) => isNotDate(item) || toDate(item) < new Date(compareWith)) ?? NotFound;
 
 export const validateAsLateAs = (compareWith: string): MatcherFunction => (
   arr: Primitive[]
-): Primitive | typeof NotFound => arr.find((item) => new Date(item.toString()) > new Date(compareWith)) ?? NotFound;
+): Primitive | typeof NotFound =>
+  arr.find((item) => isNotDate(item) || toDate(item) > new Date(compareWith)) ?? NotFound;
 
 export const validateDate = (): MatcherFunction => (arr: Primitive[]): Primitive | typeof NotFound =>
-  arr.find((item) => isNaN(new Date(item.toString()).valueOf())) ?? NotFound;
+  arr.find((item) => isNotDate(item)) ?? NotFound;
+
+export const validateToday = (): MatcherFunction => validateSameDateAs(now().toISOString());
+
+export const validateAfterToday = (): MatcherFunction => (arr: Primitive[]): Primitive | typeof NotFound =>
+  arr.find((item) => isNotDate(item) || sameDate(now(), toDate(item)) || toDate(item) < now()) ?? NotFound;
+
+export const validateBeforeToday = (): MatcherFunction => (arr: Primitive[]): Primitive | typeof NotFound =>
+  arr.find((item) => isNotDate(item) || sameDate(now(), toDate(item)) || toDate(item) > now()) ?? NotFound;
 
 /* Strings */
 
 export const validateNonEmptyString = (): MatcherFunction => (arr: Primitive[]): Primitive | typeof NotFound =>
   arr.find((item) => typeof item !== 'string' || !(item.length > 0)) ?? NotFound;
+
 export const validateStringContaining = (str: string): MatcherFunction => (
   arr: Primitive[]
 ): Primitive | typeof NotFound => arr.find((item) => typeof item !== 'string' || !item.includes(str)) ?? NotFound;
+
 export const validateStringNotContaining = (str: string): MatcherFunction => (
   arr: Primitive[]
 ): Primitive | typeof NotFound => arr.find((item) => typeof item !== 'string' || item.includes(str)) ?? NotFound;
@@ -93,15 +112,19 @@ export const validateRegex = (regex: string): MatcherFunction => (arr: Primitive
 export const validateCountEquals = (count: number): MatcherFunction => (
   arr: Primitive[]
 ): Primitive | typeof NotFound => (arr.length !== count ? arr.length : NotFound);
+
 export const validateCountGreaterThan = (count: number): MatcherFunction => (
   arr: Primitive[]
 ): Primitive | typeof NotFound => (!(arr.length > count) ? arr.length : NotFound);
+
 export const validateCountGreaterThanOrEqual = (count: number): MatcherFunction => (
   arr: Primitive[]
 ): Primitive | typeof NotFound => (!(arr.length >= count) ? arr.length : NotFound);
+
 export const validateCountLessThan = (count: number): MatcherFunction => (
   arr: Primitive[]
 ): Primitive | typeof NotFound => (!(arr.length < count) ? arr.length : NotFound);
+
 export const validateCountLessThanOrEqual = (count: number): MatcherFunction => (
   arr: Primitive[]
 ): Primitive | typeof NotFound => (!(arr.length <= count) ? arr.length : NotFound);

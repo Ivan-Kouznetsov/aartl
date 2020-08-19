@@ -29,5 +29,8 @@ To match JSON rules
 	"$..xx": is text containing AAAA
 	"$..xx": is text not containing AAAA
 	"$..xx": matches \d+
-	"$..xx": properties limited to AAA BB C   
+	"$..xx": properties limited to AAA BB C  
+	"$..xx": is today 
+	"$..xx": is after today 
+	"$..xx": is before today 
 `;

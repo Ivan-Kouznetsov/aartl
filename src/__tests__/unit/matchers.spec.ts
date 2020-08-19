@@ -172,8 +172,24 @@ describe('Matchers', () => {
     expect(matchers.validateSorted('DESC')(['A', 'B', 'C'].reverse())).toEqual(NotFound);
   });
 
-  it('should return array when unordered string array is passed', () => {
-    expect(matchers.validateSorted('ASC')(['A', 'Z', 'C'])).toEqual('["A","Z","C"]');
-    expect(matchers.validateSorted('DESC')(['A', 'Z', 'C'])).toEqual('["A","Z","C"]');
+  it('should match via validateToday correctly', () => {
+    expect(matchers.validateToday()([new Date().toString()])).toBe(NotFound);
+    expect(matchers.validateToday()(['hello'])).toBe('hello');
+    expect(matchers.validateToday()(['Jan 1 2020'])).toBe('Jan 1 2020');
+    expect(matchers.validateToday()(['Jan 1 3020'])).toBe('Jan 1 3020');
+  });
+
+  it('should match via validateAfterToday correctly', () => {
+    expect(matchers.validateAfterToday()([new Date().toString()])).not.toBe(NotFound);
+    expect(matchers.validateAfterToday()(['hello'])).toBe('hello');
+    expect(matchers.validateAfterToday()(['Jan 1 2020'])).toBe('Jan 1 2020');
+    expect(matchers.validateAfterToday()(['Jan 1 3020'])).toBe(NotFound);
+  });
+
+  it('should match via validateBeforeToday correctly', () => {
+    expect(matchers.validateBeforeToday()([new Date().toString()])).not.toBe(NotFound);
+    expect(matchers.validateBeforeToday()(['hello'])).toBe('hello');
+    expect(matchers.validateBeforeToday()(['Jan 1 2020'])).toBe(NotFound);
+    expect(matchers.validateBeforeToday()(['Jan 1 3020'])).toBe('Jan 1 3020');
   });
 });
