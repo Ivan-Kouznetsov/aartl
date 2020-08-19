@@ -107,9 +107,9 @@ export const aliasedMatchers: {
     argValidator: validateArgNumber,
   },
   {
-    factory: <Factory>matchers.validateEachHasProp,
+    factory: <Factory>matchers.validateEachHasProps,
     alias: 'each has',
-    argCount: ArgCount.One,
+    argCount: ArgCount.Many,
     argValidator: validateArgString,
   },
   {

@@ -83,9 +83,9 @@ describe('Matchers', () => {
     expect(matchers.validateStringNotContaining('hello')(['hello', 'hi'])).toEqual('hello');
   });
 
-  it('should match via validateEachHasProp correctly', () => {
-    expect(matchers.validateEachHasProp('hello')([{ hello: 123 }])).toEqual(NotFound);
-    expect(matchers.validateEachHasProp('hello')([{}])).toEqual({});
+  it('should match via validateEachHasProps correctly', () => {
+    expect(matchers.validateEachHasProps(['hello'])([{ hello: 123 }])).toEqual(NotFound);
+    expect(matchers.validateEachHasProps(['hello'])([{}])).toEqual({});
   });
 
   it('should match via validateEachHasPropsLimitedTo correctly', () => {

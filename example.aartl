@@ -4,14 +4,7 @@ Expect HTTP request
     method: GET
 To match JSON rules
 	"$[*]": count > 0
-	"$[*]": each has id
-	"$[*]": each has name
-	"$[*]": each has username
-	"$[*]": each has email
-	"$[*]": each has address
-	"$[*]": each has phone
-	"$[*]": each has website
-	"$[*]": each has company
+	"$[*]": each has id name username email address phone website company xxx
 	"$[*].id": count > 0
 	"$[*].id": >= 1
 	"$[*].name": count > 0
