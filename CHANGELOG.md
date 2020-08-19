@@ -1,3 +1,4 @@
+0.6.6 Add new date rules (is today, is after today, is before today), use isNotDate check to all datetime matcher functions
 0.6.5 Include request duration only once in reports
 0.6.4 Use ms instead of ns, add colors
 0.6.3 Check for empty rule sets

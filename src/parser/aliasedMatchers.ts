@@ -166,4 +166,19 @@ export const aliasedMatchers: {
     argCount: ArgCount.One,
     argValidator: validateArgSortDir,
   },
+  {
+    factory: <Factory>matchers.validateAfterToday,
+    alias: 'is after today',
+    argCount: ArgCount.None,
+  },
+  {
+    factory: <Factory>matchers.validateBeforeToday,
+    alias: 'is before today',
+    argCount: ArgCount.None,
+  },
+  {
+    factory: <Factory>matchers.validateToday,
+    alias: 'is today',
+    argCount: ArgCount.None,
+  },
 ];

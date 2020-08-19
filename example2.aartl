@@ -80,7 +80,7 @@
     url: http://localhost:3000/posts/_id
   To respond with status code 200 /** OK **/
   To match header rules
-    "x-powered-by":"Express"
+    "X-Powered-By":"Express"
 
   Test that it should save a post and be powered by XXXX
   Using values
@@ -98,7 +98,7 @@
     url: http://localhost:3000/posts/_id
   To respond with status code 200 /** OK **/
   To match header rules
-    "x-powered-by":"XXXX"
+    "X-Powered-By":"XXXX"
 
   Test that it should check that post id is 0
   Using values
