@@ -35,22 +35,22 @@ const now = () => new Date();
 const isNotDate = (p: Primitive) => isNaN(toDate(p).valueOf());
 
 export const validateEarlierThan = (compareWith: string): MatcherFunction => (arr: Primitive[]): MatcherResult =>
-  arr.find((item) => isNotDate(item) || toDate(item) >= new Date(compareWith)) ?? NotFound;
+  arr.find((item) => isNotDate(item) || toDate(item) >= toDate(compareWith)) ?? NotFound;
 
 export const validateAfter = (compareWith: string): MatcherFunction => (arr: Primitive[]): MatcherResult =>
-  arr.find((item) => isNotDate(item) || toDate(item) <= new Date(compareWith)) ?? NotFound;
+  arr.find((item) => isNotDate(item) || toDate(item) <= toDate(compareWith)) ?? NotFound;
 
 export const validateSameDateAs = (compareWith: string): MatcherFunction => (arr: Primitive[]): MatcherResult =>
-  arr.find((item) => isNotDate(item) || !sameDate(toDate(item), new Date(compareWith))) ?? NotFound;
+  arr.find((item) => isNotDate(item) || !sameDate(toDate(item), toDate(compareWith))) ?? NotFound;
 
 export const validateSameDateTimeAs = (compareWith: string): MatcherFunction => (arr: Primitive[]): MatcherResult =>
-  arr.find((item) => isNotDate(item) || toDate(item).valueOf() !== new Date(compareWith).valueOf()) ?? NotFound;
+  arr.find((item) => isNotDate(item) || toDate(item).valueOf() !== toDate(compareWith).valueOf()) ?? NotFound;
 
 export const validateAsEarlyAs = (compareWith: string): MatcherFunction => (arr: Primitive[]): MatcherResult =>
-  arr.find((item) => isNotDate(item) || toDate(item) < new Date(compareWith)) ?? NotFound;
+  arr.find((item) => isNotDate(item) || toDate(item) < toDate(compareWith)) ?? NotFound;
 
 export const validateAsLateAs = (compareWith: string): MatcherFunction => (arr: Primitive[]): MatcherResult =>
-  arr.find((item) => isNotDate(item) || toDate(item) > new Date(compareWith)) ?? NotFound;
+  arr.find((item) => isNotDate(item) || toDate(item) > toDate(compareWith)) ?? NotFound;
 
 export const validateDate = (): MatcherFunction => (arr: Primitive[]): MatcherResult =>
   arr.find((item) => isNotDate(item)) ?? NotFound;
