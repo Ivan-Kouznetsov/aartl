@@ -5,6 +5,7 @@ import { arg } from './src/lib/arg';
 import { exit } from 'process';
 import { buildHtmlReport, resultsToXml } from './src/reportBuilder/reportBuilder';
 import { prettyPrintResult } from './src/runner/util';
+import { applyFixtures } from './src/parser/preprocessor';
 
 const showUsage = () => {
   console.log('Usage: node aartl.js -f "path-to-test-file"');
@@ -99,7 +100,7 @@ const main = async (): Promise<void> => {
         console.error(err.message);
       } else {
         suiteRunner({
-          content,
+          content: applyFixtures(content, path.dirname(file)),
           testName,
           numberOfRuns,
           randomize,
