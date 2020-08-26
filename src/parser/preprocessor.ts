@@ -1,10 +1,12 @@
 import * as fileSystem from 'fs';
 import { resolve } from 'path';
 
+const fixtureCache: { [key: string]: string } = {};
+
 const getFixture = (name: string, path: string): string => {
   try {
     const filePath = resolve(path, 'fixtures', name + '.fixture');
-    return fileSystem.readFileSync(filePath).toString('utf-8');
+    return fixtureCache[filePath] || (fixtureCache[filePath] = fileSystem.readFileSync(filePath).toString('utf-8'));
   } catch (ex) {
     throw `Fixture file ${name}.fixture not found`;
   }
