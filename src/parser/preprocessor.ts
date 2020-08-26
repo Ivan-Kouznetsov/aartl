@@ -7,7 +7,7 @@ const getFixture = (name: string, path: string): string => {
   try {
     const filePath = resolve(path, 'fixtures', name + '.fixture');
     return fixtureCache[filePath] || (fixtureCache[filePath] = fileSystem.readFileSync(filePath).toString('utf-8'));
-  } catch (ex) {
+  } catch {
     throw `Fixture file ${name}.fixture not found`;
   }
 };
