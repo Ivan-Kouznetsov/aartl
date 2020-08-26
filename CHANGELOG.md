@@ -1,3 +1,4 @@
+0.7.0 Add fixtures
 0.6.7 MatchResult type, multiple args for each has
 0.6.6 Add new date rules (is today, is after today, is before today), use isNotDate check to all datetime matcher functions
 0.6.5 Include request duration only once in reports
