@@ -99,8 +99,14 @@ const main = async (): Promise<void> => {
       if (err) {
         console.error(err.message);
       } else {
+        try {
+          content = applyFixtures(content, path.dirname(file));
+        } catch (ex) {
+          console.error(ex);
+          exit(1);
+        }
         suiteRunner({
-          content: applyFixtures(content, path.dirname(file)),
+          content,
           testName,
           numberOfRuns,
           randomize,
