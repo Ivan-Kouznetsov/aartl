@@ -67,6 +67,8 @@ Data needed for an HTTP request is:
 - method **_Example_**: post
 - url **_Example_**: http://example.org/things/123
 - body **_Example_**: Hello World
+    - body can be loaded from a fixture file like so `body from fixture: myfixture`
+    - this will load the content of fixtures/myfixture.fixture and use that as the body of the request
 
 Optional statements about how to handle transitioning to the next request are:
 
