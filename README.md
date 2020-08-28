@@ -1,10 +1,10 @@
 [![Actions Status](https://github.com/Ivan-Kouznetsov/aartl/workflows/Node.js%20CI/badge.svg)](https://github.com/Ivan-Kouznetsov/aartl/actions)
 [![100% coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg)](https://github.com/Ivan-Kouznetsov/aartl/actions)
+![Platforms](https://img.shields.io/badge/platforms-Windows%20|%20Linux%20|%20macOS-brightgreen.svg)
 [![License][license-image]][license-url]
 
 [license-url]: https://opensource.org/licenses/MIT
-[license-image]: https://img.shields.io/npm/l/make-coverage-badge.svg
-
+[license-image]: https://img.shields.io/badge/license-MIT-brightgreen
 # Why?
 
 Imagine you have a software-as-a-service product that includes multiple services that rely on each other. Each of the services is tested. Let's say for the sake of argument they have code coverage of between 85% and 95%, you may have some confidence that the services work.
