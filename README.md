@@ -1,9 +1,9 @@
 [![Actions Status](https://github.com/Ivan-Kouznetsov/aartl/workflows/Node.js%20CI/badge.svg)](https://github.com/Ivan-Kouznetsov/aartl/actions)
 [![100% coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg)](https://github.com/Ivan-Kouznetsov/aartl/actions)
-![Platforms](https://img.shields.io/badge/platforms-Windows%20|%20Linux%20|%20macOS-brightgreen.svg)
+[![Platforms](https://img.shields.io/badge/platforms-Windows%20|%20Linux%20|%20macOS-brightgreen.svg)](https://github.com/Ivan-Kouznetsov/aartl/actions)
 [![License][license-image]][license-url]
 
-[license-url]: https://opensource.org/licenses/MIT
+[license-url]: LICENSE
 [license-image]: https://img.shields.io/badge/license-MIT-brightgreen
 # Why?
 
