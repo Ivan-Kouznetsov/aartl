@@ -12,14 +12,12 @@ export const xml2json = (xmlStr: string): object => {
  */
 const xml2jsonRecurse = (xmlStr: string) => {
   const obj: { [key: string]: string | object | Array<object> } = {};
-
-  let tagName: string, indexClosingTag: number, inner_substring: string, tempVal, openingTag;
+  let tagName: string, indexClosingTag: number, inner_substring: string, tempVal: string | object, openingTag: string;
 
   while (xmlStr.match(/<[^/][^>]*>/)) {
     openingTag = xmlStr.match(/<[^/][^>]*>/)![0];
     tagName = openingTag.substring(1, openingTag.length - 1);
     tagName = tagName.includes(' ') ? /\S*(?=\s)/.exec(tagName)![0] : tagName;
-
     indexClosingTag = xmlStr.indexOf(openingTag.replace('<', '</'));
 
     inner_substring = xmlStr.substring(openingTag.length, indexClosingTag);
@@ -28,7 +26,7 @@ const xml2jsonRecurse = (xmlStr: string) => {
     } else {
       tempVal = inner_substring;
     }
-    // account for array or obj //
+    // account for array or obj
     if (obj[tagName] === undefined) {
       obj[tagName] = tempVal;
     } else if (Array.isArray(obj[tagName])) {
