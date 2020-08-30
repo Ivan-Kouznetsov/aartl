@@ -1,15 +1,18 @@
+export interface IHashTable {
+  [key: string]: string;
+}
 export interface IRequestLog {
   duration: number;
   sent: {
     url?: string;
     body?: string;
-    headers: { [key: string]: string };
+    headers: IHashTable;
     method?: string;
   };
   received: {
     json: Record<string, unknown> | null;
     string: string;
-    headers: { [key: string]: string };
+    headers: IHashTable;
     status?: number;
   };
 }
