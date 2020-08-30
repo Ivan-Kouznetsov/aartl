@@ -187,9 +187,9 @@ describe('Test runner', () => {
   });
 
   it('should pass when extra properties are not present', async () => {
-    const badResult = await runTestThruAllSteps(fixtures.limitedPropsPass);
+    const result = await runTestThruAllSteps(fixtures.limitedPropsPass);
 
-    expect(badResult.passed).toBe(true);
+    expect(result.passed).toBe(true);
   });
 
   it('should have every rule pass when they match the data', async () => {
@@ -217,14 +217,25 @@ describe('Test runner', () => {
   });
 
   it('should have sorted rule pass when dates are sorted asc', async () => {
-    const badResult = await runTestThruAllSteps(sortingFixtures.sortedAsc);
+    const result = await runTestThruAllSteps(sortingFixtures.sortedAsc);
 
-    expect(badResult.passed).toBe(true);
+    expect(result.passed).toBe(true);
   });
 
   it('should have sorted rule pass when dates are sorted desc', async () => {
-    const badResult = await runTestThruAllSteps(sortingFixtures.sortedDesc);
+    const result = await runTestThruAllSteps(sortingFixtures.sortedDesc);
 
-    expect(badResult.passed).toBe(true);
+    expect(result.passed).toBe(true);
+  });
+
+  it('should get xml as json and check a value', async () => {
+    const result = await runTestThruAllSteps(fixtures.getXmlPass);
+
+    expect(result.passed).toBe(true);
+
+    const badResult = await runTestThruAllSteps(fixtures.getXmlFail);
+
+    expect(badResult.passed).toBe(false);
+    expect(badResult.failReasons[0]).toEqual('Expected $..make to be Not Cessna, got "Cessna"');
   });
 });

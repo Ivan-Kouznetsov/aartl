@@ -372,3 +372,21 @@ export const allRulesFail = `
     "$..text": matches pie
     "$": properties limited to id
   `;
+
+export const getXmlPass = `
+  Test that it should be a Cessna
+  Expect HTTP request
+    method: get
+    url: http://localhost:3000/xml
+  To match JSON rules
+    "$..make": Cessna
+  `;
+
+export const getXmlFail = `
+  Test that it should not be a Cessna
+  Expect HTTP request
+    method: get
+    url: http://localhost:3000/xml
+  To match JSON rules
+    "$..make": Not Cessna
+  `;
