@@ -63,7 +63,7 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
           return {
             testName: test.name,
             passed: false,
-            failReasons: [`Cannot pass on value because response was not JSON`],
+            failReasons: [`Cannot pass on value because response was not JSON or XML`],
             duration: util.bigIntToNumber(process.hrtime.bigint() - testStartTime),
             requestLogs,
           };
@@ -89,7 +89,7 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
       if (currentRequest.expectedStatusCode) {
         if (currentRequestResponse.status !== parseInt(currentRequest.expectedStatusCode)) {
           failReasons.push(
-            `Expected status code of ${currentRequest.expectedStatusCode}, got: ${currentRequestResponse.status}`
+            `Expected status code of ${currentRequest.expectedStatusCode}, received: ${currentRequestResponse.status}`
           );
         }
       }
@@ -105,7 +105,7 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
               currentRequestResponse.headers[headerRule.key] !== headerRule.value)
           ) {
             failReasons.push(
-              `Expected header ${headerRule.key} to be ${headerRule.value}, got: ${
+              `Expected header ${headerRule.key} to match ${headerRule.value}, received: ${
                 currentRequestResponse.headers[headerRule.key] === undefined
                   ? 'nothing'
                   : currentRequestResponse.headers[headerRule.key]
@@ -122,7 +122,7 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
           return {
             testName: test.name,
             passed: false,
-            failReasons: [`Cannot check JSON rules because response was not JSON`],
+            failReasons: [`Cannot check JSON rules because response was not JSON or XML`],
             duration: util.bigIntToNumber(process.hrtime.bigint() - testStartTime),
             requestLogs,
           };
@@ -133,10 +133,12 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
             if (rule.originalRule.toString().includes('count')) {
               const ruleCheckResult = rule.matching.factory(rule.matching.args[0])([]);
               if (ruleCheckResult !== NotFound) {
-                failReasons.push(`Expected ${rule.jsonpath} to be ${rule.originalRule}, got ${ruleCheckResult}`);
+                failReasons.push(
+                  `Expected ${rule.jsonpath} to match ${rule.originalRule}, received ${ruleCheckResult}`
+                );
               }
             } else {
-              failReasons.push(`Expected ${rule.jsonpath} to be ${rule.originalRule}, got nothing`);
+              failReasons.push(`Expected ${rule.jsonpath} to match ${rule.originalRule}, received nothing`);
             }
           } else {
             const nonCompliantValue =
@@ -145,7 +147,7 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
                 : rule.matching.factory(rule.matching.args)(data);
             if (nonCompliantValue !== NotFound) {
               failReasons.push(
-                `Expected ${rule.jsonpath} to be ${rule.originalRule}, got ${JSON.stringify(nonCompliantValue)}`
+                `Expected ${rule.jsonpath} to match ${rule.originalRule}, received ${JSON.stringify(nonCompliantValue)}`
               );
             }
           }
