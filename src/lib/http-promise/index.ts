@@ -59,8 +59,7 @@ const tryParseJson = (str: string): Record<string, unknown> | null => {
 const tryParseXml = (str: string): Record<string, unknown> | null => {
   try {
     return <Record<string, unknown>>xml2json(str);
-  } catch (ex) {
-    console.log(ex);
+  } catch {
     return null;
   }
 };
