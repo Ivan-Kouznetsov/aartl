@@ -46,10 +46,10 @@ export const getFirstValidationError = (test: ITest): string | undefined => {
             return `Rule: ${JSON.stringify(rule)} has too many arguments`;
           }
           if (am.argCount === ArgCount.One && argLength !== 1) {
-            return `Rule: ${JSON.stringify(rule)} requires 1 argument, got ${argLength}`;
+            return `Rule: ${JSON.stringify(rule)} requires 1 argument, received ${argLength}`;
           }
           if (am.argCount === ArgCount.Many && argLength === 0) {
-            return `Rule: ${JSON.stringify(rule)} requires 1 or more arguments, got 0`;
+            return `Rule: ${JSON.stringify(rule)} requires 1 or more arguments, received 0`;
           }
 
           for (const a of args) {

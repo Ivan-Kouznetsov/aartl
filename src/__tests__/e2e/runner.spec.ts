@@ -45,14 +45,14 @@ describe('Test runner', () => {
     const result = await runTestThruAllSteps(fixtures.requestNonexistentPost);
 
     expect(result.passed).toBe(false);
-    expect(result.failReasons[0]).toEqual('Expected status code of 200, got: 404');
+    expect(result.failReasons[0]).toEqual('Expected status code of 200, received: 404');
   });
 
   it('should fail when header rules does not exist', async () => {
     const result = await runTestThruAllSteps(fixtures.missingHeader);
 
     expect(result.passed).toBe(false);
-    expect(result.failReasons[0]).toEqual('Expected header X-Cache to be true, got: nothing');
+    expect(result.failReasons[0]).toEqual('Expected header X-Cache to match true, received: nothing');
   });
 
   it('should pass when header rules do match', async () => {
@@ -65,14 +65,16 @@ describe('Test runner', () => {
     const result = await runTestThruAllSteps(fixtures.wrongHeaderValue);
 
     expect(result.passed).toBe(false);
-    expect(result.failReasons[0]).toEqual('Expected header X-Powered-By to be XXXX, got: Express');
+    expect(result.failReasons[0]).toEqual('Expected header X-Powered-By to match XXXX, received: Express');
   });
 
   it('should not pass when prohibited header is present', async () => {
     const result = await runTestThruAllSteps(fixtures.headerNotPresentFail);
 
     expect(result.passed).toBe(false);
-    expect(result.failReasons[0]).toEqual('Expected header X-Powered-By to be must not be present, got: Express');
+    expect(result.failReasons[0]).toEqual(
+      'Expected header X-Powered-By to match must not be present, received: Express'
+    );
   });
 
   it('should pass when prohibited header is not present', async () => {
@@ -85,14 +87,14 @@ describe('Test runner', () => {
     const result = await runTestThruAllSteps(fixtures.checkLiteral);
 
     expect(result.passed).toBe(false);
-    expect(result.failReasons[0]).toContain('Expected $..id to be 0, got');
+    expect(result.failReasons[0]).toContain('Expected $..id to match 0, received');
   });
 
   it('should fail when anyOf rules do not match', async () => {
     const result = await runTestThruAllSteps(fixtures.wrongCheckAnyOf);
 
     expect(result.passed).toBe(false);
-    expect(result.failReasons[0]).toContain('Expected $..id to be is any of 1 2 3 4 5, got 0');
+    expect(result.failReasons[0]).toContain('Expected $..id to match is any of 1 2 3 4 5, received 0');
   });
 
   it('should pass when anyOf rules do match', async () => {
@@ -125,14 +127,14 @@ describe('Test runner', () => {
     const result = await runTestThruAllSteps(fixtures.passOnNonExistentValue);
 
     expect(result.passed).toBe(false);
-    expect(result.failReasons[0]).toEqual('Cannot pass on value because response was not JSON');
+    expect(result.failReasons[0]).toEqual('Cannot pass on value because response was not JSON or XML');
   });
 
   it('should fail when checking JSON rule against a non-JSON response', async () => {
     const result = await runTestThruAllSteps(fixtures.JsonRuleCheckWhenResponseIsNotJson);
 
     expect(result.passed).toBe(false);
-    expect(result.failReasons[0]).toEqual('Cannot check JSON rules because response was not JSON');
+    expect(result.failReasons[0]).toEqual('Cannot check JSON rules because response was not JSON or XML');
   });
 
   it('should defualt to get when method is not provided', async () => {
@@ -145,7 +147,7 @@ describe('Test runner', () => {
     const badResult = await runTestThruAllSteps(fixtures.hasEachRootQueryFail);
 
     expect(badResult.passed).toBe(false);
-    expect(badResult.failReasons[0]).toEqual('Expected $ to be each has XXX, got {"id":0,"text":"0th Post"}');
+    expect(badResult.failReasons[0]).toEqual('Expected $ to match each has XXX, received {"id":0,"text":"0th Post"}');
 
     const goodResult = await runTestThruAllSteps(fixtures.hasEachRootQueryPass);
 
@@ -156,7 +158,7 @@ describe('Test runner', () => {
     const badResult = await runTestThruAllSteps(fixtures.countFail);
 
     expect(badResult.passed).toBe(false);
-    expect(badResult.failReasons[0]).toEqual('Expected $..text to be count >= 50, got 0');
+    expect(badResult.failReasons[0]).toEqual('Expected $..text to match count >= 50, received 0');
 
     const goodResult = await runTestThruAllSteps(fixtures.countPass);
 
@@ -167,14 +169,14 @@ describe('Test runner', () => {
     const badResult = await runTestThruAllSteps(fixtures.nonExistentJsonPath);
 
     expect(badResult.passed).toBe(false);
-    expect(badResult.failReasons[0]).toEqual('Expected $..AAAAA to be 10, got nothing');
+    expect(badResult.failReasons[0]).toEqual('Expected $..AAAAA to match 10, received nothing');
   });
 
   it('should fail when checking JSON rule for a path that does not exist with a rule', async () => {
     const badResult = await runTestThruAllSteps(fixtures.nonExistentJsonPathRule);
 
     expect(badResult.passed).toBe(false);
-    expect(badResult.failReasons[0]).toEqual('Expected $..AAAAA to be > 10, got nothing');
+    expect(badResult.failReasons[0]).toEqual('Expected $..AAAAA to match > 10, received nothing');
   });
 
   it('should fail when extra properties are present', async () => {
@@ -182,7 +184,7 @@ describe('Test runner', () => {
 
     expect(badResult.passed).toBe(false);
     expect(badResult.failReasons[0]).toEqual(
-      'Expected $ to be properties limited to text, got {"id":0,"text":"0th Post"}'
+      'Expected $ to match properties limited to text, received {"id":0,"text":"0th Post"}'
     );
   });
 
@@ -212,7 +214,7 @@ describe('Test runner', () => {
 
     expect(badResult.passed).toBe(false);
     expect(badResult.failReasons).toEqual([
-      'Expected $..releaseDate to be is sorted asc, got "[\\"Jan 12, 2000\\",\\"Aug 1, 2000\\",\\"Feb 14, 2000\\"]"',
+      'Expected $..releaseDate to match is sorted asc, received "[\\"Jan 12, 2000\\",\\"Aug 1, 2000\\",\\"Feb 14, 2000\\"]"',
     ]);
   });
 
@@ -236,6 +238,6 @@ describe('Test runner', () => {
     const badResult = await runTestThruAllSteps(fixtures.getXmlFail);
 
     expect(badResult.passed).toBe(false);
-    expect(badResult.failReasons[0]).toEqual('Expected $..make to be Not Cessna, got "Cessna"');
+    expect(badResult.failReasons[0]).toEqual('Expected $..make to match Not Cessna, received "Cessna"');
   });
 });

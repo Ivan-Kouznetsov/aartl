@@ -29,7 +29,7 @@ export const testResults: ITestResult[] = [
   {
     testName: 'should save a post and make sure id is less than 0',
     passed: false,
-    failReasons: ['Expected $..id to be < 0, got 166'],
+    failReasons: ['Expected $..id to match < 0, received 166'],
     duration: 55991817,
     requestLogs: [
       {
@@ -79,7 +79,7 @@ export const testResults: ITestResult[] = [
   {
     testName: 'should check that post id is 0',
     passed: false,
-    failReasons: ['Expected $..id to be 0, got 170'],
+    failReasons: ['Expected $..id to match 0, received 170'],
     duration: 59402017,
     requestLogs: [
       {
@@ -104,7 +104,7 @@ export const testResults: ITestResult[] = [
   {
     testName: 'should check that post id is 1 - 5',
     passed: false,
-    failReasons: ['Expected $..id to be is any of 1 2 3 4 5, got 0'],
+    failReasons: ['Expected $..id to match is any of 1 2 3 4 5, received 0'],
     duration: 57960389,
     requestLogs: [
       {
@@ -179,7 +179,7 @@ export const testResults: ITestResult[] = [
   {
     testName: 'should save a post and cache it',
     passed: false,
-    failReasons: ['Expected header X-Cache to be true, got: nothing'],
+    failReasons: ['Expected header X-Cache to match true, received: nothing'],
     duration: 67852239,
     requestLogs: [
       {
@@ -263,7 +263,7 @@ export const testResults: ITestResult[] = [
   {
     testName: 'should save a post and be powered by XXXX',
     passed: false,
-    failReasons: ['Expected header X-Powered-By to be XXXX, got: Express'],
+    failReasons: ['Expected header X-Powered-By to match XXXX, received: Express'],
     duration: 66961634,
     requestLogs: [
       {
@@ -377,7 +377,7 @@ classname="should_save_a_post_and_make_sure_id_is_less_than_0"
 status="failed"
 time="0.06"
 >
-<failure message="Expected $..id to be < 0, got 166"></failure>
+<failure message="Expected $..id to match < 0, received 166"></failure>
 </testcase>
 <testcase name="should get apost with id of -1"
 classname="should_get_apost_with_id_of_-1"
@@ -391,14 +391,14 @@ classname="should_check_that_post_id_is_0"
 status="failed"
 time="0.06"
 >
-<failure message="Expected $..id to be 0, got 170"></failure>
+<failure message="Expected $..id to match 0, received 170"></failure>
 </testcase>
 <testcase name="should check that post id is 1 - 5"
 classname="should_check_that_post_id_is_1_-_5"
 status="failed"
 time="0.06"
 >
-<failure message="Expected $..id to be is any of 1 2 3 4 5, got 0"></failure>
+<failure message="Expected $..id to match is any of 1 2 3 4 5, received 0"></failure>
 </testcase>
 <testcase name="should check post id 0 - 5"
 classname="should_check_post_id_0_-_5"
@@ -419,7 +419,7 @@ classname="should_save_a_post_and_cache_it"
 status="failed"
 time="0.07"
 >
-<failure message="Expected header X-Cache to be true, got: nothing"></failure>
+<failure message="Expected header X-Cache to match true, received: nothing"></failure>
 </testcase>
 <testcase name="should save a post and be powered by Express"
 classname="should_save_a_post_and_be_powered_by_Express"
@@ -433,7 +433,7 @@ classname="should_save_a_post_and_be_powered_by_XXXX"
 status="failed"
 time="0.07"
 >
-<failure message="Expected header X-Powered-By to be XXXX, got: Express"></failure>
+<failure message="Expected header X-Powered-By to match XXXX, received: Express"></failure>
 </testcase>
 <testcase name="should save a post"
 classname="should_save_a_post"

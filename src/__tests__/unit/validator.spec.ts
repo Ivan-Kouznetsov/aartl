@@ -22,7 +22,7 @@ describe('Validator', () => {
   });
   it('should return appropriate error message when too many args are provided to a rule', () => {
     expect(getFirstValidationError(fixtures.tooManyArgs)).toEqual(
-      'Rule: {"$..id":">= 1 2"} requires 1 argument, got 2'
+      'Rule: {"$..id":">= 1 2"} requires 1 argument, received 2'
     );
 
     expect(getFirstValidationError(fixtures.tooManyArgs1)).toEqual(
@@ -31,7 +31,7 @@ describe('Validator', () => {
   });
   it('should return appropriate error message when too few args are provided to a rule', () => {
     expect(getFirstValidationError(fixtures.tooFewArgs)).toEqual(
-      'Rule: {"$..id":"is any of"} requires 1 or more arguments, got 0'
+      'Rule: {"$..id":"is any of"} requires 1 or more arguments, received 0'
     );
   });
   it('should return appropriate error message when non-unique Pass on JSON path is provided', () => {
