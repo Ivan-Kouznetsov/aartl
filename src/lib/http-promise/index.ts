@@ -1,8 +1,24 @@
 import * as http from 'http';
 import * as https from 'https';
 import { TextEncoder } from 'util';
+import { xml2json } from './xml2json';
+
 const httpkeepAliveAgent = new http.Agent({ keepAlive: true });
 const httpskeepAliveAgent = new https.Agent({ keepAlive: true });
+
+/**
+ * Types
+ */
+
+export interface IHashTable {
+  [key: string]: string;
+}
+
+export enum ResponseDataType {
+  Json,
+  Xml,
+  Other,
+}
 
 /**
  * Helpers
@@ -23,7 +39,7 @@ const splitUrl = (url: string) => {
   return { protocol, hostname: hostnameMatches[0], path, port };
 };
 
-const headerArrayToHashTable = (rawHeaders: string[]): { [key: string]: string } => {
+const headerArrayToHashTable = (rawHeaders: string[]): IHashTable => {
   const result: { [key: string]: string } = {};
   for (let i = 0; i < rawHeaders.length; i = i + 2) {
     result[rawHeaders[i]] = rawHeaders[i + 1];
@@ -38,6 +54,20 @@ const tryParseJson = (str: string): Record<string, unknown> | null => {
   } catch {
     return null;
   }
+};
+
+const tryParseXml = (str: string): Record<string, unknown> | null => {
+  try {
+    return <Record<string, unknown>>xml2json(str);
+  } catch {
+    return null;
+  }
+};
+
+const getType = (headers: IHashTable): ResponseDataType => {
+  if (getHeaderValue(headers, 'Content-Type')?.includes('json')) return ResponseDataType.Json;
+  if (getHeaderValue(headers, 'Content-Type')?.includes('xml')) return ResponseDataType.Xml;
+  return ResponseDataType.Other;
 };
 
 export const request = (
@@ -94,11 +124,16 @@ export const request = (
         });
 
         res.on('end', () => {
-          const json = tryParseJson(data);
+          const headers = headerArrayToHashTable(res.rawHeaders);
+          const dataType = getType(headers);
+
+          const json = dataType === ResponseDataType.Json ? tryParseJson(data) : null;
+          const jsonFromXml = dataType === ResponseDataType.Xml ? tryParseXml(data) : null;
+
           resolve({
-            json,
+            json: json ?? jsonFromXml,
             string: data,
-            headers: headerArrayToHashTable(res.rawHeaders),
+            headers,
             status: res.statusCode,
           });
         });
@@ -110,4 +145,12 @@ export const request = (
     if (body) req.write(body);
     req.end();
   });
+};
+
+export const getHeaderValue = (headers: IHashTable, name: string): string | null => {
+  const keys = Object.keys(headers);
+  for (const key of keys) {
+    if (key.toLowerCase() === name.toLowerCase()) return headers[key];
+  }
+  return null;
 };

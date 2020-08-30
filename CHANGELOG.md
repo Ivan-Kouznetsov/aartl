@@ -1,3 +1,4 @@
+0.8.0 Add XML support  
 0.7.1 Add caching of fixtures  
 0.7.0 Add fixtures  
 0.6.7 MatchResult type, multiple args for each has  
