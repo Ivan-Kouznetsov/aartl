@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 
 export const xml2json = (xmlStr: string): object => {
-  xmlStr = cleanXML(xmlStr); // workaround
+  xmlStr = cleanXML(xmlStr);
   return xml2jsonRecurse(xmlStr);
 };
 
