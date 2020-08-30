@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/ban-types */
 
 export const xml2json = (xmlStr: string): object => {
@@ -11,14 +12,14 @@ export const xml2json = (xmlStr: string): object => {
  */
 const xml2jsonRecurse = (xmlStr: string) => {
   const obj: { [key: string]: string | object | Array<object> } = {};
-  let tagName, indexClosingTag, inner_substring, tempVal, openingTag;
+
+  let tagName: string, indexClosingTag: number, inner_substring: string, tempVal, openingTag;
 
   while (xmlStr.match(/<[^/][^>]*>/)) {
-    const openingTagMatches = xmlStr.match(/<[^/][^>]*>/);
-    if (openingTagMatches === null) throw 'No opening tag';
-
-    openingTag = openingTagMatches[0];
+    openingTag = xmlStr.match(/<[^/][^>]*>/)![0];
     tagName = openingTag.substring(1, openingTag.length - 1);
+    tagName = tagName.includes(' ') ? /\S*(?=\s)/.exec(tagName)![0] : tagName;
+
     indexClosingTag = xmlStr.indexOf(openingTag.replace('<', '</'));
 
     inner_substring = xmlStr.substring(openingTag.length, indexClosingTag);
@@ -77,10 +78,7 @@ const replaceSelfClosingTags = (xmlStr: string) => {
       let tempTag = oldTag.substring(0, oldTag.length - 2);
       tempTag += '>';
 
-      const tagNameMatches = oldTag.match(/[^<][\w+$]*/);
-      if (tagNameMatches === null) return xmlStr;
-
-      const tagName = tagNameMatches[0];
+      const tagName = oldTag.match(/[^<][\w+$]*/)![0];
       const closingTag = '</' + tagName + '>';
       let newTag = '<' + tagName + '>';
       tempTag = tempTag.replace(/\\"/g, escQuote);
@@ -134,16 +132,14 @@ const replaceAloneValues = (xmlStr: string) => {
  * @param xmlStr XML string
  */
 const replaceAttributes = (xmlStr: string) => {
-  const tagsWithAttributes = xmlStr.match(/<[^/][^>][^<]+\s+.[^<]+[=][^<]+>/g);
+  const tagsWithAttributes = xmlStr.match(/<([^/^>^<])+\s+.[^<]+[=][^<]+>/g);
 
   if (tagsWithAttributes) {
     for (let i = 0; i < tagsWithAttributes.length; i++) {
       const oldTag = tagsWithAttributes[i];
-      const tagNameMatches = oldTag.match(/[^<][\w+$]*/);
-      if (tagNameMatches === null) return xmlStr;
-      const tagName = tagNameMatches[0];
+      const tagName = oldTag.match(/[^<]\S*/)![0];
       let newTag = '<' + tagName + '>';
-      const attrs = oldTag.match(/(\S+)=["']?((?:.(?!["']?\s+(?:\S+)=|[>"']))+.)["']?/g) ?? [];
+      const attrs = oldTag.match(/(\S+)=["']?((?:.(?!["']?\s+(?:\S+)=|[>"']))+.)["']?/g)!;
 
       for (let j = 0; j < attrs.length; j++) {
         const attr = attrs[j];
