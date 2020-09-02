@@ -390,3 +390,19 @@ export const getXmlFail = `
   To match JSON rules
     "$..make": Not Cessna
   `;
+
+export const loginAndGetUserData = `  
+  Test that it should get users name
+  After HTTP request
+    method: POST
+    url: http://localhost:3000/login
+    body: {"username":"john_auth", "password":"p@ssw0rd11"}
+  Pass on "$..token" as _token
+  Expect HTTP request
+    method: GET
+    url: http://localhost:3000/user/profile
+  headers:
+    "Authentication": Bearer _token
+  To match JSON rules
+    "$..real_name": John A. Authman
+`;

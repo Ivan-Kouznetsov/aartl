@@ -65,9 +65,9 @@ const getPassOn = (requestText: string) =>
     passOnStringToPair(s.trim())
   );
 const getHeaders = (requestText: string) =>
-  safeSplitIntoLines(requestText.match(/(?<=headers:)[\s\S]*?(?=method:)/g) ?? []).map((s) =>
-    stringToPair(removeQuotes(s))
-  );
+  safeSplitIntoLines(
+    requestText.match(new RegExp(`(?<=headers:)[\\s\\S]*?(?=(method:|body:|url:|${endTerms}))`, 'g')) ?? []
+  ).map((s) => stringToPair(removeQuotes(s)));
 const getJsonRules = (requestText: string) =>
   safeSplitIntoLines(
     requestText.match(new RegExp(`(?<=To match JSON rules)[\\s\\S]*?(?=(${endTerms}))`, 'g')) ?? []
