@@ -240,4 +240,10 @@ describe('Test runner', () => {
     expect(badResult.passed).toBe(false);
     expect(badResult.failReasons[0]).toEqual('Expected $..make to match Not Cessna, received "Cessna"');
   });
+
+  it('should do an authenticated request', async () => {
+    const result = await runTestThruAllSteps(fixtures.loginAndGetUserData);
+
+    expect(result.passed).toBe(true);
+  });
 });

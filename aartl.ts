@@ -15,6 +15,7 @@ const showUsage = () => {
   console.log('-n NUMBER - Run the tests a number of times');
   console.log('-m NUMBER - Maximum concurrent tests. Default: 100');
   console.log('--hello - Display name of this program');
+  console.log('--logs - Output logs');
   console.log('--r - Randomize test order');
   console.log('--xml - Output results as JUnit XML');
   console.log('--novalidation - Skip validation of tests');

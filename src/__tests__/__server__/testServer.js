@@ -120,6 +120,35 @@ restApp.post('/posts', (request, response) => {
   response.send(JSON.stringify({ id: posts.length - 1, success: true }));
 });
 
+// AUTH
+const authToken = 'super-secure-token-very-random';
+
+restApp.post('/login', (request, response) => {
+  response.setHeader('content-type', 'application/json');
+  console.log(request.body.toString());
+  const user = JSON.parse(request.body.toString());
+  if (user.username === 'john_auth' && user.password === 'p@ssw0rd11') {
+    response.send(JSON.stringify({ token: authToken, success: true }));
+  } else {
+    response.send(JSON.stringify({ token: null, success: false }));
+  }
+});
+
+restApp.get('/user/profile', (request, response) => {
+  response.setHeader('content-type', 'application/json');
+
+  const auth = request.header('Authentication');
+
+  if (auth === `Bearer ${authToken}`) {
+    response
+      .status(200)
+      .send(JSON.stringify({ username: 'john_auth', real_name: 'John A. Authman' }))
+      .end();
+  } else {
+    response.status(403).send('Not authenticated').end();
+  }
+});
+
 // Listen
 
 restApp.listen(restPort, (err) => {
