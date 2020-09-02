@@ -125,7 +125,7 @@ const authToken = 'super-secure-token-very-random';
 
 restApp.post('/login', (request, response) => {
   response.setHeader('content-type', 'application/json');
-  console.log(request.body.toString());
+
   const user = JSON.parse(request.body.toString());
   if (user.username === 'john_auth' && user.password === 'p@ssw0rd11') {
     response.send(JSON.stringify({ token: authToken, success: true }));
