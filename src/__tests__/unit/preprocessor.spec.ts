@@ -1,5 +1,4 @@
-
-import { test, multipleUseOfFixture } from './fixtures/preprocessor/test';
+import { test, multipleUseOfFixture } from './fixtures/preprocessor/test.fixtures';
 import { applyFixtures } from '../../parser/preprocessor';
 import * as path from 'path';
 
