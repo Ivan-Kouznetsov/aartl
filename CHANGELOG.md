@@ -1,3 +1,4 @@
+0.8.2 Refactor to use the term matcher for the part of the rule that indicates what is expected  
 0.8.1 Add logs to usage, allow headers to be defined anywhere in request, add mock authentication to test server
 0.8.0 Add XML support  
 0.7.1 Add caching of fixtures  
