@@ -23,7 +23,7 @@ export interface ITest {
   requests: IRequest[];
 }
 
-export interface IRule {
+export interface IMatcher {
   factory: Factory;
   args: (string | number)[];
   expectedArgs: ArgCount;

@@ -5,6 +5,7 @@
 
 [license-url]: LICENSE
 [license-image]: https://img.shields.io/badge/license-MIT-brightgreen
+
 # Why?
 
 Imagine you have a software-as-a-service product that includes multiple services that rely on each other. Each of the services is tested. Let's say for the sake of argument they have code coverage of between 85% and 95%, you may have some confidence that the services work.
@@ -67,8 +68,8 @@ Data needed for an HTTP request is:
 - method **_Example_**: post
 - url **_Example_**: http://example.org/things/123
 - body **_Example_**: Hello World
-    - body can be loaded from a fixture file like so `body from fixture: myfixture`
-    - this will load the content of fixtures/myfixture.fixture and use that as the body of the request
+  - body can be loaded from a fixture file like so `body from fixture: myfixture`
+  - this will load the content of fixtures/myfixture.fixture and use that as the body of the request
 
 Optional statements about how to handle transitioning to the next request are:
 
@@ -87,10 +88,10 @@ An Expect block consists of:
 
 JSON data expectations consist of:
 
-- A JSON path and either a literal value or a rule.
+- A JSON path and either a literal value or a matcher.
 
 **Examples** of rules are (_x, y, z in the rules refer to parameters_):
-| Rule | What it means |
+| Matcher | What it means |
 |--|--|
 | is a number | checks if every value that matches the JSON path is a number |
 | > x | checks if every value that matches the JSON path is a number greater than x |

@@ -131,7 +131,7 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
           const data = jsonPath(json, rule.jsonpath);
           if (data === false) {
             if (rule.originalRule.toString().includes('count')) {
-              const ruleCheckResult = rule.matching.factory(rule.matching.args[0])([]);
+              const ruleCheckResult = rule.matcher.factory(rule.matcher.args[0])([]);
               if (ruleCheckResult !== NotFound) {
                 failReasons.push(
                   `Expected ${rule.jsonpath} to match ${rule.originalRule}, received ${ruleCheckResult}`
@@ -142,9 +142,9 @@ export const runTest = async (test: ITest): Promise<ITestResult> => {
             }
           } else {
             const nonCompliantValue =
-              rule.matching.expectedArgs === ArgCount.One
-                ? rule.matching.factory(rule.matching.args[0])(data)
-                : rule.matching.factory(rule.matching.args)(data);
+              rule.matcher.expectedArgs === ArgCount.One
+                ? rule.matcher.factory(rule.matcher.args[0])(data)
+                : rule.matcher.factory(rule.matcher.args)(data);
             if (nonCompliantValue !== NotFound) {
               failReasons.push(
                 `Expected ${rule.jsonpath} to match ${rule.originalRule}, received ${JSON.stringify(nonCompliantValue)}`
