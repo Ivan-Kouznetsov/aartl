@@ -26,7 +26,7 @@ describe('Preprocessor', () => {
     );
   });
 
-  it('should replace body from fixture: mulitple times', () => {
+  it('should replace body from fixture: multiple times', () => {
     const result = applyFixtures(
       multipleUseOfFixture,
       path.resolve('./src/__tests__/unit/fixtures/preprocessor/')

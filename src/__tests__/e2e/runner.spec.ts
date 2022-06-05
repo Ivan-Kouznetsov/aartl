@@ -116,7 +116,7 @@ describe('Test runner', () => {
     expect(result.failReasons[0]).toEqual('Invalid url: http:///');
   });
 
-  it('should return approppriate error when request url is not defined', async () => {
+  it('should return appropriate error when request url is not defined', async () => {
     const result = await runTestThruAllSteps(fixtures.noUrl);
 
     expect(result.passed).toBe(false);
@@ -137,7 +137,7 @@ describe('Test runner', () => {
     expect(result.failReasons[0]).toEqual('Cannot check JSON rules because response was not JSON or XML');
   });
 
-  it('should defualt to get when method is not provided', async () => {
+  it('should default to get when method is not provided', async () => {
     const result = await runTestThruAllSteps(fixtures.noMethod);
 
     expect(result.passed).toBe(true);

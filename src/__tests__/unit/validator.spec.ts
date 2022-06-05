@@ -77,7 +77,7 @@ describe('Validator', () => {
     );
   });
 
-  it('should return appropriate error message when invalid sort directiion is used with a sorting rule', () => {
+  it('should return appropriate error message when invalid sort direction is used with a sorting rule', () => {
     expect(getFirstValidationError(fixtures.numbericSortDirection)).toEqual(
       'Rule: {"$..date":"is sorted 1"} has the wrong type of argument, did not expect 1'
     );
@@ -87,7 +87,7 @@ describe('Validator', () => {
     expect(getFirstValidationError(fixtures.validDate)).toBeUndefined();
   });
 
-  it('should return appropriate error message when invalid sort directiion is used with a sorting rule', () => {
+  it('should return appropriate error message when invalid sort direction is used with a sorting rule', () => {
     expect(getFirstValidationError(fixtures.okSortDirection)).toBeUndefined();
   });
 });
